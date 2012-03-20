@@ -1,21 +1,66 @@
 #!/usr/bin/env node
-// # Utility for building javascript bundles
+// Development server and bundling tool for creating JavaScript web applications.
 //
+// ## Features:
+//
+// - CommonJS modules
+// - watch files / recompile bundles on change 
+// - local server on port 8080
+// - automatic, enforced checks with jshint
+// - loading with line-numbers preserved on browsers supporting `//@sourceURL=`
+// - realtime generation of `docco`-documentation
+// - different bundles, ie. one bundle for modern browsers with zepto.js and
+//   another for legacy browsers with jquery, es5shim, json, etc.
+// - bundles debug version + deploy version
+//
+// ## Why make a new bundling tool
+//
+// None fitted exactly what I needed, and it was trivial to implement
+//
+// - enderjs - misses watchin/development mode.
+// - requirejs - requires manual wrapping of modules, and the dynamic loading
+//   had issues on windows phones.
+// - browserify - adding extra code, not minifying (may probably be done via
+//   plugins, but that would probably be more work than to hack this code
+//   together. Watching also didn't work well (vim writes file by moving the
+//   new version into the old version, witch made watching barf).
+// - assetgraph - looks promising, but solves another problem: full web sites,
+//   where the need here is to have a developer friendly pure-javascript app
+//   development.
+//
+// ## TODO
+//
+// - npm-compatibility / better path handling + find depended modules
+//   automatically
+// - better error-reporting when uglify fails
+// - code coverage
+// - strip test code from modules (`exports.test*`) during minification
+// - output widgets/apps too
+//
+// # The actual code
 
-// # Setup and dependencies
-
+// Enforce strict checking when running checks.
 /*global require:true,console:true,process:true,__dirname:true*/
 /*jshint es5:true,strict:true,trailing:true,curly:true,eqeqeq:true*/
 (function() {'use strict';
 
+// ## Dependencies
 var util = require('./util');
 var async = require('async');
 var fs = require('fs');
 var uglify = require('uglify-js');
 var mustache = require('mustache');
+var _ = require('underscore');
 var jshint = require('jshint').JSHINT;
+var spawn = require('child_process').spawn;
 
 // # Functions to build application bundle
+// 
+// A lot of these are passing an `obj`-object around, which accumulates
+// the different information on the JavaScript file, ie. filename, source,
+// minified version, errors ...
+
+// Read a file
 function readFile(obj, callback) {
     console.log('readfile', obj.filename);
     fs.readFile(obj.filename, 'utf8', function(err, data) {
@@ -25,6 +70,7 @@ function readFile(obj, callback) {
     });
 }
 
+// Run strict jshint on the file
 function jsHint(obj, callback) {
     console.log('jshint', obj.filename);
     if(obj.err) {
@@ -36,6 +82,7 @@ function jsHint(obj, callback) {
             'console:true,setTimeout:true */' +
            obj.filedata + '})();');
     obj.jshint = '';
+    // Reporting
     jshint.errors.forEach(function(err) { if(err) {
         obj.jshint += mustache.to_html(
             '<div>{{file}} line {{line}} pos {{pos}}: {{err}}</div>',
@@ -45,6 +92,11 @@ function jsHint(obj, callback) {
     return callback(obj);
 }
 
+// ## Minification and metaprocessing
+//
+// Currenly just minify.
+//
+// TODO: add code coverage, and removal of test code
 function applyUglify(obj, callback) {
     console.log('uglify', obj.filename);
     if(obj.err) {
@@ -56,28 +108,22 @@ function applyUglify(obj, callback) {
         var squeezed = uglify.uglify.ast_squeeze(ast);
         obj.minified = uglify.uglify.gen_code(squeezed);
     } catch(e) {
+        // TODO: nicer error-reporting
         obj.err = {err: 'uglify-error', details: e};
     }
     callback(obj);
 }
 
+// Code used to define the module in the bundle.
 function moduleString(modulename, modulesource) {
     return ['bundler.module(\'', modulename, '\',\'', 
             util.stringEscape(modulesource) , '\');'].join('');
 }
 
-function uniqModules(bundles) {
-    return util.uniq(bundles.map(function(bundle) {
-        return bundle.modules;
-    }));
-}
-function uniqLibs(bundles) {
-    return util.uniq(bundles.map(function(bundle) {
-        return bundle.libs;
-    }));
-}
-
+// Do, what has to be done, to a single file. This is where the core logic of
+// processing each file is defined.
 function processFile(obj, callback) {
+    spawn('docco', [obj.filename]);
     readFile(obj, function(obj) {
     jsHint(obj, function(obj) {
     applyUglify(obj, function(obj) {
@@ -146,12 +192,17 @@ function writeBundles(bundles, fileObjs, callback) {
 }
 
 function bundle(bundles) {
-    var moduleObjs = uniqModules(bundles).map(function(filename) {
+    var moduleObjs = _.chain(bundles).pluck('modules')
+        .flatten().uniq().value()
+        .map(function(filename) {
             return {filename: filename}; 
         });
-    var libObjs = uniqLibs(bundles).map(function(filename) {
+    var libObjs = _.chain(bundles).pluck('libs')
+        .flatten().uniq().value()
+        .map(function(filename) {
             return {filename: filename}; 
         });
+
     var fileObjs = libObjs.concat(moduleObjs);
     var delayedWriteBundles = util.delaySingleExecAsync(
             function(done) {
@@ -165,6 +216,17 @@ function bundle(bundles) {
         watchObj(obj, delayedWriteBundles);
     });
 }
+
+// ## Generate documentation for itself
+function docself() {
+    var self = 'scripts/server.js'
+    fs.unwatchFile(self);
+    spawn('docco', [self]);
+    setTimeout(function() { fs.watchFile(self, docself); }, 1000);
+
+}
+docself();
+spawn('jshint', ['scripts/server.js']);
 
 // # The actual bundles
 var base = ["depend/zepto.min.js"];

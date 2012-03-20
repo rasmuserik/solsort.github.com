@@ -6,6 +6,7 @@
   "description": "solsort.com web application",
   "dependencies": {
     "mustache": "*",
+    "underscore": "*",
     "jshint": "*",
     "async": "*",
     "uglify-js": "*",
