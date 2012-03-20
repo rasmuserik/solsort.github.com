@@ -43,12 +43,12 @@
         - closing - consise, summary, memorable/call to action
         - overall structure
 - presentation
+    - make a point from  the speech, teach a lesson to all
     - sandwich / CRC - commend recommend commend/conclude
     - intro
         - she/he showed us ..., thanks
         - purpose of the speech
         - summarize the speech
-    - make a point from  the speech, teach a lesson to all
     - concrete points from the speech
     - focus on a few points in depth
     - talk about how it impacts the audience, rather than what you would do as speaker
