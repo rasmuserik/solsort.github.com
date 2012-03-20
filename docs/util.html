@@ -1,0 +1,93 @@
+<!DOCTYPE html>  <html> <head>   <title>util.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               util.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/*global setTimeout: true*/</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">stringEscape</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[^&quot; !#-&amp;(-\[\]-~]/g</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">code</span> <span class="o">=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">code</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">&quot;\\x&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="mh">0x100</span> <span class="o">+</span> <span class="nx">code</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s2">&quot;\\u&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="mh">0x10000</span> <span class="o">+</span> <span class="nx">code</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">delaySingleExecAsync</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">,</span> <span class="nx">delay</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">delay</span> <span class="o">=</span> <span class="nx">delay</span> <span class="o">||</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">scheduled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">running</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">doneFns</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">scheduleFn</span><span class="p">;</span>
+    <span class="kd">function</span> <span class="nx">exec</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">scheduled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">fns</span> <span class="o">=</span> <span class="nx">doneFns</span><span class="p">;</span>
+        <span class="nx">doneFns</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">running</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">scheduleFn</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="nx">running</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="nx">fn</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">running</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+            <span class="nx">fns</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span><span class="nx">fn</span><span class="p">();});</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+    <span class="nx">scheduleFn</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">done</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">doneFns</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">done</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">scheduled</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">scheduled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">exec</span><span class="p">,</span> <span class="nx">delay</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="k">return</span> <span class="nx">scheduleFn</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">flattenArrays</span> <span class="o">=</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">flattenArrays</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">list</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">list</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">list</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">flattenArrays</span><span class="p">).</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">a</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nx">list</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">uniq</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lists</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">hash</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">flattenArrays</span><span class="p">(</span><span class="nx">lists</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">elem</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">hash</span><span class="p">[</span><span class="nx">elem</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">hash</span><span class="p">);</span>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h2>Throttle a function and limit it to a single invocation per 10ms</h2>
+
+<p>Slightly delay execution of a function, and make sure it only run once,
+even though it is requested several times to be executed.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">niceSingle</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">running</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">running</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">running</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">fn</span><span class="p">();</span>
+            <span class="nx">running</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">},</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="p">};</span>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h2>Deterministic pseudorandom number generator</h2>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">pseudoRandom</span> <span class="o">=</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">pseudoRandom</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">seed</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1664525</span> <span class="o">*</span> <span class="p">(</span><span class="nx">n</span> <span class="o">||</span> <span class="nx">seed</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1013904223</span><span class="p">)</span> <span class="o">&amp;</span><span class="mh">0x7fffffff</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">text</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span> <span class="o">=</span> <span class="nx">pseudoRandom</span><span class="p">(</span><span class="nx">result</span> <span class="o">+</span> <span class="nx">text</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h2>From a string, generate a HTML-color</h2>
+
+<p>pastel theme</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">colorHash</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="p">((</span><span class="nx">exports</span><span class="p">.</span><span class="nx">hash</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="o">|</span> <span class="mh">0xe0e0e0</span><span class="p">)</span><span class="o">&amp;</span><span class="mh">0xffffff</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+<span class="p">};</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

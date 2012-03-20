@@ -1,5 +1,2 @@
-_site
 *.sw?
 node_modules/
-docs/
-*.secret

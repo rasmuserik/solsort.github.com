@@ -1,0 +1,105 @@
+<!DOCTYPE html>  <html> <head>   <title>bidiv.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               bidiv.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">fullbrows</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">webutil</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;webutil&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">console</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;console&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">_</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zquery&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">menuRaw</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#source/bidiv&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#source/bundler&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#source/fullbrows&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#source/jsxml&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#source/main&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#source/menu&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#source/server&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#source/showSource&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#source/util&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#source/webutil&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/browser_platforms&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/c9ender&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/coffee&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/grapla&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/htmlnotes&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/jam-rep&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/javascript&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/jekyll&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/js&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/lightscriptapi&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/notedump&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/notes&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/oauth2.html&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/oauth2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/socnet&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/tango&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/ted&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/toastmasters2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;#notes/vim&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;/dkcities&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;/notescore&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;/planetcute&#39;</span><span class="p">];</span>
+
+<span class="kd">function</span> <span class="nx">makeTree</span><span class="p">(</span><span class="nx">list</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="s1">&#39;argh&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">list</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">list</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">pseudoRandom</span><span class="p">()</span> <span class="o">%</span> <span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">pos</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nx">makeTree</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">pos</span><span class="p">)),</span> <span class="nx">makeTree</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">pos</span><span class="p">))];</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">tree</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">layoutTree</span><span class="p">(</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">$dom</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">dir</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">tree</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">$elem</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="nx">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="nx">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;padding&#39;</span><span class="p">,</span> <span class="s1">&#39;0px 4px 0px 4px&#39;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;margin&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">w</span><span class="o">-</span><span class="mi">10</span><span class="p">))</span>
+            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">h</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background-color&#39;</span><span class="p">,</span> <span class="nx">util</span><span class="p">.</span><span class="nx">colorHash</span><span class="p">(</span><span class="nx">tree</span><span class="p">))</span>
+            <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">));</span>
+        <span class="nx">$dom</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">$elem</span><span class="p">);</span>
+        <span class="nx">webutil</span><span class="p">.</span><span class="nx">scaleText</span><span class="p">(</span><span class="nx">$elem</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">x0</span> <span class="o">=</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">x1</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">y0</span> <span class="o">=</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">y1</span> <span class="o">=</span> <span class="nx">y</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">w0</span> <span class="o">=</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">w1</span> <span class="o">=</span> <span class="nx">w</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">h0</span> <span class="o">=</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">h1</span> <span class="o">=</span> <span class="nx">h</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">dir</span><span class="o">&amp;</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">w0</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="nx">x1</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">w0</span><span class="p">;</span>
+            <span class="nx">w1</span> <span class="o">=</span> <span class="nx">w</span> <span class="o">-</span> <span class="nx">w0</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">h0</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="nx">y1</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">+</span> <span class="nx">h0</span><span class="p">;</span>
+            <span class="nx">h1</span> <span class="o">=</span> <span class="nx">h</span> <span class="o">-</span> <span class="nx">h0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">layoutTree</span><span class="p">(</span><span class="nx">tree</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">$dom</span><span class="p">,</span> <span class="nx">x0</span><span class="p">,</span><span class="nx">y0</span><span class="p">,</span><span class="nx">w0</span><span class="p">,</span><span class="nx">h0</span><span class="p">,</span> <span class="nx">dir</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+        <span class="nx">layoutTree</span><span class="p">(</span><span class="nx">tree</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">$dom</span><span class="p">,</span> <span class="nx">x1</span><span class="p">,</span><span class="nx">y1</span><span class="p">,</span><span class="nx">w1</span><span class="p">,</span><span class="nx">h1</span><span class="p">,</span> <span class="nx">dir</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kd">function</span> <span class="nx">update</span><span class="p">(</span><span class="nx">dom</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">$dom</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">dom</span><span class="p">);</span>
+    <span class="nx">$dom</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+    <span class="nx">layoutTree</span><span class="p">(</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">$dom</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">$dom</span><span class="p">.</span><span class="nx">width</span><span class="p">(),</span> <span class="nx">$dom</span><span class="p">.</span><span class="nx">height</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="nx">webutil</span><span class="p">.</span><span class="nx">scaleText</span><span class="p">(</span><span class="nx">$dom</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">));</span>
+<span class="p">}</span>
+
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">run</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h3>Assign random weights to map;</h3>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">util</span><span class="p">.</span><span class="nx">pseudoRandom</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">// set seed</span>
+    <span class="nx">tree</span> <span class="o">=</span> <span class="nx">makeTree</span><span class="p">(</span><span class="nx">menuRaw</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">menuRaw</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">menuRaw</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">menuRaw</span><span class="p">));</span>
+    <span class="nx">tree</span> <span class="o">=</span> <span class="nx">makeTree</span><span class="p">(</span><span class="nx">menuRaw</span><span class="p">);</span>
+
+    <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span> <span class="nx">update</span><span class="p">});</span>
+<span class="p">};</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

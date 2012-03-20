@@ -1,0 +1,78 @@
+<!DOCTYPE html>  <html> <head>   <title>showSource.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               showSource.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zquery&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">_</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">console</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;console&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">doccoLineRegEx</span> <span class="o">=</span> <span class="sr">/^\s*\/\/( |$)/</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">isDoccoComment</span><span class="p">(</span><span class="nx">line</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">line</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">doccoLineRegEx</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">docco</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">showdown</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showdown&#39;</span><span class="p">);</span>
+    <span class="nx">showdown</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">showdown</span><span class="p">.</span><span class="nx">converter</span><span class="p">();</span>
+
+    <span class="nx">text</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">current</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">prevIsDocco</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">lineno</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nx">text</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">line</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">currentIsDocco</span> <span class="o">=</span> <span class="o">!!</span><span class="nx">isDoccoComment</span><span class="p">(</span><span class="nx">line</span><span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nx">currentIsDocco</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">line</span> <span class="o">=</span> <span class="nx">line</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">doccoLineRegEx</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">line</span> <span class="o">=</span> <span class="p">{</span><span class="nx">lineno</span><span class="o">:</span> <span class="nx">lineno</span><span class="p">,</span> <span class="nx">line</span><span class="o">:</span> <span class="nx">line</span><span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nx">prevIsDocco</span> <span class="o">===</span> <span class="nx">currentIsDocco</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">current</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">line</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">current</span><span class="p">);</span>
+            <span class="nx">current</span> <span class="o">=</span> <span class="p">[</span><span class="nx">line</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="nx">prevIsDocco</span> <span class="o">=</span> <span class="nx">currentIsDocco</span><span class="p">;</span>
+        <span class="o">++</span><span class="nx">lineno</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">current</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">([]);</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">docs</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">code</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">result</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">docs</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">result</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="nx">code</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">result</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="nx">docs</span> <span class="o">=</span> <span class="nx">docs</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">doc</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">showdown</span><span class="p">.</span><span class="nx">makeHtml</span><span class="p">(</span><span class="nx">doc</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">));</span> <span class="p">});</span>
+    <span class="nx">code</span> <span class="o">=</span> <span class="nx">code</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;pre&gt;&#39;</span> <span class="o">+</span> <span class="nx">_</span><span class="p">.</span><span class="nx">escape</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="nx">code</span><span class="p">,</span> <span class="s1">&#39;line&#39;</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;&lt;/pre&gt;&#39;</span><span class="p">;</span>
+    <span class="p">});</span>
+
+    <span class="nx">result</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;table&gt;&#39;</span><span class="p">];</span>
+    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">docs</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;&lt;tr&gt;&lt;td style=&quot;vertical-align: top&quot;&gt;&#39;</span><span class="p">);</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">docs</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;&lt;/td&gt;&lt;td style=&quot;vertical-align: top&quot;&gt;&#39;</span><span class="p">);</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">code</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;&lt;/td&gt;&lt;/tr&gt;&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s1">&#39;&lt;/table&gt;&#39;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+
+<span class="p">}</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">show</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">filename</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+        <span class="nx">url</span><span class="o">:</span> <span class="p">(</span><span class="s1">&#39;/scripts/&#39;</span> <span class="o">+</span> <span class="nx">filename</span> <span class="o">+</span> <span class="s1">&#39;.js&#39;</span><span class="p">),</span>
+        <span class="nx">dataType</span><span class="o">:</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>
+        <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">docco</span><span class="p">(</span><span class="nx">text</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">};</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
