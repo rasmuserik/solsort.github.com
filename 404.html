@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>solsort.dk</title>
+        <title>solsort.com</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="HandheldFriendly" content="True">
@@ -16,14 +16,9 @@
     <body>
         <noscript>
             sorry, needs javascript enabled.
-        </script> 
+        </script>
         <script>
-            var script = 'dist/bundle.min.js';
-            if(!Object.create || !Object.keys || !Array.prototype.forEach 
-              || !window.JSON || !JSON.parse  || !navigator.userAgent.match(/webkit/i)) {
-                script = 'dist/bundle.legacy.min.js';
-            }
-            document.write('<script src="' + script + '" type="text/javascript"></' + 'script>');
+            location.assign('/#' + location.pathname.slice(1));
         </script>
     </body>
 </html>
