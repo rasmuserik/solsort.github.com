@@ -37,6 +37,7 @@ function drawCard(color, figure, count, fill, size) {
     var name = exports.name(color, figure, count, fill);
     $('#content').append('<canvas id="' + name +'">');
     var canvas = document.getElementById(name);
+    $(canvas).addClass('card');
     canvas.width = canvas.height = size;
     var ctx = canvas.getContext('2d');
     ctx.fillStyle = '#000000';
@@ -52,8 +53,7 @@ function drawCard(color, figure, count, fill, size) {
         draw(ctx, figure, color, fill, size * 0.30, size * 0.70, size * 0.15);
         draw(ctx, figure, color, fill, size * 0.70, size * 0.70, size * 0.15);
     }
-    canvas.style.width = '0';
-    canvas.style.height = '0';
+    canvas.style.opacity = '0';
     canvas.style.position = 'absolute';
     return canvas;
 }
@@ -74,5 +74,5 @@ exports.createCards = function(size) {
 };
 
 exports.name = function(color, figure, count, fill) {
-    return 'canvas' + color + figure + count + fill;
+    return 'card' + color + figure + count + fill;
 };
