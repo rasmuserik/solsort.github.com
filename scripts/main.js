@@ -18,7 +18,7 @@ var SiteMap = Backbone.Router.extend({
     unicodeTest: unicodeTest,
     timelog: require('timelog').main,
     menu: menuFn,
-    combigame: require('combigameCards').run,
+    combigame: require('combigame').run,
     bidiv: require('bidiv').run,
     source: function(name) { require('showSource').show(name); },
     notes: notes

@@ -6,7 +6,7 @@ var $ = require('zquery');
 var document = require('document');
 
 function draw(ctx, figure, color, fill, x, y, size) {
-    var colorPrefix = ['rgba(255,0,0,', 'rgba(0,255,0,', 'rgba(0,0,255,'] [color];
+    var colorPrefix = ['rgba(200,0,0,', 'rgba(0,200,0,', 'rgba(0,0,200,'] [color];
     ctx.lineWidth = size / 10;
     ctx.lineJoin= 'round';
     ctx.lineCap= 'round';
@@ -33,41 +33,46 @@ function draw(ctx, figure, color, fill, x, y, size) {
     ctx.stroke();
 }
 
-function drawCard(color, figure, count, fill) {
-    var name = 'canvas' + color + figure + count + fill;
-    $('body').append('<canvas id="' + name +'">');
+function drawCard(color, figure, count, fill, size) {
+    var name = exports.name(color, figure, count, fill);
+    $('#content').append('<canvas id="' + name +'">');
     var canvas = document.getElementById(name);
-    var size = 100;
-    console.log(canvas);
-    canvas.width = canvas.height = canvas.style.width = canvas.style.height = size;
+    canvas.width = canvas.height = size;
     var ctx = canvas.getContext('2d');
     ctx.fillStyle = '#000000';
-    //ctx.fillRect(0,0,size,size);
     if(count === 0) {
-        draw(ctx, figure, color, fill, 50, 50, 35);
+        draw(ctx, figure, color, fill, size * 0.50, size * 0.50, size * 0.35);
     }
     if(count === 1) {
-        draw(ctx, figure, color, fill, 30, 30, 20);
-        draw(ctx, figure, color, fill, 70, 70, 20);
+        draw(ctx, figure, color, fill, size * 0.30, size * 0.30, size * 0.20);
+        draw(ctx, figure, color, fill, size * 0.70, size * 0.70, size * 0.20);
     }
     if(count === 2) {
-        draw(ctx, figure, color, fill, 50, 30, 15);
-        draw(ctx, figure, color, fill, 30, 70, 15);
-        draw(ctx, figure, color, fill, 70, 70, 15);
+        draw(ctx, figure, color, fill, size * 0.50, size * 0.30, size * 0.15);
+        draw(ctx, figure, color, fill, size * 0.30, size * 0.70, size * 0.15);
+        draw(ctx, figure, color, fill, size * 0.70, size * 0.70, size * 0.15);
     }
+    canvas.style.width = '0';
+    canvas.style.height = '0';
+    canvas.style.position = 'absolute';
+    return canvas;
 }
 
-exports.run = function() {
-    //require('fullbrows').init();
-    console.log('here');
+exports.createCards = function(size) {
     $('#content').html();
+    var result = [];
     for(var color = 0; color < 3; ++color) {
         for(var figure = 0; figure < 3; ++figure) {
             for(var count = 0; count < 3; ++count) {
                 for(var fill = 0; fill < 3; ++fill) {
-                    drawCard(color, figure, count, fill);
+                    result.push(drawCard(color, figure, count, fill, size));
                 }
             }
         }
     }
+    return result;
+};
+
+exports.name = function(color, figure, count, fill) {
+    return 'canvas' + color + figure + count + fill;
 };
