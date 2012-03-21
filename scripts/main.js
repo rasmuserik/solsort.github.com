@@ -11,12 +11,14 @@ var SiteMap = Backbone.Router.extend({
         'notes/*path': 'notes',
         'source/*path': 'source',
         'timelog': 'timelog',
+        'combigame': 'combigame',
         '*default': 'default'
     },
     'default': function() { },
     unicodeTest: unicodeTest,
     timelog: require('timelog').main,
     menu: menuFn,
+    combigame: require('combigameCards').run,
     bidiv: require('bidiv').run,
     source: function(name) { require('showSource').show(name); },
     notes: notes

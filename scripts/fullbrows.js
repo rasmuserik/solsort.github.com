@@ -40,3 +40,7 @@ var init = exports.init = function(opt) {
     $(window).bind('orientationchange', relayoutDelayed);
     relayout();
 };
+
+exports.layoutFunction = function(fn) {
+    init({callback:fn});
+};
