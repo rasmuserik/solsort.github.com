@@ -1,6 +1,7 @@
 var cardSprites;
 var $ = require('zquery');
 var _ = require('underscore');
+var Modernizr = require('modernizr');
 
 var hidden = {
     opacity: 0,
@@ -93,8 +94,9 @@ var doLayout = function() {
         anim(i, $('#card' + cards[i]))();
     }
 
-    $('.card').bind('touchstart mousedown', function(e, e2) {
+    $('.card').bind(Modernizr.touch?'touchstart':'mousedown', function(e, e2) {
         click(e.target.id.slice(4));
+        return true;
     });
 };
 
@@ -102,12 +104,12 @@ function click(card) {
     console.log(card);
     if(exports.selected[card]) {
         $('#card' + card).css(unselectedStyle);
-        setTimeout(function() { delete exports.selected[card]; }, 100);
+        delete exports.selected[card];
     } else {
         $('#card' + card).css(selectedStyle);
-        setTimeout(function() { exports.selected[card] = true; }, 100);
+        exports.selected[card] = true;
     }
-    setTimeout(testSelected, 130);
+    testSelected();
 }
 
 function testSelected() {
