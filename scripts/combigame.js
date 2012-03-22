@@ -87,17 +87,23 @@ var doLayout = function() {
         border: 'none'
     };
 
-    cardSprites = cardSprites || require('combigameCards').createCards(size);
+    if(!cardSprites) {
+        cardSprites = require('combigameCards').createCards(size);
+        $('.card').bind('click', function(e) {
+            click(e.target.id.slice(4));
+            return true;
+        });
+    }
 
     $('.card').css({top:-size, left:-size});
     for(i = 0; i < 12; ++i) {
         anim(i, $('#card' + cards[i]))();
     }
 
-    $('.card').bind(Modernizr.touch?'touchstart':'mousedown', function(e, e2) {
+    /*$('.card').bind(Modernizr.touch?'touchstart':'mousedown', function(e, e2) {
         click(e.target.id.slice(4));
         return true;
-    });
+    });*/
 };
 
 function click(card) {
