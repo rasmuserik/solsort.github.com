@@ -33,6 +33,6 @@
     <div>2012-02-25 <a href="#menu">Experiment</a> with 2d-layout of hierarchical data</div>
     <div>2011-08-28 <a href="http://solsort.dk/planetcute">Simple app experiment</a> for game with the planetcute tileset</div>
     <div>2011-08-02 <a href="http://solsort.dk/dkcities">Simple app</a> for learning the danish citynames</div>
-    <div>2011-05-24 <a href="http://solsort.dk/notescore">Simple app</a> for learning notes/scores on piano (<a href="https://play.google.com/store/apps/details?id=dk.solsort.notescore">https://play.google.com/store/apps/details?id=dk.solsort.notescore</a></div>
+    <div>2011-05-24 <a href="http://solsort.dk/notescore">Simple app</a> for learning notes/scores on piano (also at <a href="https://play.google.com/store/apps/details?id=dk.solsort.notescore">Google Play</a>)</div>
     <div><a href="http://github.com/rasmuserik/">Various other projects at GitHub</a></div>
 </div>
