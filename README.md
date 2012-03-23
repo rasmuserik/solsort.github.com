@@ -4,6 +4,7 @@
 - `depend` - external scripts included
 - `package.json` - package+dependencies for `scripts/server.js`
 - `notes` - notes in github-flavored markdown
+- `html` - notes and content in html
 - static servered data
     - `index.html` - deploy version of app
     - `debug.html` - debug version of app
