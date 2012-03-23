@@ -198,8 +198,8 @@ function okDeck() {
 }
 
 exports.run = function() {
+    $('#content').html('');
     require('fullbrows').init({update: doLayout});
-    $('#content').html();
     do {
         cards = [];
         for(var i = 0; i < 12; ++i) {

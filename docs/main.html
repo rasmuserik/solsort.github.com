@@ -10,6 +10,7 @@
         <span class="s1">&#39;unicodeTest&#39;</span><span class="o">:</span> <span class="s1">&#39;unicodeTest&#39;</span><span class="p">,</span>
         <span class="s1">&#39;notes/*path&#39;</span><span class="o">:</span> <span class="s1">&#39;notes&#39;</span><span class="p">,</span>
         <span class="s1">&#39;source/*path&#39;</span><span class="o">:</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;rasmuserik&#39;</span><span class="o">:</span> <span class="s1">&#39;rasmuserik&#39;</span><span class="p">,</span>
         <span class="s1">&#39;timelog&#39;</span><span class="o">:</span> <span class="s1">&#39;timelog&#39;</span><span class="p">,</span>
         <span class="s1">&#39;combigame&#39;</span><span class="o">:</span> <span class="s1">&#39;combigame&#39;</span><span class="p">,</span>
         <span class="s1">&#39;*default&#39;</span><span class="o">:</span> <span class="s1">&#39;default&#39;</span>
@@ -20,9 +21,18 @@
     <span class="nx">menu</span><span class="o">:</span> <span class="nx">menuFn</span><span class="p">,</span>
     <span class="nx">combigame</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;combigame&#39;</span><span class="p">).</span><span class="nx">run</span><span class="p">,</span>
     <span class="nx">bidiv</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;bidiv&#39;</span><span class="p">).</span><span class="nx">run</span><span class="p">,</span>
+    <span class="nx">rasmuserik</span><span class="o">:</span> <span class="nx">htmlFn</span><span class="p">(</span><span class="s1">&#39;rasmuserik&#39;</span><span class="p">),</span>
     <span class="nx">source</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showSource&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span> <span class="p">},</span>
+    <span class="nx">html</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">},</span>
     <span class="nx">notes</span><span class="o">:</span> <span class="nx">notes</span>
 <span class="p">});</span>
+
+<span class="kd">function</span> <span class="nx">htmlFn</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;html/&#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;.inc&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">html</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">};}</span>
 
 <span class="kd">function</span> <span class="nx">unicodeTest</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">[];</span>
@@ -55,9 +65,12 @@
 
 <span class="kd">var</span> <span class="nx">sitemap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SiteMap</span><span class="p">();</span>
 
-<span class="nx">exports</span><span class="p">.</span><span class="nx">main</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span> <span class="p">});</span>
-<span class="p">};</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">main</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">Backbone</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div id=&quot;content&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});};</span>
 
 <span class="kd">function</span> <span class="nx">menuFn</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">).</span><span class="nx">init</span><span class="p">();</span>

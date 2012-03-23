@@ -1,0 +1,213 @@
+<!DOCTYPE html>  <html> <head>   <title>combigame.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               combigame.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">cardSprites</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zquery&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">_</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">Modernizr</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;modernizr&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">hidden</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">opacity</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">width</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">height</span><span class="o">:</span> <span class="mi">0</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">transitionStyle</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;transition&#39;</span><span class="o">:</span> <span class="s1">&#39;opacity 2s&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-moz-transition&#39;</span><span class="o">:</span> <span class="s1">&#39;opacity 2s&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-webkit-transition&#39;</span><span class="o">:</span> <span class="s1">&#39;opacity 2s&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;-o-transition&#39;</span><span class="o">:</span> <span class="s1">&#39;opacity 2s&#39;</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">visibleStyle</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">selectedStyle</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">unselectedStyle</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">pos</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">size</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">doLayout</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">$content</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">);</span>
+    <span class="nx">$content</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">$content</span><span class="p">.</span><span class="nx">width</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">$content</span><span class="p">.</span><span class="nx">height</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">topPad</span><span class="p">,</span> <span class="nx">leftPad</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">landscape</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">;</span>
+
+    <span class="nx">pos</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">size</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="nx">h</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="nx">h</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span><span class="p">);</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nx">w</span> <span class="o">&gt;</span> <span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">topPad</span> <span class="o">=</span> <span class="p">(</span><span class="nx">h</span> <span class="o">-</span> <span class="nx">size</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="nx">leftPad</span> <span class="o">=</span> <span class="p">(</span><span class="nx">w</span> <span class="o">-</span> <span class="nx">size</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">topPad</span> <span class="o">=</span> <span class="p">(</span><span class="nx">h</span> <span class="o">-</span> <span class="nx">size</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="nx">leftPad</span> <span class="o">=</span> <span class="p">(</span><span class="nx">w</span> <span class="o">-</span> <span class="nx">size</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="nx">landscape</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">topPad</span> <span class="o">+=</span> <span class="mf">0.05</span><span class="o">*</span><span class="nx">size</span><span class="p">;</span>
+    <span class="nx">leftPad</span> <span class="o">+=</span> <span class="mf">0.05</span><span class="o">*</span><span class="nx">size</span><span class="p">;</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">pos</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+                <span class="nx">top</span><span class="o">:</span> <span class="nx">topPad</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="nx">y</span><span class="p">)</span> <span class="o">*</span> <span class="nx">size</span><span class="p">,</span>
+                <span class="nx">left</span><span class="o">:</span> <span class="nx">leftPad</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="nx">x</span><span class="p">)</span> <span class="o">*</span> <span class="nx">size</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">landscape</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">pos</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+                <span class="nx">top</span><span class="o">:</span> <span class="nx">topPad</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="nx">i</span><span class="p">)</span> <span class="o">*</span> <span class="nx">size</span><span class="p">,</span>
+                <span class="nx">left</span><span class="o">:</span> <span class="nx">leftPad</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="nx">size</span>
+            <span class="p">});</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">pos</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
+                <span class="nx">top</span><span class="o">:</span> <span class="nx">topPad</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="nx">size</span><span class="p">,</span>
+                <span class="nx">left</span><span class="o">:</span> <span class="nx">leftPad</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="nx">i</span><span class="p">)</span> <span class="o">*</span> <span class="nx">size</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nx">visibleStyle</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">opacity</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;margin-top&#39;</span><span class="o">:</span> <span class="o">-</span><span class="nx">size</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+        <span class="s1">&#39;margin-left&#39;</span><span class="o">:</span> <span class="o">-</span><span class="nx">size</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+        <span class="nx">width</span><span class="o">:</span> <span class="mf">0.9</span><span class="o">*</span><span class="nx">size</span><span class="p">,</span>
+        <span class="nx">height</span><span class="o">:</span> <span class="mf">0.9</span><span class="o">*</span><span class="nx">size</span>
+    <span class="p">};</span>
+    <span class="nx">selectedStyle</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;border-style&#39;</span><span class="o">:</span> <span class="s1">&#39;solid&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;border-width&#39;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;margin-top&#39;</span><span class="o">:</span> <span class="o">-</span><span class="nx">size</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;margin-left&#39;</span><span class="o">:</span> <span class="o">-</span><span class="nx">size</span><span class="o">/</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;border-radius&#39;</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mi">16</span><span class="p">,</span>
+        <span class="s1">&#39;border-color&#39;</span><span class="o">:</span> <span class="s1">&#39;gray&#39;</span>
+    <span class="p">};</span>
+    <span class="nx">unselectedStyle</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;margin-top&#39;</span><span class="o">:</span> <span class="o">-</span><span class="nx">size</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+        <span class="s1">&#39;margin-left&#39;</span><span class="o">:</span> <span class="o">-</span><span class="nx">size</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+        <span class="nx">border</span><span class="o">:</span> <span class="s1">&#39;none&#39;</span>
+    <span class="p">};</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">cardSprites</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cardSprites</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;combigameCards&#39;</span><span class="p">).</span><span class="nx">createCards</span><span class="p">(</span><span class="nx">size</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">click</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">4</span><span class="p">));</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nx">top</span><span class="o">:-</span><span class="nx">size</span><span class="p">,</span> <span class="nx">left</span><span class="o">:-</span><span class="nx">size</span><span class="p">});</span>
+    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">anim</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#card&#39;</span> <span class="o">+</span> <span class="nx">cards</span><span class="p">[</span><span class="nx">i</span><span class="p">]))();</span>
+    <span class="p">}</span>
+
+    <span class="cm">/*$(&#39;.card&#39;).bind(Modernizr.touch?&#39;touchstart&#39;:&#39;mousedown&#39;, function(e, e2) {</span>
+<span class="cm">        click(e.target.id.slice(4));</span>
+<span class="cm">        return true;</span>
+<span class="cm">    });*/</span>
+<span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">click</span><span class="p">(</span><span class="nx">card</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">card</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">exports</span><span class="p">.</span><span class="nx">selected</span><span class="p">[</span><span class="nx">card</span><span class="p">])</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#card&#39;</span> <span class="o">+</span> <span class="nx">card</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="nx">unselectedStyle</span><span class="p">);</span>
+        <span class="k">delete</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">selected</span><span class="p">[</span><span class="nx">card</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#card&#39;</span> <span class="o">+</span> <span class="nx">card</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="nx">selectedStyle</span><span class="p">);</span>
+        <span class="nx">exports</span><span class="p">.</span><span class="nx">selected</span><span class="p">[</span><span class="nx">card</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">testSelected</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">testSelected</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">exports</span><span class="p">.</span><span class="nx">selected</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">okSet</span><span class="p">(</span><span class="nx">list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">list</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span> <span class="p">{</span>
+            <span class="nx">list</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#card&#39;</span><span class="o">+</span><span class="nx">id</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;opacity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="p">});</span>
+            <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">list</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#card&#39;</span><span class="o">+</span><span class="nx">id</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;opacity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="p">});</span>
+            <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">ids</span> <span class="o">=</span> <span class="p">[</span><span class="nx">_</span><span class="p">(</span><span class="nx">cards</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nx">_</span><span class="p">(</span><span class="nx">cards</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">list</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nx">_</span><span class="p">(</span><span class="nx">cards</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">list</span><span class="p">[</span><span class="mi">2</span><span class="p">])];</span>
+            <span class="k">do</span> <span class="p">{</span>
+                <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">cards</span><span class="p">[</span><span class="nx">ids</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">randomCard</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="nx">okDeck</span><span class="p">());</span>
+            <span class="nx">doLayout</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="nx">unselectedStyle</span><span class="p">);</span>
+        <span class="nx">exports</span><span class="p">.</span><span class="nx">selected</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">selected</span> <span class="o">=</span> <span class="p">{};</span>
+
+<span class="kd">function</span> <span class="nx">anim</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">$card</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$card</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="nx">pos</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">$card</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="nx">transitionStyle</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="nx">visibleStyle</span><span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">rnd3</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">|</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">randomCard</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">rnd3</span><span class="p">()</span> <span class="o">+</span> <span class="nx">rnd3</span><span class="p">()</span> <span class="o">+</span> <span class="nx">rnd3</span><span class="p">()</span> <span class="o">+</span> <span class="nx">rnd3</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">cards</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="kd">function</span> <span class="nx">okSet</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">ok</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">b</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">b</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">===</span> <span class="nx">c</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="o">||</span>
+            <span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">b</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">b</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">c</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">c</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">okDeck</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">cardHash</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="kd">var</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">cardHash</span><span class="p">[</span><span class="nx">cards</span><span class="p">[</span><span class="nx">i</span><span class="p">]])</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">cardHash</span><span class="p">[</span><span class="nx">cards</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span><span class="p">(</span><span class="nx">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">a</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">b</span> <span class="o">&lt;</span> <span class="mi">11</span><span class="p">;</span> <span class="o">++</span><span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="nx">c</span> <span class="o">=</span> <span class="nx">b</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">c</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="o">++</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">okSet</span><span class="p">(</span><span class="nx">cards</span><span class="p">[</span><span class="nx">a</span><span class="p">],</span> <span class="nx">cards</span><span class="p">[</span><span class="nx">b</span><span class="p">],</span> <span class="nx">cards</span><span class="p">[</span><span class="nx">c</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">run</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">).</span><span class="nx">init</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span> <span class="nx">doLayout</span><span class="p">});</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="nx">cards</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">cards</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">randomCard</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="nx">okDeck</span><span class="p">());</span>
+    <span class="nx">doLayout</span><span class="p">();</span>
+    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">).</span><span class="nx">init</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span> <span class="nx">doLayout</span><span class="p">});</span>
+<span class="p">};</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
