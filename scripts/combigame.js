@@ -199,13 +199,11 @@ function okDeck() {
 
 exports.run = function() {
     $('#content').html('');
-    require('fullbrows').init({update: doLayout});
     do {
         cards = [];
         for(var i = 0; i < 12; ++i) {
             cards.push(randomCard());
         }
     } while(!okDeck());
-    doLayout();
     require('fullbrows').init({update: doLayout});
 };
