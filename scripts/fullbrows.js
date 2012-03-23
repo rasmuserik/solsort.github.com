@@ -33,9 +33,10 @@ var init = exports.init = function(opt) {
     } else {
         $('body').append('<div style="height:' +
                 (Math.max(webutil.windowHeight(),$(window).width()) + 62) +
-                'px;background-color: black;"></div>');
+                'px;"></div>');
+                //'px;background-color: black;"></div>');
     }
-    $('body').css('background-color', 'black');
+//    $('body').css('background-color', 'black');
     $(window).bind('resize', relayoutDelayed);
     $(window).bind('orientationchange', relayoutDelayed);
     relayout();
