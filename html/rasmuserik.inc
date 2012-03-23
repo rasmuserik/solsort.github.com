@@ -27,7 +27,12 @@
     <div>2012-03-21 <a href="#combigame">Combigame</a> early prototype of a Set™-like game for mobile devices (currently not working in internet explorer)</div>
     <div>2012-03-20 <a href="https://github.com/solsort/solsort.github.com">Github repository for solsort.com</a> with code/content from solsort.dk</div>
     <div>2012-03-18 <a href="#notes/speak-eval">Notes</a> for a presentation on speech evaluation at Toastmasters</div>
+    <div>2012-03-16 <a href="#bidiv">Experiment</a> with layout based on binary division of space</div>
     <div>2012-03-11 <a href="/docs/server.html">JavaScript development server / bundling tool</a> started</div>
     <div>2012-03-10 <a href="http://solsort.dk/osd2012">Serious JavaScript - presentation at OpenSourceDays 2012</a></div>
+    <div>2012-02-25 <a href="#menu">Experiment</a> with 2d-layout of hierarchical data</div>
+    <div>2011-08-28 <a href="http://solsort.dk/planetcute">Simple app experiment</a> for game with the planetcute tileset</div>
+    <div>2011-08-02 <a href="http://solsort.dk/dkcities">Simple app</a> for learning the danish citynames</div>
+    <div>2011-05-24 <a href="http://solsort.dk/notescore">Simple app</a> for learning notes/scores on piano (<a href="https://play.google.com/store/apps/details?id=dk.solsort.notescore">https://play.google.com/store/apps/details?id=dk.solsort.notescore</a></div>
     <div><a href="http://github.com/rasmuserik/">Various other projects at GitHub</a></div>
 </div>
