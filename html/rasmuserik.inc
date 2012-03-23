@@ -23,8 +23,8 @@
 <hr>
 
 <div class="section">
-    Recent:
-    <div>2012-03-21 <a href="#combigame">Combigame</a> early prototype of a Set™-like game for mobile devices (currently not working in internet explorer)</div>
+    Recent (a lot of these are experiments and may only work in modern browsers, ie. Firefox, Chromium or similar):
+    <div>2012-03-21 <a href="#combigame">Combigame</a> early prototype of a Set™-like game for mobile devices</div>
     <div>2012-03-20 <a href="https://github.com/solsort/solsort.github.com">Github repository for solsort.com</a> with code/content from solsort.dk</div>
     <div>2012-03-18 <a href="#notes/speak-eval">Notes</a> for a presentation on speech evaluation at Toastmasters</div>
     <div>2012-03-16 <a href="#bidiv">Experiment</a> with layout based on binary division of space</div>
