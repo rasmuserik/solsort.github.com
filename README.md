@@ -10,3 +10,4 @@
     - `debug.html` - debug version of app
     - `404.html` error page: redirect to /
     - `dist` generated debug/minified/... JavaScript
+    - `docs` docco generated documentation from source code
