@@ -30,7 +30,7 @@ var SiteMap = Backbone.Router.extend({
 
 function htmlFn(name) { return function() {
     $.get('html/' + name + '.inc', function(html) {
-        $('#content').html(html);
+        $('#content').html(html).css('overflow', 'auto');
     });
 };}
 
