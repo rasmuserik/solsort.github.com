@@ -91,6 +91,7 @@ var doLayout = function() {
         cardSprites = require('combigameCards').createCards(size);
         $('.card').bind('touchstart mousedown', function(e) {
             click(e.target.id.slice(4));
+            e.preventDefault();
             return true;
         });
     }
