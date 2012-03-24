@@ -89,7 +89,7 @@
 
     <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">cardSprites</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">cardSprites</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;combigameCards&#39;</span><span class="p">).</span><span class="nx">createCards</span><span class="p">(</span><span class="nx">size</span><span class="p">);</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;touchstart mousedown&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">click</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">4</span><span class="p">));</span>
             <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
         <span class="p">});</span>
@@ -106,7 +106,14 @@
 <span class="cm">    });*/</span>
 <span class="p">};</span>
 
+<span class="kd">var</span> <span class="nx">lastClickTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">prevCard</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
 <span class="kd">function</span> <span class="nx">click</span><span class="p">(</span><span class="nx">card</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">card</span> <span class="o">===</span> <span class="nx">prevCard</span> <span class="o">&amp;&amp;</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">lastClickTime</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">prevCard</span> <span class="o">=</span> <span class="nx">card</span><span class="p">;</span>
+    <span class="nx">lastClickTime</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">card</span><span class="p">);</span>
     <span class="k">if</span><span class="p">(</span><span class="nx">exports</span><span class="p">.</span><span class="nx">selected</span><span class="p">[</span><span class="nx">card</span><span class="p">])</span> <span class="p">{</span>
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#card&#39;</span> <span class="o">+</span> <span class="nx">card</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="nx">unselectedStyle</span><span class="p">);</span>

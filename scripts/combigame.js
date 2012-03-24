@@ -89,7 +89,7 @@ var doLayout = function() {
 
     if(!cardSprites) {
         cardSprites = require('combigameCards').createCards(size);
-        $('.card').bind('click', function(e) {
+        $('.card').bind('touchstart mousedown', function(e) {
             click(e.target.id.slice(4));
             return true;
         });
@@ -106,7 +106,14 @@ var doLayout = function() {
     });*/
 };
 
+var lastClickTime = 0;
+var prevCard = '';
 function click(card) {
+    if(card === prevCard && Date.now() - lastClickTime < 1000) {
+            return;
+    }
+    prevCard = card;
+    lastClickTime = Date.now();
     console.log(card);
     if(exports.selected[card]) {
         $('#card' + card).css(unselectedStyle);
