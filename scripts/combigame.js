@@ -1,3 +1,4 @@
+/*global alert: true*/
 var cardSprites;
 var $ = require('zquery');
 var _ = require('underscore');
@@ -88,23 +89,20 @@ var doLayout = function() {
     };
 
     if(!cardSprites) {
-        cardSprites = require('combigameCards').createCards(2*size);
-        $('.card').bind('touchstart mousedown', function(e) {
-            click(e.target.id.slice(4));
-            e.preventDefault();
-            return true;
-        });
     }
+    $('#timer').css({
+            'font-size': w / 3,
+            'color': '#eeeeee',
+            position: 'absolute',
+            'text-align': 'center',
+            'width': '100%'
+            })
+        .css('top', (h-$('#timer').height())/2);
 
     $('.card').css({top:-size, left:-size});
     for(i = 0; i < 12; ++i) {
         anim(i, $('#card' + cards[i]))();
     }
-
-    /*$('.card').bind(Modernizr.touch?'touchstart':'mousedown', function(e, e2) {
-        click(e.target.id.slice(4));
-        return true;
-    });*/
 };
 
 var lastClickTime = 0;
@@ -126,18 +124,18 @@ function click(card) {
     testSelected();
 }
 
+var score = 0;
 function testSelected() {
     var list = Object.keys(exports.selected);
     if(list.length >= 3) {
         if(okSet(list[0], list[1], list[2])) {
-            list.forEach(function(id) {
-                $('#card'+id).css('opacity', 0);
-            });
+            ++score;
             setTimeout(function() {
                 list.forEach(function(id) {
                     $('#card'+id).css('opacity', 0);
                 });
             }, 0);
+            setTimeout(function() {
             var ids = [_(cards).indexOf(list[0]), _(cards).indexOf(list[1]), _(cards).indexOf(list[2])];
             do {
                 for(var i = 0; i < 3; ++i) {
@@ -145,8 +143,8 @@ function testSelected() {
                 }
             } while(!okDeck());
             doLayout();
+            }, 2000);
         }
-
         $('.card').css(unselectedStyle);
         exports.selected = {};
     }
@@ -205,8 +203,32 @@ function okDeck() {
     return false;
 }
 
-exports.run = function() {
-    $('#content').html('');
+var finalTime;
+function timer() {
+    var now = Date.now();
+    if(now > finalTime) {
+        alert('Score: ' + score);
+        menu();
+    } else {
+        var sec = (finalTime - now)/1000;
+        $('#timer').text(
+                (sec/60|0) + ':' + (''+(100 + (sec%60))).slice(1,3)
+        );
+        setTimeout(timer, 100);
+    }
+}
+function startGame() {
+    $('#content').html('<div id="timer"></div>');
+    finalTime = Date.now() + 3 * 60 * 1000;
+    timer();
+
+    require('combigameCards').createCards($('#content').width()/3|0);
+    $('.card').bind('touchstart mousedown', function(e) {
+        click(e.target.id.slice(4));
+        return true;
+    });
+
+    score = 0;
     do {
         cards = [];
         for(var i = 0; i < 12; ++i) {
@@ -214,4 +236,46 @@ exports.run = function() {
         }
     } while(!okDeck());
     require('fullbrows').init({update: doLayout});
+}
+
+function menu() {
+    $('#content').html('')
+        .append(
+            $('<div>')
+                .text('Play')
+                .bind('click', startGame)
+        ).append(
+            $('<div>')
+                .text('Settings')
+                .bind('click', settings)
+        ).append(
+            $('<div>')
+                .text('Score')
+                .bind('click', showScore)
+        ).append(
+            $('<div>')
+                .text('Help')
+                .bind('click', help)
+        ).css({
+            'font-family': 'sans-serif',
+            'text-align': 'center',
+            'width': '80%',
+            'height': '80%',
+            'left': '10%',
+            'top': '10%'
+        });
+    $('#content>div').css({
+    });
+    require('webutil').scaleText($('#content'));
+    $('#content').css('overflow', 'visible');
+}
+function help() {
+}
+function settings() {
+}
+function showScore() {
+}
+
+exports.run = function() {
+    require('fullbrows').init({update: menu});
 };
