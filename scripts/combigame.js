@@ -154,11 +154,21 @@ function shuffle(fn) {
     }
     cards = saved;
 }
+var logData = [];
+function log(obj) {
+    logData.push(JSON.parse(JSON.stringify(obj)));
+    console.log(JSON.stringify(obj));
+}
 
 function testSelected() {
     var list = Object.keys(exports.selected);
     if(list.length >= 3) {
         if(okSet(list[0], list[1], list[2])) {
+            var now = Date.now();
+            log([now - prevtime, giveup, cards, list, now]);
+            giveup = false;
+            prevtime = now;
+
             setTimeout(function() {
                 list.forEach(function(id) {
                     $('#card'+id).css('opacity', 0);
@@ -210,6 +220,23 @@ function okSet(a, b, c) {
     return true;
 }
 
+function hint() {
+    var a, b, c;
+    for(a = 0; a < 10; ++a) {
+        for(b = a + 1; b < 11; ++b) {
+            for(c = b + 1; c < 12; ++c) {
+                if(okSet(cards[a], cards[b], cards[c])) {
+                    $('#card'+cards[a]).css('opacity', 0.3);
+                    $('#card'+cards[b]).css('opacity', 0.3);
+                    $('#card'+cards[c]).css('opacity', 0.3);
+                    giveup = true;
+                    return;
+                }
+            }
+        }
+    }
+}
+
 function okDeck() {
     var cardHash = {};
     var a, b, c;
@@ -233,10 +260,14 @@ function okDeck() {
     return ok;
 }
 
+var prevtime;
+var giveup;
 function startGame() {
+    giveup = false;
     fullbrows.init();
     var $content = $('#content');
     $content.html('');
+    prevtime = Date.now();
 
     require('combigameCards').createCards($('#content').width()/3|0);
     $('.card').bind('touchstart mousedown', function(e) {
@@ -249,7 +280,6 @@ function startGame() {
         $('<img class="menuIcon" src="/images/help.png" alt="How to play">')
             .css('position', 'absolute')
             .bind('click', function() {
-                console.log('here');
                 fullbrows.init({update:function() {
                     $.get('html/combigameguide.inc', function(html) {
                         var $t = $('<div>');
@@ -266,8 +296,8 @@ function startGame() {
         $('<img class="menuIcon menuEast" src="/images/difficulty.png" alt="Difficulty">')
             .css('position', 'absolute')
             .bind('click', function() { menu(
-                {  friendly:function() {
-                    difficulty = 'friendly';
+                {  easy: function() {
+                    difficulty = 'easy';
                     startGame();
                 }, normal: function () {
                     difficulty = 'normal';
@@ -279,12 +309,13 @@ function startGame() {
     ).append(
         $('<img class="menuIcon menuSouth" src="/images/give-up.png" alt="Give up">')
             .css('position', 'absolute')
+            .bind('click', hint)
     ).append(
         $('<img class="menuIcon menuEast menuSouth" src="/images/score.png" alt="Score">')
             .css('position', 'absolute')
     );
 
-    difficulty = difficulty || localStorage.getItem('combigameDifficulty') || 'friendly';
+    difficulty = difficulty || localStorage.getItem('combigameDifficulty') || 'normal';
     localStorage.setItem('combigameDifficulty', difficulty);
     $('#content').append($('<div class="difficultyStatus">').text(difficulty));
 
