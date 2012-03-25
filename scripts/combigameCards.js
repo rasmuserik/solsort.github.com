@@ -6,7 +6,7 @@ var $ = require('zquery');
 var document = require('document');
 
 function draw(ctx, figure, color, fill, x, y, size) {
-    var colorPrefix = ['rgba(200,0,0,', 'rgba(0,200,0,', 'rgba(0,0,200,'] [color];
+    var colorPrefix = ['rgba(180,0,180,', 'rgba(50,200,0,', 'rgba(0,150,230,'] [color];
     ctx.lineWidth = size / 10;
     ctx.lineJoin= 'round';
     ctx.lineCap= 'round';
