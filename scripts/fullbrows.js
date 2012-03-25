@@ -13,6 +13,7 @@ function relayout() {
         .css('left', 0)
         .css('top', 1)
         .css('overflow', 'hidden')
+        .css('font-family', 'sans-serif')
         .css('width', $(window).width())
         .css('height', browsOpt.scrollable ? 'auto' : webutil.windowHeight());
     if(typeof relayoutFn === 'function') {

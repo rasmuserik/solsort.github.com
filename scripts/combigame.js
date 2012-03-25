@@ -1,6 +1,8 @@
 /*global localStorage: true*/
 var $ = require('zquery');
 var _ = require('underscore');
+var webutil = require('webutil');
+var fullbrows = require('fullbrows');
 var Modernizr = require('modernizr');
 
 var hidden = {
@@ -100,13 +102,12 @@ var doLayout = function() {
     $('.difficultyStatus').css({
         position: 'absolute',
         width: size/2.3,
-        'font-family': 'sans-serif',
         top: size/1.5,
         'text-align': 'right',
         height: size*2,
         left: w - size/2
     });
-    require('webutil').scaleText($('.difficultyStatus'));
+    webutil.scaleText($('.difficultyStatus'));
     $('.difficultyStatus').css('overflow', 'visible');
 
 };
@@ -233,8 +234,9 @@ function okDeck() {
 }
 
 function startGame() {
-    require('fullbrows').init();
-    $('#content').html('');
+    fullbrows.init();
+    var $content = $('#content');
+    $content.html('');
 
     require('combigameCards').createCards($('#content').width()/3|0);
     $('.card').bind('touchstart mousedown', function(e) {
@@ -243,9 +245,23 @@ function startGame() {
         return true;
     });
 
-    $('#content').append(
+    $content.append(
         $('<img class="menuIcon" src="/images/help.png" alt="How to play">')
             .css('position', 'absolute')
+            .bind('click', function() {
+                console.log('here');
+                fullbrows.init({update:function() {
+                    $.get('html/combigameguide.inc', function(html) {
+                        var $t = $('<div>');
+                        $t.html(html);
+                        $content.html('').append($t);
+                        $t.css({width: '80%', height:'90%'});
+                        webutil.scaleText($t);
+                        $t.css({margin: '5% 10% 5% 10%', overflow: 'visible'});
+                        $t.bind('mousedown touchstart', startGame);
+                    });
+                }});
+            })
     ).append(
         $('<img class="menuIcon menuEast" src="/images/difficulty.png" alt="Difficulty">')
             .css('position', 'absolute')
@@ -279,10 +295,10 @@ function startGame() {
             cards.push(randomCard());
         }
     });
-    require('fullbrows').init({update: doLayout});
+    fullbrows.init({update: doLayout});
 }
 
-function menu(items) { require('fullbrows').init({update: function() {
+function menu(items) { fullbrows.init({update: function() {
     var item;
     var s = Math.min($('#content').height() + $('#content').width());
     var $menu = $('<div>');
@@ -295,7 +311,6 @@ function menu(items) { require('fullbrows').init({update: function() {
                 .css({
                     border: '1px solid black',
                     'border-radius': s * 0.02,
-                    'font-family': 'sans-serif',
                     'text-align': 'center',
                     margin: s * 0.01,
                     padding: s * 0.01
@@ -303,7 +318,7 @@ function menu(items) { require('fullbrows').init({update: function() {
                 .bind('click', items[item])
         );
     }
-    require('webutil').scaleText($content);
+    webutil.scaleText($content);
     $content.css('font-size', parseInt($content.css('font-size'), 10) * 0.8);
     $menu.css('top', ($content.height() - $menu.height()) /2);
     $menu.css('position', 'absolute');

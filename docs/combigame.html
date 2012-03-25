@@ -1,6 +1,8 @@
 <!DOCTYPE html>  <html> <head>   <title>combigame.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               combigame.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/*global localStorage: true*/</span>
 <span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zquery&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">_</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">webutil</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;webutil&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fullbrows</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">Modernizr</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;modernizr&#39;</span><span class="p">);</span>
 
 <span class="kd">var</span> <span class="nx">hidden</span> <span class="o">=</span> <span class="p">{</span>
@@ -100,13 +102,12 @@
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.difficultyStatus&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
         <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;absolute&#39;</span><span class="p">,</span>
         <span class="nx">width</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mf">2.3</span><span class="p">,</span>
-        <span class="s1">&#39;font-family&#39;</span><span class="o">:</span> <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span>
         <span class="nx">top</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">,</span>
         <span class="s1">&#39;text-align&#39;</span><span class="o">:</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span>
         <span class="nx">height</span><span class="o">:</span> <span class="nx">size</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>
         <span class="nx">left</span><span class="o">:</span> <span class="nx">w</span> <span class="o">-</span> <span class="nx">size</span><span class="o">/</span><span class="mi">2</span>
     <span class="p">});</span>
-    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;webutil&#39;</span><span class="p">).</span><span class="nx">scaleText</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.difficultyStatus&#39;</span><span class="p">));</span>
+    <span class="nx">webutil</span><span class="p">.</span><span class="nx">scaleText</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.difficultyStatus&#39;</span><span class="p">));</span>
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.difficultyStatus&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;overflow&#39;</span><span class="p">,</span> <span class="s1">&#39;visible&#39;</span><span class="p">);</span>
 
 <span class="p">};</span>
@@ -233,8 +234,9 @@
 <span class="p">}</span>
 
 <span class="kd">function</span> <span class="nx">startGame</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">).</span><span class="nx">init</span><span class="p">();</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+    <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">$content</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">);</span>
+    <span class="nx">$content</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
 
     <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;combigameCards&#39;</span><span class="p">).</span><span class="nx">createCards</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span><span class="o">/</span><span class="mi">3</span><span class="o">|</span><span class="mi">0</span><span class="p">);</span>
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;touchstart mousedown&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
@@ -243,9 +245,23 @@
         <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">});</span>
 
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span>
+    <span class="nx">$content</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span>
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;img class=&quot;menuIcon&quot; src=&quot;/images/help.png&quot; alt=&quot;How to play&quot;&gt;&#39;</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">)</span>
+            <span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;here&#39;</span><span class="p">);</span>
+                <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;html/combigameguide.inc&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">html</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="kd">var</span> <span class="nx">$t</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">);</span>
+                        <span class="nx">$t</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+                        <span class="nx">$content</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">$t</span><span class="p">);</span>
+                        <span class="nx">$t</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="s1">&#39;80%&#39;</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span><span class="s1">&#39;90%&#39;</span><span class="p">});</span>
+                        <span class="nx">webutil</span><span class="p">.</span><span class="nx">scaleText</span><span class="p">(</span><span class="nx">$t</span><span class="p">);</span>
+                        <span class="nx">$t</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">margin</span><span class="o">:</span> <span class="s1">&#39;5% 10% 5% 10%&#39;</span><span class="p">,</span> <span class="nx">overflow</span><span class="o">:</span> <span class="s1">&#39;visible&#39;</span><span class="p">});</span>
+                        <span class="nx">$t</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;mousedown touchstart&#39;</span><span class="p">,</span> <span class="nx">startGame</span><span class="p">);</span>
+                    <span class="p">});</span>
+                <span class="p">}});</span>
+            <span class="p">})</span>
     <span class="p">).</span><span class="nx">append</span><span class="p">(</span>
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;img class=&quot;menuIcon menuEast&quot; src=&quot;/images/difficulty.png&quot; alt=&quot;Difficulty&quot;&gt;&#39;</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">)</span>
@@ -279,10 +295,10 @@
             <span class="nx">cards</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">randomCard</span><span class="p">());</span>
         <span class="p">}</span>
     <span class="p">});</span>
-    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">).</span><span class="nx">init</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span> <span class="nx">doLayout</span><span class="p">});</span>
+    <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span> <span class="nx">doLayout</span><span class="p">});</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">menu</span><span class="p">(</span><span class="nx">items</span><span class="p">)</span> <span class="p">{</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">).</span><span class="nx">init</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nx">menu</span><span class="p">(</span><span class="nx">items</span><span class="p">)</span> <span class="p">{</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">item</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span> <span class="o">+</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">width</span><span class="p">());</span>
     <span class="kd">var</span> <span class="nx">$menu</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">);</span>
@@ -295,7 +311,6 @@
                 <span class="p">.</span><span class="nx">css</span><span class="p">({</span>
                     <span class="nx">border</span><span class="o">:</span> <span class="s1">&#39;1px solid black&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;border-radius&#39;</span><span class="o">:</span> <span class="nx">s</span> <span class="o">*</span> <span class="mf">0.02</span><span class="p">,</span>
-                    <span class="s1">&#39;font-family&#39;</span><span class="o">:</span> <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;text-align&#39;</span><span class="o">:</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span>
                     <span class="nx">margin</span><span class="o">:</span> <span class="nx">s</span> <span class="o">*</span> <span class="mf">0.01</span><span class="p">,</span>
                     <span class="nx">padding</span><span class="o">:</span> <span class="nx">s</span> <span class="o">*</span> <span class="mf">0.01</span>
@@ -303,7 +318,7 @@
                 <span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">items</span><span class="p">[</span><span class="nx">item</span><span class="p">])</span>
         <span class="p">);</span>
     <span class="p">}</span>
-    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;webutil&#39;</span><span class="p">).</span><span class="nx">scaleText</span><span class="p">(</span><span class="nx">$content</span><span class="p">);</span>
+    <span class="nx">webutil</span><span class="p">.</span><span class="nx">scaleText</span><span class="p">(</span><span class="nx">$content</span><span class="p">);</span>
     <span class="nx">$content</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;font-size&#39;</span><span class="p">,</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">$content</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;font-size&#39;</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">);</span>
     <span class="nx">$menu</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">$content</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span> <span class="o">-</span> <span class="nx">$menu</span><span class="p">.</span><span class="nx">height</span><span class="p">())</span> <span class="o">/</span><span class="mi">2</span><span class="p">);</span>
     <span class="nx">$menu</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">);</span>
