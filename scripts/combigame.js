@@ -10,10 +10,10 @@ var hidden = {
 };
 
 var transitionStyle = {
-    'transition': 'opacity 2s',
-    '-moz-transition': 'opacity 2s',
-    '-webkit-transition': 'opacity 2s',
-    '-o-transition': 'opacity 2s'
+    'transition': 'opacity 1s',
+    '-moz-transition': 'opacity 1s',
+    '-webkit-transition': 'opacity 1s',
+    '-o-transition': 'opacity 1s'
 };
 
 var visibleStyle;
@@ -119,7 +119,6 @@ function click(card) {
     }
     prevCard = card;
     lastClickTime = Date.now();
-    console.log(card);
     if(exports.selected[card]) {
         $('#card' + card).css(unselectedStyle);
         delete exports.selected[card];
@@ -128,6 +127,31 @@ function click(card) {
         exports.selected[card] = true;
     }
     testSelected();
+}
+
+function shuffle(fn) {
+    var score, bestscore = -10000, saved;
+    var i;
+    for(i=0;i<100;++i) {
+        do {
+            fn();
+            score = okDeck();
+        } while(!score);
+
+        if(difficulty === 'normal') {
+            saved = cards;
+            break;
+        }
+
+        if(difficulty === 'hard') {
+            score = -score;
+        }
+        if(score > bestscore) {
+            saved = cards.slice(0);
+            bestscore = score;
+        }
+    }
+    cards = saved;
 }
 
 function testSelected() {
@@ -141,13 +165,13 @@ function testSelected() {
             }, 0);
             setTimeout(function() {
             var ids = [_(cards).indexOf(list[0]), _(cards).indexOf(list[1]), _(cards).indexOf(list[2])];
-            do {
+            shuffle(function() {
                 for(var i = 0; i < 3; ++i) {
                     cards[ids[i]] = randomCard();
                 }
-            } while(!okDeck());
+            });
             doLayout();
-            }, 2000);
+            }, 1000);
         }
         $('.card').css(unselectedStyle);
         exports.selected = {};
@@ -189,6 +213,7 @@ function okDeck() {
     var cardHash = {};
     var a, b, c;
     var i;
+    var ok = 0;
     for(i = 0; i < 12; ++i) {
         if(cardHash[cards[i]]) {
             return false;
@@ -199,12 +224,12 @@ function okDeck() {
         for(b = a + 1; b < 11; ++b) {
             for(c = b + 1; c < 12; ++c) {
                 if(okSet(cards[a], cards[b], cards[c])) {
-                    return true;
+                    ++ok;
                 }
             }
         }
     }
-    return false;
+    return ok;
 }
 
 function startGame() {
@@ -225,8 +250,8 @@ function startGame() {
         $('<img class="menuIcon menuEast" src="/images/difficulty.png" alt="Difficulty">')
             .css('position', 'absolute')
             .bind('click', function() { menu(
-                {  easy:function() {
-                    difficulty = 'easy';
+                {  friendly:function() {
+                    difficulty = 'friendly';
                     startGame();
                 }, normal: function () {
                     difficulty = 'normal';
@@ -243,17 +268,17 @@ function startGame() {
             .css('position', 'absolute')
     );
 
-    difficulty = difficulty || localStorage.getItem('combigameDifficulty') || 'normal';
+    difficulty = difficulty || localStorage.getItem('combigameDifficulty') || 'friendly';
     localStorage.setItem('combigameDifficulty', difficulty);
     $('#content').append($('<div class="difficultyStatus">').text(difficulty));
 
 
-    do {
+    shuffle(function() {
         cards = [];
         for(var i = 0; i < 12; ++i) {
             cards.push(randomCard());
         }
-    } while(!okDeck());
+    });
     require('fullbrows').init({update: doLayout});
 }
 
