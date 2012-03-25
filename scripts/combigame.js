@@ -1,4 +1,4 @@
-/*global alert: true*/
+/*global localStorage: true*/
 var $ = require('zquery');
 var _ = require('underscore');
 var Modernizr = require('modernizr');
@@ -21,6 +21,7 @@ var selectedStyle;
 var unselectedStyle;
 var pos;
 var size;
+var difficulty;
 var doLayout = function() {
     var $content = $('#content');
     $content.css('background', 'white');
@@ -95,6 +96,19 @@ var doLayout = function() {
     $('.menuIcon').css({width: size/1.5, height: size/1.5});
     $('.menuEast').css({left: w - size/1.5});
     $('.menuSouth').css({top: h - size/1.5});
+
+    $('.difficultyStatus').css({
+        position: 'absolute',
+        width: size/2.3,
+        'font-family': 'sans-serif',
+        top: size/1.5,
+        'text-align': 'right',
+        height: size*2,
+        left: w - size/2
+    });
+    require('webutil').scaleText($('.difficultyStatus'));
+    $('.difficultyStatus').css('overflow', 'visible');
+
 };
 
 var lastClickTime = 0;
@@ -212,11 +226,14 @@ function startGame() {
             .css('position', 'absolute')
             .bind('click', function() { menu(
                 {  easy:function() {
-                    console.log('easy');
-                }, medium: function () {
-                    console.log('medium');
+                    difficulty = 'easy';
+                    startGame();
+                }, normal: function () {
+                    difficulty = 'normal';
+                    startGame();
                 }, hard: function() {
-                    console.log('hard');
+                    difficulty = 'hard';
+                    startGame();
                 }});})
     ).append(
         $('<img class="menuIcon menuSouth" src="/images/give-up.png" alt="Give up">')
@@ -225,6 +242,10 @@ function startGame() {
         $('<img class="menuIcon menuEast menuSouth" src="/images/score.png" alt="Score">')
             .css('position', 'absolute')
     );
+
+    difficulty = difficulty || localStorage.getItem('combigameDifficulty') || 'normal';
+    localStorage.setItem('combigameDifficulty', difficulty);
+    $('#content').append($('<div class="difficultyStatus">').text(difficulty));
 
 
     do {

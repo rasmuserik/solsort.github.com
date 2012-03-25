@@ -1,4 +1,4 @@
-<!DOCTYPE html>  <html> <head>   <title>combigame.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               combigame.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/*global alert: true*/</span>
+<!DOCTYPE html>  <html> <head>   <title>combigame.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               combigame.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/*global localStorage: true*/</span>
 <span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zquery&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">_</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">Modernizr</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;modernizr&#39;</span><span class="p">);</span>
@@ -21,6 +21,7 @@
 <span class="kd">var</span> <span class="nx">unselectedStyle</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">pos</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">size</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">difficulty</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">doLayout</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">$content</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">);</span>
     <span class="nx">$content</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">);</span>
@@ -95,6 +96,19 @@
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.menuIcon&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">});</span>
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.menuEast&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nx">left</span><span class="o">:</span> <span class="nx">w</span> <span class="o">-</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">});</span>
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.menuSouth&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="nx">h</span> <span class="o">-</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">});</span>
+
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.difficultyStatus&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
+        <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;absolute&#39;</span><span class="p">,</span>
+        <span class="nx">width</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mf">2.3</span><span class="p">,</span>
+        <span class="s1">&#39;font-family&#39;</span><span class="o">:</span> <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span>
+        <span class="nx">top</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">,</span>
+        <span class="s1">&#39;text-align&#39;</span><span class="o">:</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span>
+        <span class="nx">height</span><span class="o">:</span> <span class="nx">size</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>
+        <span class="nx">left</span><span class="o">:</span> <span class="nx">w</span> <span class="o">-</span> <span class="nx">size</span><span class="o">/</span><span class="mi">2</span>
+    <span class="p">});</span>
+    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;webutil&#39;</span><span class="p">).</span><span class="nx">scaleText</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.difficultyStatus&#39;</span><span class="p">));</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.difficultyStatus&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;overflow&#39;</span><span class="p">,</span> <span class="s1">&#39;visible&#39;</span><span class="p">);</span>
+
 <span class="p">};</span>
 
 <span class="kd">var</span> <span class="nx">lastClickTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -212,11 +226,14 @@
             <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">menu</span><span class="p">(</span>
                 <span class="p">{</span>  <span class="nx">easy</span><span class="o">:</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;easy&#39;</span><span class="p">);</span>
-                <span class="p">},</span> <span class="nx">medium</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;medium&#39;</span><span class="p">);</span>
+                    <span class="nx">difficulty</span> <span class="o">=</span> <span class="s1">&#39;easy&#39;</span><span class="p">;</span>
+                    <span class="nx">startGame</span><span class="p">();</span>
+                <span class="p">},</span> <span class="nx">normal</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                    <span class="nx">difficulty</span> <span class="o">=</span> <span class="s1">&#39;normal&#39;</span><span class="p">;</span>
+                    <span class="nx">startGame</span><span class="p">();</span>
                 <span class="p">},</span> <span class="nx">hard</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;hard&#39;</span><span class="p">);</span>
+                    <span class="nx">difficulty</span> <span class="o">=</span> <span class="s1">&#39;hard&#39;</span><span class="p">;</span>
+                    <span class="nx">startGame</span><span class="p">();</span>
                 <span class="p">}});})</span>
     <span class="p">).</span><span class="nx">append</span><span class="p">(</span>
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;img class=&quot;menuIcon menuSouth&quot; src=&quot;/images/give-up.png&quot; alt=&quot;Give up&quot;&gt;&#39;</span><span class="p">)</span>
@@ -225,6 +242,10 @@
         <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;img class=&quot;menuIcon menuEast menuSouth&quot; src=&quot;/images/score.png&quot; alt=&quot;Score&quot;&gt;&#39;</span><span class="p">)</span>
             <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">)</span>
     <span class="p">);</span>
+
+    <span class="nx">difficulty</span> <span class="o">=</span> <span class="nx">difficulty</span> <span class="o">||</span> <span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s1">&#39;combigameDifficulty&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;normal&#39;</span><span class="p">;</span>
+    <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="s1">&#39;combigameDifficulty&#39;</span><span class="p">,</span> <span class="nx">difficulty</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;difficultyStatus&quot;&gt;&#39;</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">difficulty</span><span class="p">));</span>
 
 
     <span class="k">do</span> <span class="p">{</span>
