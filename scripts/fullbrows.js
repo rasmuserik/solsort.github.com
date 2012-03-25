@@ -32,10 +32,12 @@ var init = exports.init = function(opt) {
     if(!Modernizr.touch) {
         $('body').css('overflow', 'hidden');
     } else {
-        $('body').append('<div style="height:' +
+        if($('#addressbarfillerdisable').length === 0) {
+            $('body').append('<div id="addressbarfillerdisable" style="height:' +
                 (Math.max(webutil.windowHeight(),$(window).width()) + 62) +
                 'px;"></div>');
                 //'px;background-color: black;"></div>');
+        }
     }
 //    $('body').css('background-color', 'black');
     $(window).bind('resize', relayoutDelayed);

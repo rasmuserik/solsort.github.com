@@ -160,12 +160,42 @@ function log(obj) {
     console.log(JSON.stringify(obj));
 }
 
+function partialScore($t, title, log) {
+    if(log.length > 0) {
+        if(title) { $t.append($('<div><b>' + title+ '</b></div>')); }
+        $t.append($('<div>Best time: ' + (log[0].time/10|0)/100 + 's'));
+        $t.append($('<div>Median time: ' + (log[(log.length >> 1)].time/10|0)/100 + 's'));
+    }
+}
+function showScore() { fullbrows.init({update:function() {
+    var $t = $('<div>');
+    var log = _(logData)
+            .filter(function(elem) { return !elem.hint && elem.difficulty === difficulty; })
+            .sort(function(a,b) { return a.time - b.time; });
+    console.log(log);
+    $t.append($('<h3>Score - easy</h3>'));
+    partialScore($t, undefined, log);
+    partialScore($t, 'Last five minutes', log.filter(function(elem) {
+            return Date.now() - elem.now < 5*60*1000;
+            }));
+    partialScore($t, 'Last minute', log.filter(function(elem) {
+            return Date.now() - elem.now < 60*1000;
+            }));
+
+
+    $('#content').html('').append($t);
+    $t.css({width: '80%', height:'80%'});
+    webutil.scaleText($t);
+    $t.css({margin: '5% 10% 5% 10%', overflow: 'visible'});
+    $t.bind('mousedown touchstart', startGame);
+}});}
+
 function testSelected() {
     var list = Object.keys(exports.selected);
     if(list.length >= 3) {
         if(okSet(list[0], list[1], list[2])) {
             var now = Date.now();
-            log([now - prevtime, giveup, cards, list, now]);
+            log({time: now - prevtime, hint: giveup, cards: cards, choosen: list, now: now, difficulty: difficulty});
             giveup = false;
             prevtime = now;
 
@@ -313,6 +343,7 @@ function startGame() {
     ).append(
         $('<img class="menuIcon menuEast menuSouth" src="/images/score.png" alt="Score">')
             .css('position', 'absolute')
+            .bind('click', showScore)
     );
 
     difficulty = difficulty || localStorage.getItem('combigameDifficulty') || 'normal';
