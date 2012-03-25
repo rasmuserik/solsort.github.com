@@ -1,5 +1,4 @@
 /*global alert: true*/
-var cardSprites;
 var $ = require('zquery');
 var _ = require('underscore');
 var Modernizr = require('modernizr');
@@ -32,7 +31,7 @@ var doLayout = function() {
     var i, x, y;
 
     pos = [];
-    size = Math.min(Math.max(w,h)/4, Math.min(w,h)/3);
+    size = Math.min(Math.max(w,h)/4, Math.min(w,h)/3)*0.85;
 
     if(w > h) {
         topPad = (h - size * 3) >> 1;
@@ -67,6 +66,7 @@ var doLayout = function() {
         }
     }
 
+
     visibleStyle = {
         opacity: 1,
         'margin-top': -size/2,
@@ -88,27 +88,19 @@ var doLayout = function() {
         border: 'none'
     };
 
-    if(!cardSprites) {
-    }
-    $('#timer').css({
-            'font-size': w / 3,
-            'color': '#eeeeee',
-            position: 'absolute',
-            'text-align': 'center',
-            'width': '100%'
-            })
-        .css('top', (h-$('#timer').height())/2);
-
     $('.card').css({top:-size, left:-size});
     for(i = 0; i < 12; ++i) {
         anim(i, $('#card' + cards[i]))();
     }
+    $('.menuIcon').css({width: size/1.5, height: size/1.5});
+    $('.menuEast').css({left: w - size/1.5});
+    $('.menuSouth').css({top: h - size/1.5});
 };
 
 var lastClickTime = 0;
 var prevCard = '';
 function click(card) {
-    if(card === prevCard && Date.now() - lastClickTime < 1000) {
+    if(card === prevCard && Date.now() - lastClickTime < 100) {
             return;
     }
     prevCard = card;
@@ -124,12 +116,10 @@ function click(card) {
     testSelected();
 }
 
-var score = 0;
 function testSelected() {
     var list = Object.keys(exports.selected);
     if(list.length >= 3) {
         if(okSet(list[0], list[1], list[2])) {
-            ++score;
             setTimeout(function() {
                 list.forEach(function(id) {
                     $('#card'+id).css('opacity', 0);
@@ -203,32 +193,40 @@ function okDeck() {
     return false;
 }
 
-var finalTime;
-function timer() {
-    var now = Date.now();
-    if(now > finalTime) {
-        alert('Score: ' + score);
-        menu();
-    } else {
-        var sec = (finalTime - now)/1000;
-        $('#timer').text(
-                (sec/60|0) + ':' + (''+(100 + (sec%60))).slice(1,3)
-        );
-        setTimeout(timer, 100);
-    }
-}
 function startGame() {
-    $('#content').html('<div id="timer"></div>');
-    finalTime = Date.now() + 3 * 60 * 1000;
-    timer();
+    require('fullbrows').init();
+    $('#content').html('');
 
     require('combigameCards').createCards($('#content').width()/3|0);
     $('.card').bind('touchstart mousedown', function(e) {
         click(e.target.id.slice(4));
+        e.preventDefault();
         return true;
     });
 
-    score = 0;
+    $('#content').append(
+        $('<img class="menuIcon" src="/images/help.png" alt="How to play">')
+            .css('position', 'absolute')
+    ).append(
+        $('<img class="menuIcon menuEast" src="/images/difficulty.png" alt="Difficulty">')
+            .css('position', 'absolute')
+            .bind('click', function() { menu(
+                {  easy:function() {
+                    console.log('easy');
+                }, medium: function () {
+                    console.log('medium');
+                }, hard: function() {
+                    console.log('hard');
+                }});})
+    ).append(
+        $('<img class="menuIcon menuSouth" src="/images/give-up.png" alt="Give up">')
+            .css('position', 'absolute')
+    ).append(
+        $('<img class="menuIcon menuEast menuSouth" src="/images/score.png" alt="Score">')
+            .css('position', 'absolute')
+    );
+
+
     do {
         cards = [];
         for(var i = 0; i < 12; ++i) {
@@ -238,44 +236,34 @@ function startGame() {
     require('fullbrows').init({update: doLayout});
 }
 
-function menu() {
-    $('#content').html('')
-        .append(
+function menu(items) { require('fullbrows').init({update: function() {
+    var item;
+    var s = Math.min($('#content').height() + $('#content').width());
+    var $menu = $('<div>');
+    var $content = $('#content');
+    $content.html('').append($menu);
+    for(item in items) {
+        $menu.append(
             $('<div>')
-                .text('Play')
-                .bind('click', startGame)
-        ).append(
-            $('<div>')
-                .text('Settings')
-                .bind('click', settings)
-        ).append(
-            $('<div>')
-                .text('Score')
-                .bind('click', showScore)
-        ).append(
-            $('<div>')
-                .text('Help')
-                .bind('click', help)
-        ).css({
-            'font-family': 'sans-serif',
-            'text-align': 'center',
-            'width': '80%',
-            'height': '80%',
-            'left': '10%',
-            'top': '10%'
-        });
-    $('#content>div').css({
-    });
-    require('webutil').scaleText($('#content'));
-    $('#content').css('overflow', 'visible');
-}
-function help() {
-}
-function settings() {
-}
-function showScore() {
-}
+                .text(item)
+                .css({
+                    border: '1px solid black',
+                    'border-radius': s * 0.02,
+                    'font-family': 'sans-serif',
+                    'text-align': 'center',
+                    margin: s * 0.01,
+                    padding: s * 0.01
+                })
+                .bind('click', items[item])
+        );
+    }
+    require('webutil').scaleText($content);
+    $content.css('font-size', parseInt($content.css('font-size'), 10) * 0.8);
+    $menu.css('top', ($content.height() - $menu.height()) /2);
+    $menu.css('position', 'absolute');
+    $menu.css('width', '100%');
+}});}
 
 exports.run = function() {
-    require('fullbrows').init({update: menu});
+    startGame();
 };
