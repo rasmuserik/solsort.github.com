@@ -47,24 +47,16 @@ var doLayout = function() {
     topPad += 0.05*size;
     leftPad += 0.05*size;
 
-    for(x = 0; x < 3; ++x) {
-        for(y = 0; y < 3; ++y) {
-            pos.push({
-                top: topPad + (0.5 + y) * size,
-                left: leftPad + (0.5 + x) * size
-            });
-        }
-    }
-    for(i = 0; i < 3; ++i) {
+    for(i = 0; i < 12; ++i) {
         if(landscape) {
             pos.push({
-                top: topPad + (0.5 + i) * size,
-                left: leftPad + (0.5 + 3) * size
+                top: topPad + (0.5 + (i%3)) * size,
+                left: leftPad + (0.5 + (i/3|0)) * size
             });
         } else {
             pos.push({
-                top: topPad + (0.5 + 3) * size,
-                left: leftPad + (0.5 + i) * size
+                left: leftPad + (0.5 + (i%3)) * size,
+                top: topPad + (0.5 + (i/3|0)) * size
             });
         }
     }
