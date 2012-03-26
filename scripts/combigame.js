@@ -146,10 +146,17 @@ function shuffle(fn) {
     }
     cards = saved;
 }
-var logData = [];
+var logData;
+var curDate;
 function log(obj) {
+    var objDate = (obj.now /24/60/60/1000) | 0;
+    if(objDate !== curDate) {
+        curDate = objDate;
+        logData = JSON.parse(localStorage.getItem('combigamelog' + curDate) || '[]');
+    }
+    logData = logData || [];
     logData.push(JSON.parse(JSON.stringify(obj)));
-    console.log(JSON.stringify(obj));
+    localStorage.setItem('combigamelog' + curDate, JSON.stringify(logData));
 }
 
 function partialScore($t, title, log) {
@@ -164,8 +171,7 @@ function showScore() { fullbrows.init({update:function() {
     var log = _(logData)
             .filter(function(elem) { return !elem.hint && elem.difficulty === difficulty; })
             .sort(function(a,b) { return a.time - b.time; });
-    console.log(log);
-    $t.append($('<h3>Score - easy</h3>'));
+    $t.append($('<h3>Score&nbsp;' + difficulty + '</h3>'));
     partialScore($t, undefined, log);
     partialScore($t, 'Last five minutes', log.filter(function(elem) {
             return Date.now() - elem.now < 5*60*1000;
