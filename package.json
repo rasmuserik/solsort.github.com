@@ -5,6 +5,7 @@
   "homepage": "http://solsort.com",
   "description": "solsort.com web application",
   "dependencies": {
+    "canvas": "*",
     "mustache": "*",
     "underscore": "*",
     "jshint": "*",

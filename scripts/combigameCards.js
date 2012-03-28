@@ -1,9 +1,13 @@
 // Script for generating the graphics for a combigame.
 // Combigame is a set™-like game.
 // The card vary by: color, figure, number-of-figures, and fillstyle
-//
-var $ = require('zquery');
-var document = require('document');
+/*global document:true */
+
+try {
+    // zquery is a browser-only lib, so this should fail on node
+    var $ = require('zquery');
+} catch(e) {
+}
 
 function draw(ctx, figure, color, fill, x, y, size) {
     var colorPrefix = ['rgba(180,0,180,', 'rgba(50,200,0,', 'rgba(0,150,230,'] [color];
@@ -33,11 +37,8 @@ function draw(ctx, figure, color, fill, x, y, size) {
     ctx.stroke();
 }
 
-function drawCard(color, figure, count, fill, size) {
-    var name = exports.name(color, figure, count, fill);
-    $('#content').append('<canvas id="' + name +'">');
-    var canvas = document.getElementById(name);
-    $(canvas).addClass('card');
+
+exports.drawCard = function(canvas, color, figure, count, fill, size) {
     canvas.width = canvas.height = size;
     var ctx = canvas.getContext('2d');
     ctx.fillStyle = '#000000';
@@ -53,6 +54,15 @@ function drawCard(color, figure, count, fill, size) {
         draw(ctx, figure, color, fill, size * 0.30, size * 0.70, size * 0.15);
         draw(ctx, figure, color, fill, size * 0.70, size * 0.70, size * 0.15);
     }
+};
+
+function createCard(color, figure, count, fill, size) {
+    var name = exports.name(color, figure, count, fill);
+    $('#content').append('<canvas id="' + name +'">');
+    var canvas = document.getElementById(name);
+    $(canvas).addClass('card');
+
+    exports.drawCard(canvas, color, figure, count, fill, size);
     canvas.style.opacity = '0';
     canvas.style.position = 'absolute';
     return canvas;
@@ -65,7 +75,7 @@ exports.createCards = function(size) {
         for(var figure = 0; figure < 3; ++figure) {
             for(var count = 0; count < 3; ++count) {
                 for(var fill = 0; fill < 3; ++fill) {
-                    result.push(drawCard(color, figure, count, fill, size));
+                    result.push(createCard(color, figure, count, fill, size));
                 }
             }
         }
