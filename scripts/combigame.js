@@ -83,7 +83,7 @@ var doLayout = function() {
         border: 'none'
     };
 
-    $('.card').css({top:-size, left:-size});
+    $('.card').css({top:h, left:w});
     for(i = 0; i < 12; ++i) {
         anim(i, $('#card' + cards[i]))();
     }
@@ -297,7 +297,15 @@ function startGame() {
     $content.html('');
     prevtime = Date.now();
 
-    require('combigameCards').createCards($('#content').width()/3|0);
+    //require('combigameCards').createCards($('#content').width()/3|0);
+    var i, j, k, l;
+    for(i = 0;i < 3;++i) { for(j = 0;j < 3;++j) { for(k = 0;k < 3;++k) { for(l = 0;l < 3;++l) {
+        $content.append(
+            $('<img class="card" src="/dist/combigame' +i+j+k+l+ '.png" id="card' +i+j+k+l+ '">'));
+    } } } }
+    $('.card').css({position: 'absolute', opacity: '0'});
+
+    
     $('.card').bind('touchstart mousedown', function(e) {
         click(e.target.id.slice(4));
         e.preventDefault();
