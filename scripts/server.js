@@ -189,6 +189,30 @@ function writeBundles(bundles, fileObjs, callback) {
     async.forEach(bundles, function(bundle, callback) {
         writeBundle(bundle, fileObjHash, callback);
     }, callback);
+
+    writeCacheManifest();
+}
+
+function writeCacheManifest() {
+    var i,j,k,l;
+    var manifest = ['CACHE MANIFEST', '# ' + (new Date()), '/index.html', '/dist/bundle.min.js'];
+    for(i=0;i<3;++i){for(j=0;j<3;++j){for(k=0;k<3;++k){for(l=0;l<3;++l){
+        manifest.push('/dist/combigame'+i+j+k+l+'.png');
+    }}}}
+    async.forEach(['images', 'notes', 'html'], function(dir, done) {
+        fs.readdir(dir, function(err, data) {
+            if(err) {
+                throw err;
+            }
+            data.forEach(function(filename) {
+                manifest.push('/' + dir + '/' + filename);
+            });
+            done()
+        });
+    }, function() {
+        console.log('writing manifest.appcache');
+        fs.writeFile('manifest.appcache', manifest.join('\n'));
+    });
 }
 
 function bundle(bundles) {
