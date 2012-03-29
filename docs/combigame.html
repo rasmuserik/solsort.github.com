@@ -207,16 +207,18 @@
                 <span class="p">});</span>
             <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
             <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">ids</span> <span class="o">=</span> <span class="p">[</span><span class="nx">_</span><span class="p">(</span><span class="nx">cards</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nx">_</span><span class="p">(</span><span class="nx">cards</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">list</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nx">_</span><span class="p">(</span><span class="nx">cards</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">list</span><span class="p">[</span><span class="mi">2</span><span class="p">])];</span>
-            <span class="nx">shuffle</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">cards</span><span class="p">[</span><span class="nx">ids</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">randomCard</span><span class="p">();</span>
-                <span class="p">}</span>
-            <span class="p">});</span>
-            <span class="nx">doLayout</span><span class="p">();</span>
+                <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="nx">unselectedStyle</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">ids</span> <span class="o">=</span> <span class="p">[</span><span class="nx">_</span><span class="p">(</span><span class="nx">cards</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nx">_</span><span class="p">(</span><span class="nx">cards</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">list</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nx">_</span><span class="p">(</span><span class="nx">cards</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">list</span><span class="p">[</span><span class="mi">2</span><span class="p">])];</span>
+                <span class="nx">shuffle</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">cards</span><span class="p">[</span><span class="nx">ids</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">randomCard</span><span class="p">();</span>
+                    <span class="p">}</span>
+                <span class="p">});</span>
+                <span class="nx">doLayout</span><span class="p">();</span>
             <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="nx">unselectedStyle</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.card&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="nx">unselectedStyle</span><span class="p">);</span>
         <span class="nx">exports</span><span class="p">.</span><span class="nx">selected</span> <span class="o">=</span> <span class="p">{};</span>
     <span class="p">}</span>
 <span class="p">}</span>

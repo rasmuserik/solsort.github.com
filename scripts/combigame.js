@@ -207,16 +207,18 @@ function testSelected() {
                 });
             }, 0);
             setTimeout(function() {
-            var ids = [_(cards).indexOf(list[0]), _(cards).indexOf(list[1]), _(cards).indexOf(list[2])];
-            shuffle(function() {
-                for(var i = 0; i < 3; ++i) {
-                    cards[ids[i]] = randomCard();
-                }
-            });
-            doLayout();
+                $('.card').css(unselectedStyle);
+                var ids = [_(cards).indexOf(list[0]), _(cards).indexOf(list[1]), _(cards).indexOf(list[2])];
+                shuffle(function() {
+                    for(var i = 0; i < 3; ++i) {
+                        cards[ids[i]] = randomCard();
+                    }
+                });
+                doLayout();
             }, 1000);
+        } else {
+            $('.card').css(unselectedStyle);
         }
-        $('.card').css(unselectedStyle);
         exports.selected = {};
     }
 }
