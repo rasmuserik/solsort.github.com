@@ -195,7 +195,7 @@ function writeBundles(bundles, fileObjs, callback) {
 
 function writeCacheManifest() {
     var i,j,k,l;
-    var manifest = ['CACHE MANIFEST', '# ' + (new Date()), '\nCACHE:', '/index.html', '/dist/bundle.min.js'];
+    var manifest = ['CACHE MANIFEST', '# ' + (new Date()), '\nCACHE:', '/dist/bundle.min.js'];
     for(i=0;i<3;++i){for(j=0;j<3;++j){for(k=0;k<3;++k){for(l=0;l<3;++l){
         manifest.push('/dist/combigame'+i+j+k+l+'.png');
     }}}}

@@ -1,8 +1,7 @@
 CACHE MANIFEST
-# Thu Mar 29 2012 10:02:11 GMT+0200 (CEST)
+# Thu Mar 29 2012 10:11:20 GMT+0200 (CEST)
 
 CACHE:
-/index.html
 /dist/bundle.min.js
 /dist/combigame0000.png
 /dist/combigame0001.png
@@ -85,10 +84,10 @@ CACHE:
 /dist/combigame2220.png
 /dist/combigame2221.png
 /dist/combigame2222.png
-/notes/speak-eval.md
 /images/give-up.png
 /images/score.png
 /images/difficulty.png
 /images/help.png
+/notes/speak-eval.md
 /html/combigameguide.inc
 /html/rasmuserik.inc
