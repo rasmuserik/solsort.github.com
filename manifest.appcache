@@ -1,5 +1,7 @@
 CACHE MANIFEST
-# Thu Mar 29 2012 09:41:51 GMT+0200 (CEST)
+# Thu Mar 29 2012 09:52:06 GMT+0200 (CEST)
+
+CACHE:
 /index.html
 /dist/bundle.min.js
 /dist/combigame0000.png
