@@ -321,9 +321,9 @@ function startGame() {
                         var $t = $('<div>');
                         $t.html(html);
                         $content.html('').append($t);
-                        $t.css({width: '80%', height:'90%'});
+                        $t.css({width: '90%', height:'90%'});
                         webutil.scaleText($t);
-                        $t.css({margin: '5% 10% 5% 10%', overflow: 'visible'});
+                        $t.css({margin: '2% 5% 8% 5%', overflow: 'visible'});
                         $t.bind('mousedown touchstart', startGame);
                     });
                 }});
