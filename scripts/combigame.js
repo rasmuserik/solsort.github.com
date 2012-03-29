@@ -171,20 +171,24 @@ function showScore() { fullbrows.init({update:function() {
     var log = _(logData)
             .filter(function(elem) { return !elem.hint && elem.difficulty === difficulty; })
             .sort(function(a,b) { return a.time - b.time; });
-    $t.append($('<h3>Score&nbsp;' + difficulty + '</h3>'));
-    partialScore($t, undefined, log);
+    $t.append($('<h3>Timings&nbsp;' + difficulty + '</h3>'));
+    if(log.length === 0) {
+        $t.append('<p>No score available for this difficulty, please play the game before looking at the timings.</p>');
+    }
+    partialScore($t, 'Today', log);
     partialScore($t, 'Last five minutes', log.filter(function(elem) {
             return Date.now() - elem.now < 5*60*1000;
             }));
     partialScore($t, 'Last minute', log.filter(function(elem) {
             return Date.now() - elem.now < 60*1000;
             }));
+    $t.append('<p>Click to close.</p>');
 
 
     $('#content').html('').append($t);
-    $t.css({width: '80%', height:'80%'});
+    $t.css({width: '80%', height:'90%'});
     webutil.scaleText($t);
-    $t.css({margin: '5% 10% 5% 10%', overflow: 'visible'});
+    $t.css({margin: '3% 10% 7% 10%', overflow: 'visible'});
     $t.bind('mousedown touchstart', startGame);
 }});}
 
@@ -249,14 +253,22 @@ function okSet(a, b, c) {
 }
 
 function hint() {
+    exports.selected = {};
+    $('.card').css(unselectedStyle);
     var a, b, c;
     for(a = 0; a < 10; ++a) {
         for(b = a + 1; b < 11; ++b) {
             for(c = b + 1; c < 12; ++c) {
                 if(okSet(cards[a], cards[b], cards[c])) {
-                    $('#card'+cards[a]).css('opacity', 0.3);
-                    $('#card'+cards[b]).css('opacity', 0.3);
-                    $('#card'+cards[c]).css('opacity', 0.3);
+                    $('#card'+cards[a])
+                        .css(selectedStyle)
+                        .css({'opacity': 0.6, border: '1px solid #ddd'});
+                    $('#card'+cards[b])
+                        .css(selectedStyle)
+                        .css({'opacity': 0.6, border: '1px solid #ddd'});
+                    $('#card'+cards[c])
+                        .css(selectedStyle)
+                        .css({'opacity': 0.6, border: '1px solid #ddd'});
                     giveup = true;
                     return;
                 }
