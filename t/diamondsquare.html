@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+<title>diamond square</title>
+<meta charset="utf-8" />
+</head>
+<style>
+    canvas {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<body>
+<canvas width=1024 height=1024 id="c"></canvas>
+<script>
+var ctx = document.getElementsByTagName('canvas')[0].getContext('2d');
+document.body.clientWidth; // fix bug in webkit: http://qfox.nl/weblog/218
+
+var img = ctx.createImageData(1024,1024);
+
+var col = 0;
+function get(x,y) {
+    return img.data[((x&1023)+(y&1023)*1024)*4+col];
+}
+function put(x,y,c) {
+    img.data[((x&1023)+(y&1023)*1024)*4+col] = c;
+}
+
+var i = 0;
+for(i=0;i<img.data.length>>2; ++i) {
+    img.data[i*4+3] = 255;
+}
+var step = 1024;
+function colrand() {
+    return (Math.random()-.5) * step *1.4;
+    return (Math.random()-.5) * 80;
+}
+function plasma() {
+while(step > 0) {
+    // diamond
+    var prevStepMask = (step<<1) - 1;
+    for(var x = 0; x < 1024; x += step) {
+        for(var y = 0; y < 1024; y += step) {
+            if((y&prevStepMask) && (x&prevStepMask)) {
+                col = 0;
+                put(x,y, (get(x-step, y-step) + get(x+step, y+step) + get(x+step,y-step) + get(x-step,y+step))/4 + colrand());
+                col = 1;
+                put(x,y, (get(x-step, y-step) + get(x+step, y+step) + get(x+step,y-step) + get(x-step,y+step))/4 + colrand());
+                col = 2;
+                put(x,y, (get(x-step, y-step) + get(x+step, y+step) + get(x+step,y-step) + get(x-step,y+step))/4 + colrand());
+            }
+        }
+    }
+    for(var x = 0; x < 1024; x += step) {
+        for(var y = 0; y < 1024; y += step) {
+            if( (!(y&prevStepMask) && (x&prevStepMask))
+             || ((y&prevStepMask) && !(x&prevStepMask))
+            ) {
+                col = 0;
+                put(x,y, (get(x-step, y) + get(x+step, y) + get(x,y-step) + get(x,y+step))/4 + colrand());
+                col = 1;
+                put(x,y, (get(x-step, y) + get(x+step, y) + get(x,y-step) + get(x,y+step))/4 + colrand());
+                col = 2;
+                put(x,y, (get(x-step, y) + get(x+step, y) + get(x,y-step) + get(x,y+step))/4 + colrand());
+            }
+        }
+    }
+    
+    step >>= 1;
+}
+}
+plasma();
+col=1;
+plasma();
+col=2;
+plasma();
+ctx.putImageData(img,0,0);
+
+/*
+for(var x=0; x<data.width; x++) {
+    for(var y=0; y<data.height; y++) {
+        
+        var val = 0;
+        var horz = (Math.floor(x/4) % 2 == 0); //loop every 4 pixels
+        var vert = (Math.floor(y/4) % 2 == 0); // loop every 4 pixels
+        if( (horz && !vert) || (!horz && vert)) {
+            val = 255;
+        } else {
+            val = 0;
+        }
+        
+        var index = (y*data.width+x)*4;  //calculate index
+        data.data[index] = val;   // red
+        data.data[index+1] = val; // green
+        data.data[index+2] = val; // blue
+        data.data[index+3] = 255; // force alpha to 100%
+    }
+}
+ctx.putImageData(data,0,0);
+*/
+
+</script>
+</body>
+</html>
