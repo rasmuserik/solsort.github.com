@@ -315,7 +315,7 @@ function startGame() {
     var i, j, k, l;
     for(i = 0;i < 3;++i) { for(j = 0;j < 3;++j) { for(k = 0;k < 3;++k) { for(l = 0;l < 3;++l) {
         $content.append(
-            $('<img class="card" src="/dist/combigame' +i+j+k+l+ '.png" id="card' +i+j+k+l+ '">'));
+            $('<img class="card" src="dist/combigame' +i+j+k+l+ '.png" id="card' +i+j+k+l+ '">'));
     } } } }
     $('.card').css({position: 'absolute', opacity: '0'});
 
@@ -327,7 +327,7 @@ function startGame() {
     });
 
     $content.append(
-        $('<img class="menuIcon" src="/images/help.png" alt="How to play">')
+        $('<img class="menuIcon" src="images/help.png" alt="How to play">')
             .css('position', 'absolute')
             .bind('click', function() {
                 fullbrows.init({update:function() {
@@ -343,7 +343,7 @@ function startGame() {
                 }});
             })
     ).append(
-        $('<img class="menuIcon menuEast" src="/images/difficulty.png" alt="Difficulty">')
+        $('<img class="menuIcon menuEast" src="images/difficulty.png" alt="Difficulty">')
             .css('position', 'absolute')
             .bind('click', function() { menu(
                 {  easy: function() {
@@ -357,11 +357,11 @@ function startGame() {
                     startGame();
                 }});})
     ).append(
-        $('<img class="menuIcon menuSouth" src="/images/give-up.png" alt="Give up">')
+        $('<img class="menuIcon menuSouth" src="images/give-up.png" alt="Give up">')
             .css('position', 'absolute')
             .bind('click', hint)
     ).append(
-        $('<img class="menuIcon menuEast menuSouth" src="/images/score.png" alt="Score">')
+        $('<img class="menuIcon menuEast menuSouth" src="images/score.png" alt="Score">')
             .css('position', 'absolute')
             .bind('click', showScore)
     );
