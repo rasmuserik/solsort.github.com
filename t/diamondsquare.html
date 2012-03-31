@@ -14,26 +14,26 @@
     }
 </style>
 <body>
-<canvas width=1024 height=1024 id="c"></canvas>
+<canvas width=512 height=512 id="c"></canvas>
 <script>
 var ctx = document.getElementsByTagName('canvas')[0].getContext('2d');
 document.body.clientWidth; // fix bug in webkit: http://qfox.nl/weblog/218
 
-var img = ctx.createImageData(1024,1024);
+var img = ctx.createImageData(512,512);
 
 var col = 0;
 function get(x,y) {
-    return img.data[((x&1023)+(y&1023)*1024)*4+col];
+    return img.data[((x&511)+(y&511)*512)*4+col];
 }
 function put(x,y,c) {
-    img.data[((x&1023)+(y&1023)*1024)*4+col] = c;
+    img.data[((x&511)+(y&511)*512)*4+col] = c;
 }
 
 var i = 0;
 for(i=0;i<img.data.length>>2; ++i) {
     img.data[i*4+3] = 255;
 }
-var step = 1024;
+var step = 512;
 function colrand() {
     return (Math.random()-.5) * step *1.4;
     return (Math.random()-.5) * 80;
@@ -42,8 +42,8 @@ function plasma() {
 while(step > 0) {
     // diamond
     var prevStepMask = (step<<1) - 1;
-    for(var x = 0; x < 1024; x += step) {
-        for(var y = 0; y < 1024; y += step) {
+    for(var x = 0; x < 512; x += step) {
+        for(var y = 0; y < 512; y += step) {
             if((y&prevStepMask) && (x&prevStepMask)) {
                 col = 0;
                 put(x,y, (get(x-step, y-step) + get(x+step, y+step) + get(x+step,y-step) + get(x-step,y+step))/4 + colrand());
@@ -54,8 +54,8 @@ while(step > 0) {
             }
         }
     }
-    for(var x = 0; x < 1024; x += step) {
-        for(var y = 0; y < 1024; y += step) {
+    for(var x = 0; x < 512; x += step) {
+        for(var y = 0; y < 512; y += step) {
             if( (!(y&prevStepMask) && (x&prevStepMask))
              || ((y&prevStepMask) && !(x&prevStepMask))
             ) {
