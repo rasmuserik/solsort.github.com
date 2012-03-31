@@ -236,13 +236,20 @@ processing each file is defined.</p>             </td>             <td class="co
                 <span class="s2">&quot;scripts/jsxml.js&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;scripts/main.js&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;scripts/showSource.js&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;scripts/menu.js&quot;</span><span class="p">,</span></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p>"scripts/combigameCards.js",</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="s2">&quot;scripts/combigame.js&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;scripts/menu.js&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;scripts/combigame.js&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;scripts/timelog.js&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;scripts/bidiv.js&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;scripts/webutil.js&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;scripts/fullbrows.js&quot;</span><span class="p">];</span>
 
 <span class="kd">var</span> <span class="nx">bundles</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="nx">out</span><span class="o">:</span> <span class="s1">&#39;apps/combigame/combigame.js&#39;</span><span class="p">,</span>
+      <span class="nx">libs</span><span class="o">:</span> <span class="nx">base</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">libs</span><span class="p">),</span>
+      <span class="nx">modules</span><span class="o">:</span> <span class="nx">modules</span><span class="p">,</span>
+      <span class="nx">moduleVersion</span><span class="o">:</span> <span class="s1">&#39;minified&#39;</span><span class="p">,</span>
+      <span class="nx">run</span><span class="o">:</span> <span class="s1">&#39;bundler.require(&quot;combigame&quot;).run();&#39;</span><span class="p">},</span>
+
     <span class="p">{</span> <span class="nx">out</span><span class="o">:</span> <span class="s1">&#39;dist/bundle.debug.js&#39;</span><span class="p">,</span>
       <span class="nx">libs</span><span class="o">:</span> <span class="nx">base</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">libs</span><span class="p">),</span>
       <span class="nx">modules</span><span class="o">:</span> <span class="nx">modules</span><span class="p">,</span>
@@ -268,7 +275,7 @@ processing each file is defined.</p>             </td>             <td class="co
       <span class="nx">run</span><span class="o">:</span> <span class="s1">&#39;bundler.require(&quot;main&quot;).main()&#39;</span><span class="p">}</span>
 <span class="p">];</span>
 
-<span class="nx">bundle</span><span class="p">(</span><span class="nx">bundles</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <h1>Web server</h1>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <p>Start a simple local web server </p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">).</span><span class="nx">createServer</span><span class="p">();</span>
+<span class="nx">bundle</span><span class="p">(</span><span class="nx">bundles</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <h1>Web server</h1>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <p>Start a simple local web server </p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">).</span><span class="nx">createServer</span><span class="p">();</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">configure</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
     <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">).</span><span class="kr">static</span><span class="p">(</span>

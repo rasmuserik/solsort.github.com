@@ -270,7 +270,6 @@ var modules =  ["scripts/util.js",
                 "scripts/main.js",
                 "scripts/showSource.js",
                 "scripts/menu.js",
-                //"scripts/combigameCards.js",
                 "scripts/combigame.js",
                 "scripts/timelog.js",
                 "scripts/bidiv.js",
@@ -278,6 +277,12 @@ var modules =  ["scripts/util.js",
                 "scripts/fullbrows.js"];
 
 var bundles = [
+    { out: 'apps/combigame/combigame.js',
+      libs: base.concat(libs),
+      modules: modules,
+      moduleVersion: 'minified',
+      run: 'bundler.require("combigame").run();'},
+
     { out: 'dist/bundle.debug.js',
       libs: base.concat(libs),
       modules: modules,

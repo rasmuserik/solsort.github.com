@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.phonegap.example"
+        version   = "1.0.0">
+
+    <name>CombiGame</name>
+
+    <description>
+        Game of finding combinations of figures, - similar in gameplay to the set®-card game.
+    </description>
+
+    <author href="http://solsort.com/" email="combigame@solsort.com">
+        Rasmus Erik
+    </author>
+
+    <preference name="orientation" value="default" />
+    <preference name="fullscreen" value="true" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="android-minSdkVersion" value="7" /><!-- android 2.1 = sdk-version 7 -->
+    <preference name="prerendered-icon" value="true" />
+    <icon src="icon.png" />
+
+    <preference name="permissions" value="none"/>
+</widget>
