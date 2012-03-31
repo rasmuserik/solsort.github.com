@@ -171,7 +171,7 @@ function showScore() { fullbrows.init({update:function() {
     var log = _(logData)
             .filter(function(elem) { return !elem.hint && elem.difficulty === difficulty; })
             .sort(function(a,b) { return a.time - b.time; });
-    $t.append($('<h3>Timings&nbsp;' + difficulty + '</h3>'));
+    $t.append($('<h3>Timings\xa0' + difficulty + '</h3>'));
     if(log.length === 0) {
         $t.append('<p>No score available for this difficulty, please play the game before looking at the timings.</p>');
     }
@@ -331,7 +331,19 @@ function startGame() {
             .css('position', 'absolute')
             .bind('click', function() {
                 fullbrows.init({update:function() {
-                    $.get('html/combigameguide.inc', function(html) {
+                    var html = require('jsxml').toXml(
+                        ["div",
+                            ["h2", "CombiGame"],
+                            "Game objectives: click on combinations of three figures where color, count, shape, and fill, are either the same or all different.", ["br"],
+                            ['p',
+                                ['img', {style:'height: 1.5em; width: 1.5em;',src:'images/give-up.png'}],
+                                ' shows a valid combination among the figures.', ['br'],
+                                ['img', {style:'height: 1.5em; width: 1.5em;',src:'images/difficulty.png'}],
+                                ' sets difficulty •\xa0easy    : ca. 6 valid combinations •\xa0hard: 1 valid combination •\xa0normal: random number of valid combinations.', ['br'],
+                                ['img', {style:'height: 1.5em; width: 1.5em;',src:'images/score.png'}],
+                                ' shows latest timing for the current difficulty.', ['br']],
+                            'Click to close.']);
+
                         var $t = $('<div>');
                         $t.html(html);
                         $content.html('').append($t);
@@ -339,7 +351,6 @@ function startGame() {
                         webutil.scaleText($t);
                         $t.css({margin: '2% 5% 8% 5%', overflow: 'visible'});
                         $t.bind('mousedown touchstart', startGame);
-                    });
                 }});
             })
     ).append(
