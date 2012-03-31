@@ -254,6 +254,7 @@ spawn('jshint', ['scripts/server.js']);
 
 // # The actual bundles
 var base = ["depend/zepto.min.js"];
+var oldAndroid = ["depend/es5-shim.min.js","depend/zepto.min.js"];
 
 var legacy = ["depend/es5-shim.min.js",
               "depend/jquery-1.7.1.min.js",
@@ -278,7 +279,7 @@ var modules =  ["scripts/util.js",
 
 var bundles = [
     { out: 'apps/combigame/combigame.js',
-      libs: base.concat(libs),
+      libs: oldAndroid.concat(libs),
       modules: modules,
       moduleVersion: 'minified',
       run: 'bundler.require("combigame").run();'},

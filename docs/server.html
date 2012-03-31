@@ -221,6 +221,7 @@ processing each file is defined.</p>             </td>             <td class="co
 <span class="p">}</span>
 <span class="nx">docself</span><span class="p">();</span>
 <span class="nx">spawn</span><span class="p">(</span><span class="s1">&#39;jshint&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;scripts/server.js&#39;</span><span class="p">]);</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <h1>The actual bundles</h1>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">base</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;depend/zepto.min.js&quot;</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">oldAndroid</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;depend/es5-shim.min.js&quot;</span><span class="p">,</span><span class="s2">&quot;depend/zepto.min.js&quot;</span><span class="p">];</span>
 
 <span class="kd">var</span> <span class="nx">legacy</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;depend/es5-shim.min.js&quot;</span><span class="p">,</span>
               <span class="s2">&quot;depend/jquery-1.7.1.min.js&quot;</span><span class="p">,</span>
@@ -245,7 +246,7 @@ processing each file is defined.</p>             </td>             <td class="co
 
 <span class="kd">var</span> <span class="nx">bundles</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span> <span class="nx">out</span><span class="o">:</span> <span class="s1">&#39;apps/combigame/combigame.js&#39;</span><span class="p">,</span>
-      <span class="nx">libs</span><span class="o">:</span> <span class="nx">base</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">libs</span><span class="p">),</span>
+      <span class="nx">libs</span><span class="o">:</span> <span class="nx">oldAndroid</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">libs</span><span class="p">),</span>
       <span class="nx">modules</span><span class="o">:</span> <span class="nx">modules</span><span class="p">,</span>
       <span class="nx">moduleVersion</span><span class="o">:</span> <span class="s1">&#39;minified&#39;</span><span class="p">,</span>
       <span class="nx">run</span><span class="o">:</span> <span class="s1">&#39;bundler.require(&quot;combigame&quot;).run();&#39;</span><span class="p">},</span>

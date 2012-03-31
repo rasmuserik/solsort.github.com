@@ -125,7 +125,7 @@ function click(card) {
 function shuffle(fn) {
     var score, bestscore = -10000, saved;
     var i;
-    for(i=0;i<100;++i) {
+    for(i=0;i<10;++i) {
         do {
             fn();
             score = okDeck();
@@ -146,17 +146,20 @@ function shuffle(fn) {
     }
     cards = saved;
 }
+
 var logData;
 var curDate;
 function log(obj) {
-    var objDate = (obj.now /24/60/60/1000) | 0;
-    if(objDate !== curDate) {
-        curDate = objDate;
-        logData = JSON.parse(localStorage.getItem('combigamelog' + curDate) || '[]');
-    }
-    logData = logData || [];
-    logData.push(JSON.parse(JSON.stringify(obj)));
-    localStorage.setItem('combigamelog' + curDate, JSON.stringify(logData));
+    setTimeout(function() {
+        var objDate = (obj.now /24/60/60/1000) | 0;
+        if(objDate !== curDate) {
+            curDate = objDate;
+            logData = JSON.parse(localStorage.getItem('combigamelog' + curDate) || '[]');
+        }
+        logData = logData || [];
+        logData.push(obj);
+        localStorage.setItem('combigamelog' + curDate, JSON.stringify(logData));
+    }, 0);
 }
 
 function partialScore($t, title, log) {
@@ -197,7 +200,7 @@ function testSelected() {
     if(list.length >= 3) {
         if(okSet(list[0], list[1], list[2])) {
             var now = Date.now();
-            log({time: now - prevtime, hint: giveup, cards: cards, choosen: list, now: now, difficulty: difficulty});
+            log({time: now - prevtime, hint: giveup, cards: cards.slice(0), choosen: list, now: now, difficulty: difficulty});
             giveup = false;
             prevtime = now;
 
