@@ -101,5 +101,5 @@ exports.run = function() {
     tree = makeTree(menuRaw.concat(menuRaw).concat(menuRaw).concat(menuRaw));
     tree = makeTree(menuRaw);
 
-    fullbrows.init({update: update});
+    fullbrows.start({update: update});
 };

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Sat Mar 31 2012 13:44:44 GMT+0200 (CEST)
+# Tue Apr 03 2012 09:18:44 GMT+0200 (CEST)
 
 NETWORK:
 *
@@ -92,4 +92,3 @@ CACHE:
 /images/difficulty.png
 /images/help.png
 /notes/speak-eval.md
-/html/rasmuserik.inc

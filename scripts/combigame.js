@@ -169,7 +169,7 @@ function partialScore($t, title, log) {
         $t.append($('<div>Median time: ' + (log[(log.length >> 1)].time/10|0)/100 + 's'));
     }
 }
-function showScore() { fullbrows.init({update:function() {
+function showScore() { fullbrows.start({update:function() {
     var $t = $('<div>');
     var log = _(logData)
             .filter(function(elem) { return !elem.hint && elem.difficulty === difficulty; })
@@ -309,7 +309,7 @@ var prevtime;
 var giveup;
 function startGame() {
     giveup = false;
-    fullbrows.init();
+    fullbrows.start();
     var $content = $('#content');
     $content.html('');
     prevtime = Date.now();
@@ -333,7 +333,7 @@ function startGame() {
         $('<img class="menuIcon" src="images/help.png" alt="How to play">')
             .css('position', 'absolute')
             .bind('click', function() {
-                fullbrows.init({update:function() {
+                fullbrows.start({update:function() {
                     var html = require('jsxml').toXml(
                         ["div",
                             ["h2", "CombiGame"],
@@ -391,10 +391,10 @@ function startGame() {
             cards.push(randomCard());
         }
     });
-    fullbrows.init({update: doLayout});
+    fullbrows.start({update: doLayout});
 }
 
-function menu(items) { fullbrows.init({update: function() {
+function menu(items) { fullbrows.start({update: function() {
     var item;
     var s = Math.min($('#content').height() + $('#content').width());
     var $menu = $('<div>');

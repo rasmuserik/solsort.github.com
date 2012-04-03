@@ -58,7 +58,7 @@ function initMenu(menu) {
     }
     menu.children.forEach(initMenu);
     menu.size = totalSize(menu.children)/1.5 + 1;
-    fullbrows.init({callback: function(elem) {
+    fullbrows.start({update: function(elem) {
         position(menu, -margin,-margin,$(elem).width()+margin, $(elem).height()+margin);
     }});
 }

@@ -10,7 +10,6 @@ var SiteMap = Backbone.Router.extend({
         'unicodeTest': 'unicodeTest',
         'notes/*path': 'notes',
         'source/*path': 'source',
-        'rasmuserik': 'rasmuserik',
         'timelog': 'timelog',
         'combigame': 'combigame',
         '*default': 'default'
@@ -21,18 +20,11 @@ var SiteMap = Backbone.Router.extend({
     menu: menuFn,
     combigame: require('combigame').run,
     bidiv: require('bidiv').run,
-    rasmuserik: htmlFn('rasmuserik'),
     source: function(name) { require('showSource').show(name); },
     html: function(name) {
     },
     notes: notes
 });
-
-function htmlFn(name) { return function() {
-    $.get('html/' + name + '.inc', function(html) {
-        $('#content').html(html).css('overflow', 'auto');
-    });
-};}
 
 function unicodeTest() {
     var t = [];

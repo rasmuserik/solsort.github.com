@@ -1,8 +1,19 @@
+// imports
 var util = require('util');
 var webutil = require('webutil');
 var $ = require('zquery');
 var window = require('window');
 var Modernizr = require('modernizr');
+
+// # Fullbrows is an api for full-screen browser apps
+//
+// An app consist is an object with the following values:
+//
+// - start()
+// - update()
+// - stop()
+// - type: fullscreen | scrollable
+// - package
 
 // # Browser window setup
 var relayoutFn;
@@ -23,7 +34,7 @@ function relayout() {
 }
 var relayoutDelayed = util.niceSingle(relayout);
 
-var init = exports.init = function(opt) {
+var start = exports.start= function(opt) {
     browsOpt = opt || {};
     relayoutFn = browsOpt.callback || browsOpt.update;
     if(!window.document.getElementById('content')) {
@@ -36,15 +47,13 @@ var init = exports.init = function(opt) {
             $('body').append('<div id="addressbarfillerdisable" style="height:' +
                 (Math.max(webutil.windowHeight(),$(window).width()) + 62) +
                 'px;"></div>');
-                //'px;background-color: black;"></div>');
         }
     }
-//    $('body').css('background-color', 'black');
     $(window).bind('resize', relayoutDelayed);
     $(window).bind('orientationchange', relayoutDelayed);
     relayout();
 };
 
 exports.layoutFunction = function(fn) {
-    init({callback:fn});
+    start({callback:fn});
 };
