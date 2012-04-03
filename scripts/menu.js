@@ -58,10 +58,21 @@ function initMenu(menu) {
     }
     menu.children.forEach(initMenu);
     menu.size = totalSize(menu.children)/1.5 + 1;
-    fullbrows.start({update: function(elem) {
-        position(menu, -margin,-margin,$(elem).width()+margin, $(elem).height()+margin);
-    }});
 }
+
+exports.createApp = function(div) {
+    var menu = elemToObj(div);
+    function update(elem) {
+            position(menu, -margin,-margin,$(elem).width()+margin, $(elem).height()+margin);
+    }
+    return {
+        start: function(elem) {
+            initMenu(menu);
+            update(elem);
+        },
+        update: update
+    };
+};
 
 // # Calculate position of boxes
 position = function(menu, x, y, w, h) {
@@ -124,5 +135,4 @@ positionArray = function(arr, x, y, w, h) {
 };
 
 exports.doMenu = function(elem) {
-    initMenu(elemToObj(elem));
 };

@@ -17,7 +17,7 @@ var Modernizr = require('modernizr');
 
 // # Browser window setup
 var relayoutFn;
-var browsOpt;
+var browsOpt = {};
 function relayout() {
     $('#content')
         .css('position', 'absolute')
@@ -26,7 +26,7 @@ function relayout() {
         .css('overflow', 'hidden')
         .css('font-family', 'sans-serif')
         .css('width', $(window).width())
-        .css('height', browsOpt.scrollable ? 'auto' : webutil.windowHeight());
+        .css('height', (browsOpt.type === 'scrollable') ? 'auto' : webutil.windowHeight());
     if(typeof relayoutFn === 'function') {
         relayoutFn(window.document.getElementById('content'));
     }
@@ -34,9 +34,12 @@ function relayout() {
 }
 var relayoutDelayed = util.niceSingle(relayout);
 
-var start = exports.start= function(opt) {
+exports.start= function(opt) {
+    if(typeof browsOpt.stop === 'function') {
+        browsOpt.stop();
+    }
     browsOpt = opt || {};
-    relayoutFn = browsOpt.callback || browsOpt.update;
+    browsOpt.type = browsOpt.type || 'fullscreen';
     if(!window.document.getElementById('content')) {
         $('body').append('<div id="content"></div>');
     }
@@ -51,9 +54,9 @@ var start = exports.start= function(opt) {
     }
     $(window).bind('resize', relayoutDelayed);
     $(window).bind('orientationchange', relayoutDelayed);
+    relayoutFn = browsOpt.start || browsOpt.update;
     relayout();
+    relayoutFn = browsOpt.update;
 };
 
-exports.layoutFunction = function(fn) {
-    start({callback:fn});
-};
+exports.startFn = function(app) { return function() { exports.start(app); } ; };

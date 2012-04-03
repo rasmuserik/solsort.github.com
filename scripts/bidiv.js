@@ -1,4 +1,3 @@
-var fullbrows = require('fullbrows');
 var util = require('util');
 var webutil = require('webutil');
 var console = require('console');
@@ -94,12 +93,12 @@ function update(dom) {
     webutil.scaleText($dom.find('div'));
 }
 
-
-exports.run = function() {
-    // ### Assign random weights to map;
-    util.pseudoRandom(1000); // set seed
-    tree = makeTree(menuRaw.concat(menuRaw).concat(menuRaw).concat(menuRaw));
-    tree = makeTree(menuRaw);
-
-    fullbrows.start({update: update});
+exports.app = {
+    start: function(dom) {
+        util.pseudoRandom(1000);
+        tree = makeTree(menuRaw.concat(menuRaw).concat(menuRaw).concat(menuRaw));
+        tree = makeTree(menuRaw);
+        update(dom);
+    },
+    update: update
 };

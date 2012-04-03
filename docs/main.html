@@ -2,6 +2,7 @@
 <span class="kd">var</span> <span class="nx">jsxml</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jsxml&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">console</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;console&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zquery&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">fullbrows</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">);</span>
 
 <span class="kd">var</span> <span class="nx">SiteMap</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
     <span class="nx">routes</span><span class="o">:</span> <span class="p">{</span>
@@ -18,8 +19,8 @@
     <span class="nx">unicodeTest</span><span class="o">:</span> <span class="nx">unicodeTest</span><span class="p">,</span>
     <span class="nx">timelog</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;timelog&#39;</span><span class="p">).</span><span class="nx">main</span><span class="p">,</span>
     <span class="nx">menu</span><span class="o">:</span> <span class="nx">menuFn</span><span class="p">,</span>
-    <span class="nx">combigame</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;combigame&#39;</span><span class="p">).</span><span class="nx">run</span><span class="p">,</span>
-    <span class="nx">bidiv</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;bidiv&#39;</span><span class="p">).</span><span class="nx">run</span><span class="p">,</span>
+    <span class="nx">combigame</span><span class="o">:</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">startFn</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;combigame&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">),</span>
+    <span class="nx">bidiv</span><span class="o">:</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">startFn</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;bidiv&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">),</span>
     <span class="nx">source</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showSource&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span> <span class="p">},</span>
     <span class="nx">html</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
     <span class="p">},</span>
@@ -65,9 +66,10 @@
 <span class="p">});};</span>
 
 <span class="kd">function</span> <span class="nx">menuFn</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">).</span><span class="nx">init</span><span class="p">();</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">jsxml</span><span class="p">.</span><span class="nx">toDOM</span><span class="p">(</span><span class="nx">menuXml</span><span class="p">));</span>
-    <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./menu&#39;</span><span class="p">).</span><span class="nx">doMenu</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content &gt; ul &gt; li&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">jsxml</span><span class="p">.</span><span class="nx">toDOM</span><span class="p">(</span><span class="nx">menuXml</span><span class="p">));</span>
+        <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./menu&#39;</span><span class="p">).</span><span class="nx">createApp</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content &gt; ul &gt; li&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]));</span>
+    <span class="p">}});</span>
 <span class="p">}</span>
 
 <span class="kd">var</span> <span class="nx">menuXml</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ul&quot;</span><span class="p">,</span>

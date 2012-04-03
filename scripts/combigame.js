@@ -192,7 +192,7 @@ function showScore() { fullbrows.start({update:function() {
     $t.css({width: '80%', height:'90%'});
     webutil.scaleText($t);
     $t.css({margin: '3% 10% 7% 10%', overflow: 'visible'});
-    $t.bind('mousedown touchstart', startGame);
+    $t.bind('mousedown touchstart', fullbrows.startFn(exports.app));
 }});}
 
 function testSelected() {
@@ -309,7 +309,6 @@ var prevtime;
 var giveup;
 function startGame() {
     giveup = false;
-    fullbrows.start();
     var $content = $('#content');
     $content.html('');
     prevtime = Date.now();
@@ -353,7 +352,7 @@ function startGame() {
                         $t.css({width: '90%', height:'90%'});
                         webutil.scaleText($t);
                         $t.css({margin: '2% 5% 8% 5%', overflow: 'visible'});
-                        $t.bind('mousedown touchstart', startGame);
+                        $t.bind('mousedown touchstart', fullbrows.startFn(exports.app));
                 }});
             })
     ).append(
@@ -362,13 +361,13 @@ function startGame() {
             .bind('click', function() { menu(
                 {  easy: function() {
                     difficulty = 'easy';
-                    startGame();
+                    fullbrows.start(exports.app);
                 }, normal: function () {
                     difficulty = 'normal';
-                    startGame();
+                    fullbrows.start(exports.app);
                 }, hard: function() {
                     difficulty = 'hard';
-                    startGame();
+                    fullbrows.start(exports.app);
                 }});})
     ).append(
         $('<img class="menuIcon menuSouth" src="images/give-up.png" alt="Give up">')
@@ -391,7 +390,7 @@ function startGame() {
             cards.push(randomCard());
         }
     });
-    fullbrows.start({update: doLayout});
+    doLayout();
 }
 
 function menu(items) { fullbrows.start({update: function() {
@@ -421,6 +420,7 @@ function menu(items) { fullbrows.start({update: function() {
     $menu.css('width', '100%');
 }});}
 
-exports.run = function() {
-    startGame();
+exports.app = {
+    start: startGame,
+    update: doLayout
 };

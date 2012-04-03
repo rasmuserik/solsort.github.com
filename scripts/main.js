@@ -2,6 +2,7 @@ var Backbone = require('backbone');
 var jsxml = require('jsxml');
 var console = require('console');
 var $ = require('zquery');
+var fullbrows = require('fullbrows');
 
 var SiteMap = Backbone.Router.extend({
     routes: {
@@ -18,8 +19,8 @@ var SiteMap = Backbone.Router.extend({
     unicodeTest: unicodeTest,
     timelog: require('timelog').main,
     menu: menuFn,
-    combigame: require('combigame').run,
-    bidiv: require('bidiv').run,
+    combigame: fullbrows.startFn(require('combigame').app),
+    bidiv: fullbrows.startFn(require('bidiv').app),
     source: function(name) { require('showSource').show(name); },
     html: function(name) {
     },
@@ -65,9 +66,10 @@ exports.main = function() {$(function() {
 });};
 
 function menuFn() {
-    require('fullbrows').init();
-    $('#content').html(jsxml.toDOM(menuXml));
-    require('./menu').doMenu($('#content > ul > li')[0]);
+    fullbrows.start({update: function() {
+        $('#content').html(jsxml.toDOM(menuXml));
+        fullbrows.start(require('./menu').createApp($('#content > ul > li')[0]));
+    }});
 }
 
 var menuXml = ["ul",
