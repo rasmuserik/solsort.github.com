@@ -50,11 +50,6 @@ exports.start = function(opt) {
     }
     app.$ = $('#content');
     app.elem = app.$[0];
-    /*
-    if(!window.document.getElementById('content')) {
-        $('body').append('<div id="content"></div>');
-    }
-    */
     if(!Modernizr.touch) {
         if(app.type === 'scrollable') {
             $('body').css('overflow', 'auto');
@@ -63,11 +58,9 @@ exports.start = function(opt) {
         }
     } else {
         $('#addressbarfillerdisable').remove();
-        //if($('#addressbarfillerdisable').length === 0) {
-            $('body').append('<div id="addressbarfillerdisable" style="height:' +
-                (Math.max(webutil.windowHeight(),$(window).width()) + 62) +
-                'px;"></div>');
-        //}
+        $('body').append('<div id="addressbarfillerdisable" style="height:' +
+            (Math.max(webutil.windowHeight(),$(window).width()) + 62) +
+            'px;"></div>');
     }
     $(window).bind('resize', relayoutDelayed);
     $(window).bind('orientationchange', relayoutDelayed);
