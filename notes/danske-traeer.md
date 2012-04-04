@@ -1,3 +1,5 @@
+# Bestemmelsesnøgle for danske træer
+
 - Nåle/skæl
     - Skæl: Cypres eller Thuja
     - Lange nåle i bundter med 2-5 nåle: Fyr
@@ -36,3 +38,6 @@
             - kirsebær
             - pære
             - æble
+
+----
+Rasmus Erik 2012-04-04

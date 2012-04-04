@@ -12,7 +12,7 @@ var Modernizr = require('modernizr');
 // - start()
 // - update()
 // - stop()
-// - type: fullscreen | scrollable
+// - type: fullscreen | scrollable | canvas
 // - package
 
 // # Browser window setup
@@ -25,7 +25,7 @@ function relayout() {
         .css('top', 1)
         .css('overflow', 'hidden')
         .css('font-family', 'sans-serif')
-        .css('width', $(window).width())
+        .css('width', '100%')
         .css('height', (browsOpt.type === 'scrollable') ? 'auto' : webutil.windowHeight());
     if(typeof relayoutFn === 'function') {
         relayoutFn(window.document.getElementById('content'));
@@ -34,23 +34,38 @@ function relayout() {
 }
 var relayoutDelayed = util.niceSingle(relayout);
 
-exports.start= function(opt) {
+exports.start = function(opt) {
     if(typeof browsOpt.stop === 'function') {
         browsOpt.stop();
     }
     browsOpt = opt || {};
     browsOpt.type = browsOpt.type || 'fullscreen';
+    $('#content').remove();
+    if(browsOpt.type === 'canvas') {
+        console.log('a');
+        $('body').append('<canvas id="content">Error: canvas not supported, please update to a modern browser.</canvas>');
+    } else {
+        console.log('b');
+        $('body').append('<div id="content"></div>');
+    }
+    /*
     if(!window.document.getElementById('content')) {
         $('body').append('<div id="content"></div>');
     }
+    */
     if(!Modernizr.touch) {
-        $('body').css('overflow', 'hidden');
+        if(browsOpt.type === 'scrollable') {
+            $('body').css('overflow', 'auto');
+        } else {
+            $('body').css('overflow', 'hidden');
+        }
     } else {
-        if($('#addressbarfillerdisable').length === 0) {
+        $('#addressbarfillerdisable').remove();
+        //if($('#addressbarfillerdisable').length === 0) {
             $('body').append('<div id="addressbarfillerdisable" style="height:' +
                 (Math.max(webutil.windowHeight(),$(window).width()) + 62) +
                 'px;"></div>');
-        }
+        //}
     }
     $(window).bind('resize', relayoutDelayed);
     $(window).bind('orientationchange', relayoutDelayed);
@@ -59,4 +74,4 @@ exports.start= function(opt) {
     relayoutFn = browsOpt.update;
 };
 
-exports.startFn = function(app) { return function() { exports.start(app); } ; };
+exports.startFn = function(app) { console.log(1); return function() { console.log(2);exports.start(app); } ; };

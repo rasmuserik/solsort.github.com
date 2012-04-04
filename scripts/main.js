@@ -12,6 +12,7 @@ var SiteMap = Backbone.Router.extend({
         'notes/*path': 'notes',
         'source/*path': 'source',
         'timelog': 'timelog',
+        'plasma': 'diamondsquare',
         'combigame': 'combigame',
         '*default': 'default'
     },
@@ -21,6 +22,7 @@ var SiteMap = Backbone.Router.extend({
     menu: menuFn,
     combigame: fullbrows.startFn(require('combigame').app),
     bidiv: fullbrows.startFn(require('bidiv').app),
+    diamondsquare: fullbrows.startFn(require('demoPlasma').app),
     source: function(name) { require('showSource').show(name); },
     html: function(name) {
     },
@@ -52,7 +54,9 @@ function notes(fnname) {
     console.log(showdown);
     $.get('notes/' + fnname + '.md', function(text) {
         var html = showdown.makeHtml(text);
-        $('#content').html(html);
+        fullbrows.start({type: 'scrollable', update: function() {
+            $('#content').html(html);
+        }});
     });
 }
 

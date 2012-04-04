@@ -273,6 +273,7 @@ var modules =  ["scripts/util.js",
                 "scripts/menu.js",
                 "scripts/combigame.js",
                 "scripts/timelog.js",
+                "scripts/demoPlasma.js",
                 "scripts/bidiv.js",
                 "scripts/webutil.js",
                 "scripts/fullbrows.js"];
