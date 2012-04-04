@@ -60,13 +60,15 @@ function initMenu(menu) {
     menu.size = totalSize(menu.children)/1.5 + 1;
 }
 
-exports.createApp = function(div) {
-    var menu = elemToObj(div);
+exports.createApp = function(jsonml) {
+    var menu;
     function update(elem) {
             position(menu, -margin,-margin,$(elem).width()+margin, $(elem).height()+margin);
     }
     return {
         start: function(elem) {
+            $('#content').html(require('jsxml').toDOM(jsonml));
+            menu = elemToObj($('#content > ul > li')[0]);
             initMenu(menu);
             update(elem);
         },

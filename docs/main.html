@@ -1,33 +1,36 @@
-<!DOCTYPE html>  <html> <head>   <title>main.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               main.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">Backbone</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;backbone&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">jsxml</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jsxml&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">console</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;console&#39;</span><span class="p">);</span>
+<!DOCTYPE html>  <html> <head>   <title>main.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               main.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/*global window: true */</span>
 <span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zquery&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">fullbrows</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">);</span>
 
-<span class="kd">var</span> <span class="nx">SiteMap</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-    <span class="nx">routes</span><span class="o">:</span> <span class="p">{</span>
-        <span class="s1">&#39;menu&#39;</span><span class="o">:</span> <span class="s1">&#39;menu&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;bidiv&#39;</span><span class="o">:</span> <span class="s1">&#39;bidiv&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;unicodeTest&#39;</span><span class="o">:</span> <span class="s1">&#39;unicodeTest&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;notes/*path&#39;</span><span class="o">:</span> <span class="s1">&#39;notes&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;source/*path&#39;</span><span class="o">:</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;timelog&#39;</span><span class="o">:</span> <span class="s1">&#39;timelog&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;plasma&#39;</span><span class="o">:</span> <span class="s1">&#39;diamondsquare&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;combigame&#39;</span><span class="o">:</span> <span class="s1">&#39;combigame&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;*default&#39;</span><span class="o">:</span> <span class="s1">&#39;default&#39;</span>
-    <span class="p">},</span>
-    <span class="s1">&#39;default&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="p">},</span>
-    <span class="nx">unicodeTest</span><span class="o">:</span> <span class="nx">unicodeTest</span><span class="p">,</span>
+<span class="kd">var</span> <span class="nx">apps</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">timelog</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;timelog&#39;</span><span class="p">).</span><span class="nx">main</span><span class="p">,</span>
-    <span class="nx">menu</span><span class="o">:</span> <span class="nx">menuFn</span><span class="p">,</span>
     <span class="nx">combigame</span><span class="o">:</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">startFn</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;combigame&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">),</span>
     <span class="nx">bidiv</span><span class="o">:</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">startFn</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;bidiv&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">),</span>
-    <span class="nx">diamondsquare</span><span class="o">:</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">startFn</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;demoPlasma&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">),</span>
-    <span class="nx">source</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showSource&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span> <span class="p">},</span>
-    <span class="nx">html</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-    <span class="p">},</span>
-    <span class="nx">notes</span><span class="o">:</span> <span class="nx">notes</span>
-<span class="p">});</span>
+    <span class="nx">plasma</span><span class="o">:</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">startFn</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;demoPlasma&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">),</span>
+    <span class="s1">&#39;source/&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showSource&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span> <span class="p">},</span>
+    <span class="s1">&#39;notes/&#39;</span><span class="o">:</span> <span class="nx">notes</span><span class="p">,</span>
+    <span class="nx">menu</span><span class="o">:</span> <span class="nx">menuFn</span><span class="p">,</span>
+    <span class="s1">&#39;default&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;default dispatch&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">dispatch</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">param</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">name</span> <span class="k">in</span> <span class="nx">apps</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">param</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">===</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">param</span> <span class="o">=</span> <span class="nx">param</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;name:&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="s1">&#39;param:&#39;</span><span class="p">,</span> <span class="nx">param</span><span class="p">);</span>
+    <span class="nx">apps</span><span class="p">[</span><span class="nx">name</span><span class="p">](</span><span class="nx">param</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">main</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">onhashchange</span> <span class="o">=</span> <span class="nx">dispatch</span><span class="p">;</span>
+    <span class="nx">dispatch</span><span class="p">();</span>
+<span class="p">});};</span>
 
 <span class="kd">function</span> <span class="nx">unicodeTest</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">[];</span>
@@ -60,19 +63,9 @@
     <span class="p">});</span>
 <span class="p">}</span>
 
-<span class="kd">var</span> <span class="nx">sitemap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SiteMap</span><span class="p">();</span>
-
-<span class="nx">exports</span><span class="p">.</span><span class="nx">main</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">Backbone</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div id=&quot;content&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">});};</span>
-
 <span class="kd">function</span> <span class="nx">menuFn</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">jsxml</span><span class="p">.</span><span class="nx">toDOM</span><span class="p">(</span><span class="nx">menuXml</span><span class="p">));</span>
-        <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./menu&#39;</span><span class="p">).</span><span class="nx">createApp</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content &gt; ul &gt; li&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]));</span>
+        <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./menu&#39;</span><span class="p">).</span><span class="nx">createApp</span><span class="p">(</span><span class="nx">menuXml</span><span class="p">));</span>
     <span class="p">}});</span>
 <span class="p">}</span>
 

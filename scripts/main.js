@@ -1,33 +1,36 @@
-var Backbone = require('backbone');
-var jsxml = require('jsxml');
-var console = require('console');
+/*global window: true */
 var $ = require('zquery');
 var fullbrows = require('fullbrows');
 
-var SiteMap = Backbone.Router.extend({
-    routes: {
-        'menu': 'menu',
-        'bidiv': 'bidiv',
-        'unicodeTest': 'unicodeTest',
-        'notes/*path': 'notes',
-        'source/*path': 'source',
-        'timelog': 'timelog',
-        'plasma': 'diamondsquare',
-        'combigame': 'combigame',
-        '*default': 'default'
-    },
-    'default': function() { },
-    unicodeTest: unicodeTest,
+var apps = {
     timelog: require('timelog').main,
-    menu: menuFn,
     combigame: fullbrows.startFn(require('combigame').app),
     bidiv: fullbrows.startFn(require('bidiv').app),
-    diamondsquare: fullbrows.startFn(require('demoPlasma').app),
-    source: function(name) { require('showSource').show(name); },
-    html: function(name) {
-    },
-    notes: notes
-});
+    plasma: fullbrows.startFn(require('demoPlasma').app),
+    'source/': function(name) { require('showSource').show(name); },
+    'notes/': notes,
+    menu: menuFn,
+    'default': function() {
+        console.log('default dispatch');
+    }
+};
+
+function dispatch() {
+    var param = window.location.hash.slice(1);
+    for(var name in apps) {
+        if(param.slice(0,name.length) === name) {
+            param = param.slice(name.length);
+            break;
+        }
+    }
+    console.log('name:', name, 'param:', param);
+    apps[name](param);
+}
+
+exports.main = function() { $(function() {
+    window.onhashchange = dispatch;
+    dispatch();
+});};
 
 function unicodeTest() {
     var t = [];
@@ -60,19 +63,9 @@ function notes(fnname) {
     });
 }
 
-var sitemap = new SiteMap();
-
-exports.main = function() {$(function() {
-    Backbone.history.start();
-    if(!$('#content').length) {
-        $('body').append('<div id="content"></div>');
-    }
-});};
-
 function menuFn() {
     fullbrows.start({update: function() {
-        $('#content').html(jsxml.toDOM(menuXml));
-        fullbrows.start(require('./menu').createApp($('#content > ul > li')[0]));
+        fullbrows.start(require('./menu').createApp(menuXml));
     }});
 }
 
