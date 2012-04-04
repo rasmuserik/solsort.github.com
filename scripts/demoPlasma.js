@@ -21,7 +21,8 @@ exports.app = { type: 'canvas', update: function(canvas) {
     }
     var step = 512;
     function colrand() {
-        return (Math.random()-0.5) * step *1.4;
+        return (Math.random()-0.5) * step * 3;
+        //return (Math.random()-0.5) * step *1.4;
         //return (Math.random()-0.5) * 80;
     }
     function plasma() {
