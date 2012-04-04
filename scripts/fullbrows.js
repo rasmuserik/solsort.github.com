@@ -16,9 +16,9 @@ var Modernizr = require('modernizr');
 // - package
 
 // # Browser window setup
-var relayoutFn;
 var app = {};
-function relayout() {
+
+function relayoutStyle() {
     $('#content')
         .css('position', 'absolute')
         .css('left', 0)
@@ -27,10 +27,13 @@ function relayout() {
         .css('font-family', 'sans-serif')
         .css('width', '100%')
         .css('height', (app.type === 'scrollable') ? 'auto' : webutil.windowHeight());
-    if(typeof relayoutFn === 'function') {
-        relayoutFn(window.document.getElementById('content'));
-    }
     window.scrollTo(0,1);
+}
+function relayout() {
+    relayoutStyle();
+    if(typeof app.update === 'function') {
+        app.update();
+    }
 }
 var relayoutDelayed = util.niceSingle(relayout);
 
@@ -64,9 +67,10 @@ exports.start = function(opt) {
     }
     $(window).bind('resize', relayoutDelayed);
     $(window).bind('orientationchange', relayoutDelayed);
-    relayoutFn = app.start || app.update;
-    relayout();
-    relayoutFn = app.update;
+
+    app.start = app.start || app.update;
+    relayoutStyle();
+    app.start();
 };
 
 exports.startFn = function(app) { console.log(1); return function() { console.log(2);exports.start(app); } ; };

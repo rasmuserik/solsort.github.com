@@ -86,19 +86,18 @@ function layoutTree(tree, $dom, x, y, w, h, dir) {
 }
 
 
-function update(dom) {
-    var $dom = $(dom);
-    $dom.html('');
-    layoutTree(tree, $dom, 0, 0, $dom.width(), $dom.height(), 0);
-    webutil.scaleText($dom.find('div'));
-}
 
 exports.app = {
-    start: function(dom) {
+    start: function() {
         util.pseudoRandom(1000);
         tree = makeTree(menuRaw.concat(menuRaw).concat(menuRaw).concat(menuRaw));
         tree = makeTree(menuRaw);
-        update(dom);
+        this.update();
     },
-    update: update
+    update: function() {
+        var $dom = this.$;
+        $dom.html('');
+        layoutTree(tree, $dom, 0, 0, $dom.width(), $dom.height(), 0);
+        webutil.scaleText($dom.find('div'));
+    }
 };

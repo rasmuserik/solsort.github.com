@@ -1,6 +1,5 @@
-exports.app = { type: 'canvas', update: function(canvas) {
-    console.log(canvas);
-
+exports.app = { type: 'canvas', update: function() {
+    var canvas = this.elem;
     canvas.width = canvas.height = 512;
     var ctx = canvas.getContext('2d');
     

@@ -62,17 +62,17 @@ function initMenu(menu) {
 
 exports.createApp = function(jsonml) {
     var menu;
-    function update(elem) {
-            position(menu, -margin,-margin,$(elem).width()+margin, $(elem).height()+margin);
-    }
     return {
-        start: function(elem) {
+        start: function() {
             $('#content').html(require('jsxml').toDOM(jsonml));
             menu = elemToObj($('#content > ul > li')[0]);
             initMenu(menu);
-            update(elem);
+            this.update(this.elem);
         },
-        update: update
+        update: function() {
+            var elem = this.elem;
+            position(menu, -margin,-margin,$(elem).width()+margin, $(elem).height()+margin);
+        }
     };
 };
 
