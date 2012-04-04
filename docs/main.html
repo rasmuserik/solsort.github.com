@@ -2,72 +2,19 @@
 <span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zquery&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">fullbrows</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fullbrows&#39;</span><span class="p">);</span>
 
-<span class="kd">var</span> <span class="nx">apps</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">timelog</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;timelog&#39;</span><span class="p">).</span><span class="nx">main</span><span class="p">,</span>
-    <span class="nx">combigame</span><span class="o">:</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">startFn</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;combigame&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">),</span>
-    <span class="nx">bidiv</span><span class="o">:</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">startFn</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;bidiv&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">),</span>
-    <span class="nx">plasma</span><span class="o">:</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">startFn</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;demoPlasma&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">),</span>
-    <span class="s1">&#39;source/&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showSource&#39;</span><span class="p">).</span><span class="nx">show</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span> <span class="p">},</span>
-    <span class="s1">&#39;notes/&#39;</span><span class="o">:</span> <span class="nx">notes</span><span class="p">,</span>
-    <span class="nx">menu</span><span class="o">:</span> <span class="nx">menuFn</span><span class="p">,</span>
-    <span class="s1">&#39;default&#39;</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;default dispatch&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">notes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;scrollable&#39;</span><span class="p">,</span>
+    <span class="nx">start</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">showdown</span><span class="p">;</span>
+        <span class="nx">showdown</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showdown&#39;</span><span class="p">);</span>
+        <span class="nx">showdown</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">showdown</span><span class="p">.</span><span class="nx">converter</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;notes/&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">param</span> <span class="o">+</span> <span class="s1">&#39;.md&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">showdown</span><span class="p">.</span><span class="nx">makeHtml</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+            <span class="nx">app</span><span class="p">.</span><span class="nx">$</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+        <span class="p">});</span>
     <span class="p">}</span>
 <span class="p">};</span>
-
-<span class="kd">function</span> <span class="nx">dispatch</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">param</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">name</span> <span class="k">in</span> <span class="nx">apps</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">param</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">===</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">param</span> <span class="o">=</span> <span class="nx">param</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;name:&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="s1">&#39;param:&#39;</span><span class="p">,</span> <span class="nx">param</span><span class="p">);</span>
-    <span class="nx">apps</span><span class="p">[</span><span class="nx">name</span><span class="p">](</span><span class="nx">param</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="nx">exports</span><span class="p">.</span><span class="nx">main</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nb">window</span><span class="p">.</span><span class="nx">onhashchange</span> <span class="o">=</span> <span class="nx">dispatch</span><span class="p">;</span>
-    <span class="nx">dispatch</span><span class="p">();</span>
-<span class="p">});};</span>
-
-<span class="kd">function</span> <span class="nx">unicodeTest</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="mi">65538</span><span class="p">;</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-    <span class="k">for</span><span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">n</span><span class="p">;</span><span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">t</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="nx">t</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="p">});</span>
-    <span class="nx">t</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-    <span class="k">for</span><span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">n</span><span class="p">;</span><span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">!==</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;error t[&#39;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s1">&#39;] -&gt; &#39;</span> <span class="o">+</span> <span class="nx">t</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kd">function</span> <span class="nx">notes</span><span class="p">(</span><span class="nx">fnname</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">showdown</span><span class="p">;</span>
-    <span class="nx">showdown</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showdown&#39;</span><span class="p">);</span>
-    <span class="nx">showdown</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">showdown</span><span class="p">.</span><span class="nx">converter</span><span class="p">();</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">showdown</span><span class="p">);</span>
-    <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;notes/&#39;</span> <span class="o">+</span> <span class="nx">fnname</span> <span class="o">+</span> <span class="s1">&#39;.md&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">showdown</span><span class="p">.</span><span class="nx">makeHtml</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
-        <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">({</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;scrollable&#39;</span><span class="p">,</span> <span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
-        <span class="p">}});</span>
-    <span class="p">});</span>
-<span class="p">}</span>
-
-<span class="kd">function</span> <span class="nx">menuFn</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./menu&#39;</span><span class="p">).</span><span class="nx">createApp</span><span class="p">(</span><span class="nx">menuXml</span><span class="p">));</span>
-    <span class="p">}});</span>
-<span class="p">}</span>
 
 <span class="kd">var</span> <span class="nx">menuXml</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ul&quot;</span><span class="p">,</span>
     <span class="p">[</span><span class="s2">&quot;li&quot;</span><span class="p">,</span><span class="s2">&quot;solsort.dk&quot;</span><span class="p">,[</span><span class="s2">&quot;ul&quot;</span><span class="p">,</span>
@@ -98,5 +45,62 @@
             <span class="p">[</span><span class="s2">&quot;li&quot;</span><span class="p">,</span><span class="s2">&quot;“slidein transitions”:&quot;</span><span class="p">]]],</span>
         <span class="p">[</span><span class="s2">&quot;li&quot;</span><span class="p">,</span><span class="s2">&quot;Presentations&quot;</span><span class="p">,[</span><span class="s2">&quot;ul&quot;</span><span class="p">,</span>
             <span class="p">[</span><span class="s2">&quot;li&quot;</span><span class="p">,[</span><span class="s2">&quot;a&quot;</span><span class="p">,{</span><span class="s2">&quot;href&quot;</span><span class="o">:</span><span class="s2">&quot;/presentations/oauth2.html&quot;</span><span class="p">},</span><span class="s2">&quot;OAuth2&quot;</span><span class="p">]]]]]]];</span>
+
+<span class="kd">var</span> <span class="nx">currentName</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">dispatch</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">param</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">name</span> <span class="k">in</span> <span class="nx">apps</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">param</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">===</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">param</span> <span class="o">=</span> <span class="nx">param</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">name</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;name:&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="s1">&#39;param:&#39;</span><span class="p">,</span> <span class="nx">param</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">apps</span><span class="p">[</span><span class="nx">name</span><span class="p">]);</span>
+    <span class="nx">apps</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">param</span> <span class="o">=</span> <span class="nx">param</span><span class="p">;</span>
+    <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">apps</span><span class="p">[</span><span class="nx">name</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">main</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">onhashchange</span> <span class="o">=</span> <span class="nx">dispatch</span><span class="p">;</span>
+    <span class="nx">dispatch</span><span class="p">();</span>
+<span class="p">});};</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">switchTo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">param</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">name</span> <span class="o">=</span> <span class="nx">currentName</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="nx">name</span> <span class="o">+</span> <span class="nx">param</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">unicodeTest</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="mi">65538</span><span class="p">;</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">n</span><span class="p">;</span><span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">t</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">t</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="p">});</span>
+    <span class="nx">t</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">n</span><span class="p">;</span><span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">!==</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;error t[&#39;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s1">&#39;] -&gt; &#39;</span> <span class="o">+</span> <span class="nx">t</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">apps</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">combigame</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;combigame&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>
+    <span class="nx">bidiv</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;bidiv&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>
+    <span class="nx">plasma</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;demoPlasma&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>
+    <span class="s1">&#39;source/&#39;</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showSource&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>
+    <span class="nx">timelog</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;timelog&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>
+    <span class="s1">&#39;notes/&#39;</span><span class="o">:</span> <span class="nx">notes</span><span class="p">,</span>
+    <span class="nx">menu</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./menu&#39;</span><span class="p">).</span><span class="nx">createApp</span><span class="p">(</span><span class="nx">menuXml</span><span class="p">),</span>
+    <span class="s1">&#39;default&#39;</span><span class="o">:</span> <span class="p">{</span><span class="nx">start</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="p">}}</span>
+<span class="p">};</span>
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

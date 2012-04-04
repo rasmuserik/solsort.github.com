@@ -92,9 +92,7 @@
 <span class="cm">    */</span>
 <span class="p">}</span>
 <span class="kd">function</span> <span class="nx">renderUI</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">$content</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span><span class="s1">&#39;100%&#39;</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="s1">&#39;100%&#39;</span><span class="p">});</span>
-
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">$content</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">$content</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">);</span>
     <span class="nx">$content</span>
         <span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="p">.</span><span class="nx">css</span><span class="p">({</span>
@@ -233,13 +231,17 @@
 <span class="p">}</span>
 
 <span class="nx">exports</span><span class="p">.</span><span class="nx">sync</span> <span class="o">=</span> <span class="nx">sync</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h1>Main</h1>             </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/** main function */</span>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">main</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">load</span><span class="p">();</span>
-    <span class="nx">sync</span><span class="p">();</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">getTaskList</span><span class="p">(</span><span class="mi">16</span><span class="p">));</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">getCurrent</span><span class="p">());</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">usage</span><span class="p">());</span>
-    <span class="nx">renderUI</span><span class="p">();</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">app</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;scrollable&#39;</span><span class="p">,</span>
+    <span class="nx">start</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">load</span><span class="p">();</span>
+        <span class="nx">sync</span><span class="p">();</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">getTaskList</span><span class="p">(</span><span class="mi">16</span><span class="p">));</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">getCurrent</span><span class="p">());</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">usage</span><span class="p">());</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
+    <span class="p">},</span>
+    <span class="nx">update</span><span class="o">:</span> <span class="nx">renderUI</span>
 <span class="p">};</span>
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

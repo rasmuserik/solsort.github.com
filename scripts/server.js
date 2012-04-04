@@ -262,7 +262,6 @@ var legacy = ["depend/es5-shim.min.js",
 
 var libs = ["depend/modernizr.js",
             "depend/underscore-min.js",
-            "depend/backbone-min.js",
             "depend/showdown.min.js",
             "scripts/bundler.js"];
 

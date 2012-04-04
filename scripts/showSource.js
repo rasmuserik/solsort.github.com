@@ -65,12 +65,16 @@ function docco(text) {
 
 }
 
-exports.show = function(filename) {
-    $.ajax({
-        url: ('/scripts/' + filename + '.js'),
-        dataType: 'text',
-        success: function(text) {
-            $('body').html(docco(text));
-        }
-    });
+exports.app = {
+    type: 'scrollable',
+    start: function() {
+        var app = this;
+        $.ajax({
+            url: ('/scripts/' + this.param + '.js'),
+            dataType: 'text',
+            success: function(text) {
+                app.$.html(docco(text));
+            }
+        });
+    }
 };

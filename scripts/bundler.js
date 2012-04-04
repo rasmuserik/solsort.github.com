@@ -18,7 +18,6 @@ bundler = {};
     }
     exports.module = module;
     exports.require = require;
-    module('backbone', 'module.exports=Backbone');
     module('underscore', 'module.exports=_');
     module('zquery', 'module.exports=$');
     module('window', 'module.exports=window');

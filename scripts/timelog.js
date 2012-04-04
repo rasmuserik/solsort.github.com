@@ -96,9 +96,7 @@ function drawTaskButtons($target, x0, y0, w, h, spacing) {
     */
 }
 function renderUI() {
-    var $content = $('<div>').css({width:'100%', height: '100%'});
-
-    $('body').html($content);
+    var $content = $('#content');
     $content
         .html('')
         .css({
@@ -252,11 +250,15 @@ exports.sync = sync;
 
 // # Main
 /** main function */
-exports.main = function() {
-    load();
-    sync();
-    console.log(getTaskList(16));
-    console.log(getCurrent());
-    console.log(usage());
-    renderUI();
+exports.app = {
+    type: 'scrollable',
+    start: function() {
+        load();
+        sync();
+        console.log(getTaskList(16));
+        console.log(getCurrent());
+        console.log(usage());
+        this.update();
+    },
+    update: renderUI
 };

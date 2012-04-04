@@ -2,72 +2,19 @@
 var $ = require('zquery');
 var fullbrows = require('fullbrows');
 
-var apps = {
-    timelog: require('timelog').main,
-    combigame: fullbrows.startFn(require('combigame').app),
-    bidiv: fullbrows.startFn(require('bidiv').app),
-    plasma: fullbrows.startFn(require('demoPlasma').app),
-    'source/': function(name) { require('showSource').show(name); },
-    'notes/': notes,
-    menu: menuFn,
-    'default': function() {
-        console.log('default dispatch');
+var notes = {
+    type: 'scrollable',
+    start: function() {
+        var showdown;
+        showdown = require('showdown');
+        showdown = new showdown.converter();
+        var app = this;
+        $.get('notes/' + this.param + '.md', function(text) {
+            var html = showdown.makeHtml(text);
+            app.$.html(html);
+        });
     }
 };
-
-function dispatch() {
-    var param = window.location.hash.slice(1);
-    for(var name in apps) {
-        if(param.slice(0,name.length) === name) {
-            param = param.slice(name.length);
-            break;
-        }
-    }
-    console.log('name:', name, 'param:', param);
-    apps[name](param);
-}
-
-exports.main = function() { $(function() {
-    window.onhashchange = dispatch;
-    dispatch();
-});};
-
-function unicodeTest() {
-    var t = [];
-    var i;
-    var n = 65538;
-    $('body').text('');
-    for(i=0;i<n;++i) {
-        t.push(i);
-    }
-    t = t.map(function(a) { return String.fromCharCode(a); });
-    t = t.join('');
-    for(i=0;i<n;++i) {
-        if(t.charCodeAt(i) !== i) {
-            $('body').append('error t[' + i + '] -> ' + t.charCodeAt(i) + '<br>');
-        }
-    }
-    $('body').append('done');
-}
-
-function notes(fnname) {
-    var showdown;
-    showdown = require('showdown');
-    showdown = new showdown.converter();
-    console.log(showdown);
-    $.get('notes/' + fnname + '.md', function(text) {
-        var html = showdown.makeHtml(text);
-        fullbrows.start({type: 'scrollable', update: function() {
-            $('#content').html(html);
-        }});
-    });
-}
-
-function menuFn() {
-    fullbrows.start({update: function() {
-        fullbrows.start(require('./menu').createApp(menuXml));
-    }});
-}
 
 var menuXml = ["ul",
     ["li","solsort.dk",["ul",
@@ -98,3 +45,60 @@ var menuXml = ["ul",
             ["li","“slidein transitions”:"]]],
         ["li","Presentations",["ul",
             ["li",["a",{"href":"/presentations/oauth2.html"},"OAuth2"]]]]]]];
+
+var currentName = '';
+
+function dispatch() {
+    var param = window.location.hash.slice(1);
+    for(var name in apps) {
+        if(param.slice(0,name.length) === name) {
+            param = param.slice(name.length);
+            break;
+        }
+    }
+    console.log('name:', name, 'param:', param);
+    console.log(apps[name]);
+    apps[name].param = param;
+    fullbrows.start(apps[name]);
+}
+
+exports.main = function() { $(function() {
+    window.onhashchange = dispatch;
+    dispatch();
+});};
+
+exports.switchTo = function(name, param) {
+    if(!name) {
+        name = currentName;
+    }
+    window.location.hash = name + param;
+};
+
+function unicodeTest() {
+    var t = [];
+    var i;
+    var n = 65538;
+    $('body').text('');
+    for(i=0;i<n;++i) {
+        t.push(i);
+    }
+    t = t.map(function(a) { return String.fromCharCode(a); });
+    t = t.join('');
+    for(i=0;i<n;++i) {
+        if(t.charCodeAt(i) !== i) {
+            $('body').append('error t[' + i + '] -> ' + t.charCodeAt(i) + '<br>');
+        }
+    }
+    $('body').append('done');
+}
+
+var apps = {
+    combigame: require('combigame').app,
+    bidiv: require('bidiv').app,
+    plasma: require('demoPlasma').app,
+    'source/': require('showSource').app,
+    timelog: require('timelog').app,
+    'notes/': notes,
+    menu: require('./menu').createApp(menuXml),
+    'default': {start: function () { }}
+};
