@@ -17,7 +17,7 @@ var Modernizr = require('modernizr');
 
 // # Browser window setup
 var relayoutFn;
-var browsOpt = {};
+var app = {};
 function relayout() {
     $('#content')
         .css('position', 'absolute')
@@ -26,7 +26,7 @@ function relayout() {
         .css('overflow', 'hidden')
         .css('font-family', 'sans-serif')
         .css('width', '100%')
-        .css('height', (browsOpt.type === 'scrollable') ? 'auto' : webutil.windowHeight());
+        .css('height', (app.type === 'scrollable') ? 'auto' : webutil.windowHeight());
     if(typeof relayoutFn === 'function') {
         relayoutFn(window.document.getElementById('content'));
     }
@@ -35,26 +35,28 @@ function relayout() {
 var relayoutDelayed = util.niceSingle(relayout);
 
 exports.start = function(opt) {
-    if(typeof browsOpt.stop === 'function') {
-        browsOpt.stop();
+    if(typeof app.stop === 'function') {
+        app.stop();
     }
-    browsOpt = opt || {};
-    browsOpt.type = browsOpt.type || 'fullscreen';
+    app = opt || {};
+    app.type = app.type || 'fullscreen';
     $('#content').remove();
-    if(browsOpt.type === 'canvas') {
+    if(app.type === 'canvas') {
         console.log('a');
         $('body').append('<canvas id="content">Error: canvas not supported, please update to a modern browser.</canvas>');
     } else {
         console.log('b');
         $('body').append('<div id="content"></div>');
     }
+    app.$ = $('#content');
+    app.elem = app.$[0];
     /*
     if(!window.document.getElementById('content')) {
         $('body').append('<div id="content"></div>');
     }
     */
     if(!Modernizr.touch) {
-        if(browsOpt.type === 'scrollable') {
+        if(app.type === 'scrollable') {
             $('body').css('overflow', 'auto');
         } else {
             $('body').css('overflow', 'hidden');
@@ -69,9 +71,9 @@ exports.start = function(opt) {
     }
     $(window).bind('resize', relayoutDelayed);
     $(window).bind('orientationchange', relayoutDelayed);
-    relayoutFn = browsOpt.start || browsOpt.update;
+    relayoutFn = app.start || app.update;
     relayout();
-    relayoutFn = browsOpt.update;
+    relayoutFn = app.update;
 };
 
 exports.startFn = function(app) { console.log(1); return function() { console.log(2);exports.start(app); } ; };
