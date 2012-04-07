@@ -24,7 +24,6 @@ function relayoutStyle() {
         .css('left', 0)
         .css('top', 1)
         .css('overflow', 'hidden')
-        .css('font-family', 'sans-serif')
         .css('width', '100%')
         .css('height', (app.type === 'scrollable') ? 'auto' : webutil.windowHeight());
     window.scrollTo(0,1);
