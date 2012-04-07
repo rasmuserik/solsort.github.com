@@ -16,10 +16,10 @@ var notes = {
     }
 };
 $('head').append('<style>' +
-        '@font-face { font-family: Ubuntu; src: url("/img/Ubuntu-R.ttf"); }' +
-        '@font-face { font-family: sans-serif; src: url("/img/Ubuntu-R.ttf"); }' +
-        '@font-face { font-family: "Ubuntu Mono"; src: url("/img/UbuntuMono-R.ttf"); }' +
-        '@font-face { font-family: "Ubuntu Condensed"; src: url("/img/Ubuntu-C.ttf"); }' +
+        '@font-face { font-family: Ubuntu; src: url("img/Ubuntu-R.ttf"); }' +
+        '@font-face { font-family: sans-serif; src: url("img/Ubuntu-R.ttf"); }' +
+        '@font-face { font-family: "Ubuntu Mono"; src: url("img/UbuntuMono-R.ttf"); }' +
+        '@font-face { font-family: "Ubuntu Condensed"; src: url("img/Ubuntu-C.ttf"); }' +
         'tt { font-family: "Ubuntu Mono", monospace; }' +
         'code { font-family: "Ubuntu Mono", monospace; }' +
         'pre { font-family: "Ubuntu Mono", monospace; }' +
