@@ -21,11 +21,12 @@
 - General
     - Refactor
     - docco-docs
+    - autoscale menu.js items.
 - Sidebar/topmenu
     - back
     - home/sitemap
     - view source
-- Content (via menu.js, wider, autoscale-text)
+- Content (index -> #menu)
     - Apps
         - combigame
         - *notescore*
@@ -48,7 +49,8 @@
         - 3d illusion image
         - current-text
         - mobile-friendly
-## Next
+
+## future
 
 - better menu.js / sitemap
     - autoscale text on menu (and wider boxes)
