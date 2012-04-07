@@ -17,15 +17,16 @@
 * Brug ordrækkefølgen til at strukturere indholdet
 * Brug både visuelt, auditivt, kinestetisk og auditivt-digitalt sprog.
 
-Vær opmærksom på
+Vær opmærksom på:
+
 * Formål med kommunikationen
 * Målgruppen
 * Tilgængelighed
-** Resumé
-** Opslagsord til indeks
-** Nøgleord til søgning
-** Opbygning og overskrifter
-** Referencer og kilder
+    * Resumé
+    * Opslagsord til indeks
+    * Nøgleord til søgning
+    * Opbygning og overskrifter
+    * Referencer og kilder
 
 ### Kilder
 * http://everything2.com 
