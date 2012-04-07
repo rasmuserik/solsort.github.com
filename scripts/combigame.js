@@ -329,7 +329,7 @@ function startGame() {
     });
 
     $content.append(
-        $('<img class="menuIcon" src="images/help.png" alt="How to play">')
+        $('<img class="menuIcon" src="img/help.png" alt="How to play">')
             .css('position', 'absolute')
             .bind('click', function() {
                 fullbrows.start({update:function() {
@@ -338,11 +338,11 @@ function startGame() {
                             ["h2", "CombiGame"],
                             "Game objectives: click on combinations of three figures where color, count, shape, and fill, are either the same or all different.", ["br"],
                             ['p',
-                                ['img', {style:'height: 1.5em; width: 1.5em;',src:'images/give-up.png'}],
+                                ['img', {style:'height: 1.5em; width: 1.5em;',src:'img/give-up.png'}],
                                 ' shows a valid combination among the figures.', ['br'],
-                                ['img', {style:'height: 1.5em; width: 1.5em;',src:'images/difficulty.png'}],
+                                ['img', {style:'height: 1.5em; width: 1.5em;',src:'img/difficulty.png'}],
                                 ' sets difficulty •\xa0easy    : ca. 6 valid combinations •\xa0hard: 1 valid combination •\xa0normal: random number of valid combinations.', ['br'],
-                                ['img', {style:'height: 1.5em; width: 1.5em;',src:'images/score.png'}],
+                                ['img', {style:'height: 1.5em; width: 1.5em;',src:'img/score.png'}],
                                 ' shows latest timing for the current difficulty.', ['br']],
                             'Click to close.']);
 
@@ -356,7 +356,7 @@ function startGame() {
                 }});
             })
     ).append(
-        $('<img class="menuIcon menuEast" src="images/difficulty.png" alt="Difficulty">')
+        $('<img class="menuIcon menuEast" src="img/difficulty.png" alt="Difficulty">')
             .css('position', 'absolute')
             .bind('click', function() { menu(
                 {  easy: function() {
@@ -370,11 +370,11 @@ function startGame() {
                     fullbrows.start(exports.app);
                 }});})
     ).append(
-        $('<img class="menuIcon menuSouth" src="images/give-up.png" alt="Give up">')
+        $('<img class="menuIcon menuSouth" src="img/give-up.png" alt="Give up">')
             .css('position', 'absolute')
             .bind('click', hint)
     ).append(
-        $('<img class="menuIcon menuEast menuSouth" src="images/score.png" alt="Score">')
+        $('<img class="menuIcon menuEast menuSouth" src="img/score.png" alt="Score">')
             .css('position', 'absolute')
             .bind('click', showScore)
     );

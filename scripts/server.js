@@ -199,7 +199,7 @@ function writeCacheManifest() {
     for(i=0;i<3;++i){for(j=0;j<3;++j){for(k=0;k<3;++k){for(l=0;l<3;++l){
         manifest.push('/dist/combigame'+i+j+k+l+'.png');
     }}}}
-    async.forEach(['images', 'notes'], function(dir, done) {
+    async.forEach(['img', 'notes'], function(dir, done) {
         fs.readdir(dir, function(err, data) {
             if(err) {
                 throw err;
