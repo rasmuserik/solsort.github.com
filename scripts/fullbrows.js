@@ -36,7 +36,7 @@ function relayout() {
     }
 }
 var relayoutDelayed = util.niceSingle(relayout);
-var isMobile = !!window.navigator.userAgent.match(/mobile/i);
+var isMobile = window.isMobile || !!window.navigator.userAgent.match(/mobile/i);
 
 exports.start = function(opt) {
     if(typeof app.stop === 'function') {
