@@ -36,6 +36,7 @@ function relayout() {
     }
 }
 var relayoutDelayed = util.niceSingle(relayout);
+var isMobile = !!window.navigator.userAgent.match(/mobile/i);
 
 exports.start = function(opt) {
     if(typeof app.stop === 'function') {
@@ -43,12 +44,14 @@ exports.start = function(opt) {
     }
     app = opt || {};
     app.type = app.type || 'fullscreen';
+    if(app.mobile === undefined) {
+        app.mobile = isMobile;
+    }
+
     $('#content').remove();
     if(app.type === 'canvas') {
-        console.log('a');
         $('body').append('<canvas id="content">Error: canvas not supported, please update to a modern browser.</canvas>');
     } else {
-        console.log('b');
         $('body').append('<div id="content"></div>');
     }
     app.$ = $('#content');
