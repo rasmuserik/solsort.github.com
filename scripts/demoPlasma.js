@@ -58,9 +58,5 @@ exports.app = { type: 'canvas', update: function() {
     }
     }
     plasma();
-    col=1;
-    plasma();
-    col=2;
-    plasma();
     ctx.putImageData(img,0,0);
 }};
