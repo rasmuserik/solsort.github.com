@@ -4,7 +4,7 @@
 * Brug navneord og udsagnsord
 * Brug positive udsagn
 * Et emne per afsnit
-** Start afsnittet med emnet
+    * Start afsnittet med emnet
 * Gentag, gentag, gentag - på forskellig måde
 * Præsenter lignende ideer ens
 * Hold forfatteren i baggrunden
