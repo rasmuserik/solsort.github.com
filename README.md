@@ -29,9 +29,8 @@
 - Content (index -> #menu)
     - Apps
         - combigame
-        - *notescore*
+        - notescore
         - *danske byer*
-        - *planetcute*
     - *Images*
         - ...
     - Code Demos
