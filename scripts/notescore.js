@@ -1,6 +1,9 @@
 /*global window: true, document: true */
 var $ = require('zquery');
-exports.app = { start: function() {
+
+exports.app = {
+orientation: 'portrait',
+start: function() {
     var width, height;
     var startpos, notedwidth;
     var notecount = 6;

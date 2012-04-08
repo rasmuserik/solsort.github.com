@@ -99,6 +99,7 @@ var apps = {
     combigame: require('combigame').app,
     bidiv: require('bidiv').app,
     notescore: require('notescore').app,
+    dkcities: require('dkcities').app,
     plasma: require('demoPlasma').app,
     'source/': require('showSource').app,
     timelog: require('timelog').app,

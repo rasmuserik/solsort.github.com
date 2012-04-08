@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Sun Apr 08 2012 12:51:38 GMT+0200 (CEST)
+# Sun Apr 08 2012 21:44:03 GMT+0200 (CEST)
 
 NETWORK:
 *
@@ -87,6 +87,7 @@ CACHE:
 /dist/combigame2220.png
 /dist/combigame2221.png
 /dist/combigame2222.png
+/img/denmark.jpg
 /img/UbuntuMono-R.ttf
 /img/gclef.png
 /img/red-splat.png
@@ -95,6 +96,7 @@ CACHE:
 /img/keys.jpg
 /img/Ubuntu-R.ttf
 /img/fclef.png
+/img/location.png
 /img/note-green.png
 /img/photos
 /img/score.png
