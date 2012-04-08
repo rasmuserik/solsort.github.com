@@ -1,0 +1,153 @@
+<!DOCTYPE html>  <html> <head>   <title>notescore.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               notescore.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/*global window: true, document: true */</span>
+<span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zquery&#39;</span><span class="p">);</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">app</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">start</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">startpos</span><span class="p">,</span> <span class="nx">notedwidth</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">notecount</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">notes</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">noteid</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">noteheight</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">clef</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="o">?</span> <span class="s2">&quot;f&quot;</span> <span class="o">:</span> <span class="s2">&quot;g&quot;</span><span class="p">;</span>
+
+    <span class="kd">function</span> <span class="nx">clearImage</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="nx">drawImg</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;&lt;img&gt;&quot;</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="s1">&#39;img/&#39;</span> <span class="o">+</span> <span class="nx">url</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;px&#39;</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">y</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;px&#39;</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;px&#39;</span><span class="p">)</span>
+                <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">h</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;px&#39;</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">drawNote</span><span class="p">(</span><span class="nx">position</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">img</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">startpos</span> <span class="o">+</span> <span class="nx">position</span><span class="o">*</span><span class="p">(</span><span class="nx">width</span><span class="o">-</span><span class="nx">startpos</span><span class="p">)</span><span class="o">/</span><span class="nx">notecount</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="p">(</span><span class="mi">17</span><span class="o">-</span><span class="nx">value</span><span class="p">)</span><span class="o">*</span><span class="nx">noteheight</span><span class="o">/</span><span class="mi">24</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="p">(</span><span class="nx">width</span><span class="o">-</span><span class="nx">startpos</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.7</span> <span class="o">/</span> <span class="nx">notecount</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="mi">0</span><span class="o">|</span><span class="nx">noteheight</span> <span class="o">/</span> <span class="mi">11</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+
+        <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="nx">value</span><span class="p">;</span> <span class="nx">i</span><span class="o">-=</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">drawImg</span><span class="p">(</span><span class="s2">&quot;blackbox.png&quot;</span><span class="p">,</span> <span class="nx">x</span> <span class="o">-</span> <span class="nx">w</span><span class="o">*</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="o">|</span><span class="p">((</span><span class="mi">18</span><span class="o">-</span><span class="nx">i</span><span class="p">)</span><span class="o">*</span><span class="nx">noteheight</span><span class="o">/</span><span class="mi">24</span><span class="p">),</span> <span class="nx">w</span><span class="o">*</span><span class="mf">1.3</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">value</span><span class="p">;</span> <span class="nx">i</span><span class="o">+=</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">drawImg</span><span class="p">(</span><span class="s2">&quot;blackbox.png&quot;</span><span class="p">,</span> <span class="nx">x</span> <span class="o">-</span> <span class="nx">w</span><span class="o">*</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mi">0</span><span class="o">|</span><span class="p">((</span><span class="mi">18</span><span class="o">-</span><span class="nx">i</span><span class="p">)</span><span class="o">*</span><span class="nx">noteheight</span><span class="o">/</span><span class="mi">24</span><span class="p">),</span> <span class="nx">w</span><span class="o">*</span><span class="mf">1.3</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="nx">drawImg</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+        <span class="nx">clearImage</span><span class="p">();</span>
+        <span class="nx">width</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span><span class="p">;</span>
+        <span class="nx">height</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">innerHeight</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">width</span> <span class="o">&gt;</span> <span class="nx">height</span><span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">width</span> <span class="o">=</span> <span class="mi">0</span><span class="o">|</span><span class="p">(</span><span class="nx">height</span><span class="o">*</span> <span class="mf">0.8</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">noteheight</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">|</span> <span class="p">(</span><span class="mf">0.381966011</span> <span class="o">*</span> <span class="nx">height</span><span class="p">);</span>
+        <span class="nx">startpos</span> <span class="o">=</span> <span class="nx">width</span><span class="o">/</span><span class="mi">4</span><span class="p">;</span>
+
+        <span class="kd">var</span> <span class="nx">imgheight</span> <span class="o">=</span> <span class="nx">height</span> <span class="o">-</span> <span class="nx">noteheight</span><span class="p">;</span>
+
+        <span class="nx">drawImg</span><span class="p">(</span><span class="s2">&quot;keys.jpg&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">noteheight</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">imgheight</span><span class="p">);</span>
+        <span class="nx">drawImg</span><span class="p">(</span><span class="nx">clef</span> <span class="o">+</span> <span class="s2">&quot;clef.png&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="o">/</span><span class="mi">6</span><span class="p">,</span> <span class="nx">noteheight</span><span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">9</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">drawImg</span><span class="p">(</span><span class="s2">&quot;blackbox.png&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="o">|</span><span class="p">(</span><span class="nx">i</span><span class="o">*</span><span class="nx">noteheight</span><span class="o">/</span><span class="mi">12</span><span class="p">),</span> <span class="nx">width</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span><span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">notecount</span><span class="p">;</span><span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">drawNote</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">notes</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="s2">&quot;note.png&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">genNotes</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">noteid</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">clef</span> <span class="o">===</span> <span class="s2">&quot;f&quot;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">clef</span> <span class="o">=</span> <span class="s2">&quot;g&quot;</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">clef</span> <span class="o">=</span> <span class="s2">&quot;f&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">notes</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">notecount</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">notes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span><span class="mi">23</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span> <span class="o">|</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;here&#39;</span><span class="p">);</span>
+        <span class="nx">genNotes</span><span class="p">();</span>
+        <span class="nx">draw</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;ontouchstart&#39;</span> <span class="k">in</span> <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;touchstart&#39;</span><span class="p">,</span> <span class="nx">handleEvent</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;mousedown&#39;</span><span class="p">,</span> <span class="nx">handleEvent</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">handleEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">clientY</span><span class="p">,</span> <span class="nx">clientX</span><span class="p">;</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="nx">clientY</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">originalEvent</span><span class="p">.</span><span class="nx">touches</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">clientY</span><span class="p">;</span>
+            <span class="nx">clientX</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">originalEvent</span><span class="p">.</span><span class="nx">touches</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">clientX</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">}</span>
+        <span class="nx">clientY</span> <span class="o">=</span> <span class="nx">clientY</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientY</span><span class="p">;</span>
+        <span class="nx">clientX</span> <span class="o">=</span> <span class="nx">clientX</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientX</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">((</span><span class="o">!</span><span class="nx">clientY</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="p">(</span><span class="nx">clientX</span><span class="p">))</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="k">in</span> <span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">str</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">[</span><span class="nx">x</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nx">clientY</span> <span class="o">&lt;</span> <span class="nx">noteheight</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">clientY</span> <span class="o">&lt;</span> <span class="nx">noteheight</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">genNotes</span><span class="p">();</span>
+                <span class="nx">draw</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="o">|</span><span class="p">(</span><span class="nx">clientX</span><span class="o">/</span><span class="nx">width</span><span class="o">*</span><span class="mi">8</span><span class="p">);</span>
+        <span class="nx">pos</span> <span class="o">+=</span> <span class="mi">8</span><span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">|</span> <span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="nx">clientY</span><span class="o">-</span><span class="nx">noteheight</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">height</span><span class="o">-</span><span class="nx">noteheight</span><span class="p">));</span>
+        <span class="kd">var</span> <span class="nx">noteMap</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span>
+            <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span>
+           <span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span>
+           <span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">];</span>
+
+        <span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="s2">&quot;cdefgab&quot;</span><span class="p">;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">names</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">noteMap</span><span class="p">[</span><span class="nx">pos</span><span class="p">]</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">noteMap</span><span class="p">[</span><span class="nx">pos</span><span class="p">]</span><span class="o">&amp;</span><span class="mi">1</span><span class="p">)</span><span class="o">?</span> <span class="s2">&quot;#&quot;</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">));</span>
+        <span class="kd">var</span> <span class="nx">note</span> <span class="o">=</span> <span class="nx">noteMap</span><span class="p">[</span><span class="nx">pos</span><span class="p">]</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">clef</span> <span class="o">===</span> <span class="s2">&quot;f&quot;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">note</span> <span class="o">=</span> <span class="p">(</span><span class="nx">note</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kd">var</span> <span class="nx">curnote</span> <span class="o">=</span> <span class="nx">notes</span><span class="p">[</span><span class="nx">noteid</span><span class="p">];</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">note</span> <span class="o">===</span> <span class="p">(</span><span class="mi">7</span><span class="o">+</span><span class="nx">curnote</span><span class="p">)</span><span class="o">%</span><span class="mi">7</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">drawNote</span><span class="p">(</span><span class="nx">noteid</span><span class="p">,</span><span class="nx">curnote</span><span class="p">,</span> <span class="s2">&quot;note-green.png&quot;</span><span class="p">);</span>
+            <span class="o">++</span><span class="nx">noteid</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">note</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">note</span> <span class="o">-=</span> <span class="mi">7</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">curnote</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">while</span><span class="p">(</span><span class="nx">note</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="o">&amp;&amp;</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">note</span><span class="o">-</span><span class="nx">curnote</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">note</span> <span class="o">+=</span> <span class="mi">7</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="nx">drawNote</span><span class="p">(</span><span class="nx">noteid</span><span class="p">,</span><span class="nx">note</span><span class="p">,</span> <span class="s2">&quot;red-splat.png&quot;</span><span class="p">);</span>
+
+        <span class="p">}</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">noteid</span><span class="p">,</span> <span class="nx">notecount</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">noteid</span> <span class="o">&gt;=</span> <span class="nx">notecount</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">genNotes</span><span class="p">();</span>
+            <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">draw</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">$</span><span class="p">(</span><span class="nx">main</span><span class="p">);</span>
+<span class="p">}};</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.solsort.notescore"
+        version   = "1.0.0">
+
+    <name>NoteScore</name>
+
+    <description>
+        Note training / score reading practice. Practice reading notes with a virtual piano. Random notes are shown on bass and treble clefs, which are then to be played on a virtual piano.
+
+        Visual feedback instead of sounds when the keys are hit to allow usage on the run.
+    </description>
+
+    <author href="http://solsort.com/" email="notescore@solsort.com">
+        Rasmus Erik
+    </author>
+
+    <preference name="orientation" value="portrait" />
+    <preference name="fullscreen" value="true" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="android-minSdkVersion" value="7" /><!-- android 2.1 = sdk-version 7 -->
+    <preference name="prerendered-icon" value="true" />
+    <icon src="icon.png" />
+    <gap:splash src="splash.png" />
+
+    <preference name="permissions" value="none"/>
+</widget>
