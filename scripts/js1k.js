@@ -1,11 +1,22 @@
 /*jshint evil: true, curly: false, asi:true, expr:true */
-/*global a:true, c:true, p:true,d:true, setInterval: true */
+/*global a:true, c:true, p:true,d:true, clearInterval: true, clearTimeout: true, setInterval: true, window:true */
 exports.app = {
     type: 'canvas',
     start: function() {
         c = this.elem;
         a = c.getContext('2d');
         js1k[this.param]();
+    },
+    stop: function() {
+        var i, t;
+        t = setTimeout(function(){}, 10000);
+        for(i = 0; i <= t; ++i) {
+            clearTimeout(i);
+        }
+        t = setInterval(function(){}, 10000);
+        for(i = 0; i <= t; ++i) {
+            clearInterval(i);
+        }
     }
 };
 

@@ -56,3 +56,6 @@
     - autoscale text on menu (and wider boxes)
     - icons for apps
     - accessible from sidebar
+- people-graph
+- list-editor
+- transitions
