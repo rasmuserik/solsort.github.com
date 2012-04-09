@@ -24,7 +24,7 @@ function l(e) {
 }
 function relayoutStyle() {
     var vbar = $(window).width() > $(window).height();
-    var barsize = app.mobile?8:8;
+    var barsize = app.mobile?16:8;
     $('#bar').css({
         position: 'fixed',
         left: vbar?100-barsize+'%' : '0px',
@@ -41,11 +41,10 @@ function relayoutStyle() {
         width: iconsize * 0.6,
         height: iconsize * 0.6,
         boxShadow: '0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)',
-        //webkitBoxShadow: '3px 3px 9px rgba(0, 0, 0, .4)',
+        webkitBoxShadow: '0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)',
         background: 'rgba(255,255,255,1)',
         verticalAlign: 'top',
         padding: iconsize * 0.1,
-        //border: '1px solid black',
         borderRadius: iconsize*0.2,
         marginLeft: iconsize * 0.1,
         marginBottom: iconsize *0.1,
@@ -121,14 +120,19 @@ exports.start = function(opt) {
     $('body').append('<div id="bar"></div>');
     $('#bar').html('<div id="barleft"></div><div id="barright"></div>');
     //<img src="img/help.png"> <img src="img/difficulty.png"></div> <div id="barright"><img src="img/give-up.png"><img src="img/score.png"></div>');
-    $('#barleft').append($('<img src="img/home.png">').on('mousedown touchstart', function() {window.location.hash = "#menu"; }));
+    $('#barleft').append($('<img src="img/home.png">').on('mousedown touchstart', function() {
+        window.location.hash = "#menu";
+        return false;
+    }));
     if(window.location.hash.slice(0,7) === '#source') {
         $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function() {
             window.location.hash = "#" + window.location.hash.slice(8);
+            return false;
         }));
     } else {
         $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function() {
             window.location.hash = "#source/" + window.location.hash.slice(1);
+            return false;
         }));
     }
 
