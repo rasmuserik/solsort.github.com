@@ -15,6 +15,7 @@ var border = Modernizr.boxshadow ? 0 : 1;
 
 // # Transformation to nested list to object
 function elemToObj(elem) {
+    console.log(elem);
     var result = {};
     result.title = $(elem.firstChild).text().trim();
     result.children = [];
@@ -63,15 +64,18 @@ function initMenu(menu) {
 exports.createApp = function(jsonml) {
     var menu;
     return {
+        underbar: true,
         start: function() {
+            $('#bar').html('');
             $('body').css('background', 'black');
-            $('#content').html(require('jsxml').toDOM(jsonml));
+            $('#content').html(require('jsxml').toXml(jsonml));
             menu = elemToObj($('#content > ul > li')[0]);
             initMenu(menu);
             this.update(this.elem);
         },
         update: function() {
             var elem = this.elem;
+            console.log(elem);
             position(menu, -margin,-margin,$(elem).width()+margin, $(elem).height()+margin);
         }
     };

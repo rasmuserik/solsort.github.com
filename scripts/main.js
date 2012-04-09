@@ -6,7 +6,6 @@ var notes = {
     type: 'scrollable',
     start: function() {
         var showdown;
-        $('body').css('background', '#fff');
         showdown = require('showdown');
         showdown = new showdown.converter();
         var app = this;
