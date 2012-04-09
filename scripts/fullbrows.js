@@ -24,7 +24,7 @@ function l(e) {
 }
 function relayoutStyle() {
     var vbar = $(window).width() > $(window).height();
-    var barsize = app.mobile?16:8;
+    var barsize = app.mobile?12:8;
     $('#bar').css({
         position: 'fixed',
         left: vbar?100-barsize+'%' : '0px',
@@ -40,8 +40,10 @@ function relayoutStyle() {
     var barItemStyle = {
         width: iconsize * 0.6,
         height: iconsize * 0.6,
-        boxShadow: '0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)',
-        webkitBoxShadow: '0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)',
+        '-webkit-box-shadow': '0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)',
+        '-moz-box-shadow': '0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)',
+        '-o-box-shadow': '0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)',
+        'box-shadow': '0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)',
         background: 'rgba(255,255,255,1)',
         verticalAlign: 'top',
         padding: iconsize * 0.1,

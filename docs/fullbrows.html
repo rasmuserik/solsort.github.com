@@ -20,7 +20,7 @@
 <span class="p">}</span>
 <span class="kd">function</span> <span class="nx">relayoutStyle</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">vbar</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span> <span class="o">&gt;</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">();</span>
-    <span class="kd">var</span> <span class="nx">barsize</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">mobile</span><span class="o">?</span><span class="mi">16</span><span class="o">:</span><span class="mi">8</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">barsize</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">mobile</span><span class="o">?</span><span class="mi">12</span><span class="o">:</span><span class="mi">8</span><span class="p">;</span>
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#bar&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
         <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;fixed&#39;</span><span class="p">,</span>
         <span class="nx">left</span><span class="o">:</span> <span class="nx">vbar</span><span class="o">?</span><span class="mi">100</span><span class="o">-</span><span class="nx">barsize</span><span class="o">+</span><span class="s1">&#39;%&#39;</span> <span class="o">:</span> <span class="s1">&#39;0px&#39;</span><span class="p">,</span>
@@ -36,8 +36,10 @@
     <span class="kd">var</span> <span class="nx">barItemStyle</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">width</span><span class="o">:</span> <span class="nx">iconsize</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">,</span>
         <span class="nx">height</span><span class="o">:</span> <span class="nx">iconsize</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">,</span>
-        <span class="nx">boxShadow</span><span class="o">:</span> <span class="s1">&#39;0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)&#39;</span><span class="p">,</span>
-        <span class="nx">webkitBoxShadow</span><span class="o">:</span> <span class="s1">&#39;0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;-webkit-box-shadow&#39;</span><span class="o">:</span> <span class="s1">&#39;0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;-moz-box-shadow&#39;</span><span class="o">:</span> <span class="s1">&#39;0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;-o-box-shadow&#39;</span><span class="o">:</span> <span class="s1">&#39;0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;box-shadow&#39;</span><span class="o">:</span> <span class="s1">&#39;0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)&#39;</span><span class="p">,</span>
         <span class="nx">background</span><span class="o">:</span> <span class="s1">&#39;rgba(255,255,255,1)&#39;</span><span class="p">,</span>
         <span class="nx">verticalAlign</span><span class="o">:</span> <span class="s1">&#39;top&#39;</span><span class="p">,</span>
         <span class="nx">padding</span><span class="o">:</span> <span class="nx">iconsize</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">,</span>

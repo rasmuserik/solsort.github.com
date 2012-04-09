@@ -66,7 +66,6 @@ exports.createApp = function(jsonml) {
     return {
         underbar: true,
         start: function() {
-            $('#bar').html('');
             $('body').css('background', 'black');
             $('#content').html(require('jsxml').toXml(jsonml));
             menu = elemToObj($('#content > ul > li')[0]);
@@ -74,6 +73,7 @@ exports.createApp = function(jsonml) {
             this.update(this.elem);
         },
         update: function() {
+            $('#bar').html('');
             var elem = this.elem;
             console.log(elem);
             position(menu, -margin,-margin,$(elem).width()+margin, $(elem).height()+margin);
