@@ -23,24 +23,21 @@ function l(e) {
     return e;
 }
 function relayoutStyle() {
-    var lbar = $(window).width() > $(window).height();
+    var vbar = $(window).width() > $(window).height();
     var barsize = app.mobile?8:8;
     $('#bar').css({
-        //boxShadow: '3px 3px 9px rgba(0, 0, 0, .4)',
-        //webkitBoxShadow: '3px 3px 9px rgba(0, 0, 0, .4)',
-        position: 'absolute',
-        left: '0px',
+        position: 'fixed',
+        left: vbar?100-barsize+'%' : '0px',
         top: '0px',
         margin: 0,
         padding: 0,
-        textAlign: 'center',
         overflow: 'visible',
-        //background: 'rgba(221,221,221,.9)',
-        width: lbar?barsize+'%':'100%',
-        height: lbar?'100%':barsize+'%'
-    }).html('<img class="barleft" src="img/help.png"> <img class="barleft" src="img/difficulty.png"> <img class="barright" src="img/score.png">');
-    var iconsize = lbar ? $('#bar').width() : $('#bar').height();
-    $('#bar img').css(({
+        width: vbar?barsize+'%':'100%',
+        height: vbar?'100%':barsize+'%'
+    });
+    var iconsize = vbar ? $('#bar').width() : $('#bar').height();
+
+    var barItemStyle = {
         width: iconsize * 0.6,
         height: iconsize * 0.6,
         boxShadow: '3px 3px 9px rgba(0, 0, 0, .4)',
@@ -53,21 +50,45 @@ function relayoutStyle() {
         marginLeft: iconsize * 0.1,
         marginBottom: iconsize *0.1,
         marginRight: iconsize *0.1,
-        marginTop: iconsize * 0.1}));
-    $('#bar').css('position', 'fixed');
+        marginTop: iconsize * 0.1};
+    $('#bar img').css(barItemStyle);
+    $('#bar span').css(barItemStyle);
 
-    $('.barleft').css('float', 'left');
-    $('.barright').css('float', 'right');
+    $('#barleft img').css('float', 'left');
+    $('#barleft span').css('float', 'left');
+    $('#barright img').css('float', 'right');
+    $('#barright span').css('float', 'right');
+
+    if(vbar) {
+        $('#barright').css({
+            width: iconsize,
+            position: 'fixed',
+        });
+        $('#barright').css({
+            position: 'fixed',
+            top: $('#bar').height() - $('#barright').height()
+        });
+    } else {
+        $('#barright').css({
+            position: 'static',
+            width: 'auto',
+            top: 'auto'
+        });
+    }
         
+    if(app.underbar) {
+        barsize = 0;
+        vbar = true;
+    }
     $('#content')
         .css('position', 'absolute')
-        .css('left', lbar?barsize+'%':0)
-        .css('top', lbar?1:barsize+'%')
+        .css('left', 0 /*vbar?barsize+'%':0*/)
+        .css('top', vbar?1:barsize+'%')
         .css('overflow', 'hidden')
-        .css('width', lbar?(100-barsize)+'%':'100%')
+        .css('width', vbar?(100-barsize)+'%':'100%')
         //.css('margin-top', 1)
         .css('padding-bottom', 1)
-        .css('height', (app.type === 'scrollable') ? 'auto' : lbar?'100%':(100-barsize)+'%');
+        .css('height', (app.type === 'scrollable') ? 'auto' : vbar?'100%':(100-barsize)+'%');
     window.scrollTo(0,1);
 }
 function relayout() {
@@ -98,6 +119,10 @@ exports.start = function(opt) {
     }
     $('#bar').remove();
     $('body').append('<div id="bar"></div>');
+    $('#bar').html('<div id="barleft"></div><div id="barright"></div>');
+    //<img src="img/help.png"> <img src="img/difficulty.png"></div> <div id="barright"><img src="img/give-up.png"><img src="img/score.png"></div>');
+    $('#barleft').append($('<img src="img/help.png">').on('mousedown touchstart', function() {window.location.hash = "#menu"; }));
+
     app.$ = $('#content');
     app.elem = app.$[0];
     if(!Modernizr.touch) {
@@ -115,6 +140,11 @@ exports.start = function(opt) {
     $(window).bind('resize', relayoutDelayed);
     $(window).bind('orientationchange', relayoutDelayed);
 
+    $('body').css({
+            webkitTransition: 'background 1s',
+            transition: 'background 1s',
+            'background': '#fff'
+    });
     app.start = app.start || app.update;
     relayoutStyle();
     app.start();

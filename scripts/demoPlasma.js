@@ -1,4 +1,7 @@
-exports.app = { type: 'canvas', update: function() {
+exports.app = {
+    underbar: true,
+    type: 'canvas',
+start: function() {
     var canvas = this.elem;
     canvas.width = canvas.height = 512;
     var ctx = canvas.getContext('2d');

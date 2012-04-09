@@ -1,6 +1,7 @@
 /*jshint evil: true, curly: false, asi:true, expr:true */
 /*global a:true, c:true, p:true,d:true, clearInterval: true, clearTimeout: true, setInterval: true, window:true */
 exports.app = {
+    underbar: true,
     type: 'canvas',
     start: function() {
         c = this.elem;

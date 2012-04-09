@@ -4,6 +4,7 @@ var $ = require('zquery');
 exports.app = {
 orientation: 'portrait',
 start: function() {
+    $('body').css('background', '#fff');
     var width, height;
     var startpos, notedwidth;
     var notecount = 6;
