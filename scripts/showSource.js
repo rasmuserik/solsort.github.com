@@ -1,3 +1,4 @@
+/*34567890123456789012345678901234567890123456789012345678901234567890123456*/
 var $ = require('zquery');
 var _ = require('underscore');
 var console = require('console');
@@ -47,21 +48,60 @@ function docco(text) {
         docs.push(result[i]);
         code.push(result[i+1]);
     }
-    docs = docs.map(function(doc) { return showdown.makeHtml(doc.join('\n')); });
+    docs = docs.map(function(doc) { return '<div class="docblock">' + showdown.makeHtml(doc.join('\n')) + '</div>'; });
     code = code.map(function(code) {
-        return '<pre>' + _.escape(_.pluck(code, 'line').join('\n')) + '</pre>';
+        return '<div class="codeblock">' + code.map(function(code) {
+            return '<div><span class="lineno">' + (1+code.lineno) + ' </span> ' + _.escape(code.line) + '</div>';
+        }).join('') + '</div>';
     });
 
-    result = ['<table>'];
+    //result = ['<table>'];
+    result = [];
     for(i = 0; i < docs.length; ++i) {
-        result.push('<tr><td style="vertical-align: top">');
+    //    result.push('<tr><td style="vertical-align: top">');
         result.push(docs[i]);
-        result.push('</td><td style="vertical-align: top">');
+    //    result.push('</td><td style="vertical-align: top">');
         result.push(code[i]);
-        result.push('</td></tr>');
+    //    result.push('</td></tr>');
     }
-    result.push('</table>');
+    //result.push('</table>');
     return result.join('');
+
+}
+
+function style(app) {
+    var w = app.$.width();
+    $('.lineno').css({
+        fontSize: '50%',
+        width: '4ex',
+        color: '#ccc',
+        'vertical-align': '0.5ex',
+        display: 'inline-block',
+        textAlign: 'right'
+    });
+    $('.codeblock div').css({
+        whiteSpace: 'pre-wrap',
+        textIndent: '.5ex',
+        //fontFamily: app.mobile?'Ubuntu Condensed':'Ubuntu Mono'
+        //fontFamily: 'Ubuntu Mono'
+        fontFamily: 'Ubuntu Mono'
+    });
+    $('.docblock').css({
+        marginTop: app.mobile?'.1pt':'2pt',
+        borderTop: app.mobile?'none':'1px solid #eee',
+        'vertical-align': 'top',
+        display: 'inline-block',
+        marginLeft: w*0.02|0,
+        width: (app.mobile?w*0.95:w*0.45)|0
+    });
+    $('.codeblock').css({
+        marginTop: app.mobile?'.1pt':'2pt',
+        borderTop: app.mobile?'none':'1px solid #eee',
+        'vertical-align': 'top',
+        display: 'inline-block',
+        fontSize: Math.max(app.$.width() / 45 * (app.mobile?1:0.5), 8),
+        width: app.mobile?w:w>>1
+    });
 
 }
 
@@ -74,7 +114,11 @@ exports.app = {
             dataType: 'text',
             success: function(text) {
                 app.$.html(docco(text));
+                style(app);
             }
         });
+    },
+    update: function() {
+        style(this);
     }
 };
