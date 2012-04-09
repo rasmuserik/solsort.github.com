@@ -267,13 +267,13 @@ function hint() {
                 if(okSet(cards[a], cards[b], cards[c])) {
                     $('#card'+cards[a])
                         .css(selectedStyle)
-                        .css({'opacity': 0.6, border: '1px solid #ddd'});
+                        .css({'opacity': 0.6, background: '#ccc', border: '1px solid #bbb'});
                     $('#card'+cards[b])
                         .css(selectedStyle)
-                        .css({'opacity': 0.6, border: '1px solid #ddd'});
+                        .css({'opacity': 0.6, background: '#ccc', border: '1px solid #bbb'});
                     $('#card'+cards[c])
                         .css(selectedStyle)
-                        .css({'opacity': 0.6, border: '1px solid #ddd'});
+                        .css({'opacity': 0.6, background: '#ccc', border: '1px solid #bbb'});
                     giveup = true;
                     return;
                 }

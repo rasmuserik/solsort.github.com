@@ -546,7 +546,7 @@
         <span class="nx">corrects</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="nx">shuffle</span><span class="p">();</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&lt;img src=&quot;img/denmark.jpg&quot; id=map&gt;&lt;div id=&quot;cityname&quot;&gt;&lt;/div&gt;&lt;div id=&quot;locations&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&lt;img src=&quot;img/denmark.jpg&quot; id=map&gt;&lt;div id=&quot;cityname&quot;&gt;&lt;/div&gt;&lt;div id=&quot;locations&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">locstr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
     <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">count</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">locstr</span> <span class="o">+=</span> <span class="s1">&#39;&lt;image id=&quot;loc&#39;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="p">;</span>
@@ -594,17 +594,17 @@
     <span class="p">}</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;ontouchstart&#39;</span> <span class="k">in</span> <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;touchstart&#39;</span><span class="p">,</span> <span class="nx">xyWrapper</span><span class="p">(</span><span class="nx">downEvent</span><span class="p">));</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;touchstart&#39;</span><span class="p">,</span> <span class="nx">xyWrapper</span><span class="p">(</span><span class="nx">downEvent</span><span class="p">));</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;mousedown&#39;</span><span class="p">,</span> <span class="nx">xyWrapper</span><span class="p">(</span><span class="nx">downEvent</span><span class="p">));</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;mousedown&#39;</span><span class="p">,</span> <span class="nx">xyWrapper</span><span class="p">(</span><span class="nx">downEvent</span><span class="p">));</span>
     <span class="p">}</span>
 
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;mouseout mouseup touchend&#39;</span><span class="p">,</span> <span class="nx">xyWrapper</span><span class="p">(</span><span class="nx">upEvent</span><span class="p">));</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;mouseout mouseup touchend&#39;</span><span class="p">,</span> <span class="nx">xyWrapper</span><span class="p">(</span><span class="nx">upEvent</span><span class="p">));</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;ontouchmove&#39;</span> <span class="k">in</span> <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;touchmove&#39;</span><span class="p">,</span> <span class="nx">xyWrapper</span><span class="p">(</span><span class="nx">moveEvent</span><span class="p">));</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;touchmove&#39;</span><span class="p">,</span> <span class="nx">xyWrapper</span><span class="p">(</span><span class="nx">moveEvent</span><span class="p">));</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;mousemove&#39;</span><span class="p">,</span> <span class="nx">xyWrapper</span><span class="p">(</span><span class="nx">moveEvent</span><span class="p">));</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;mousemove&#39;</span><span class="p">,</span> <span class="nx">xyWrapper</span><span class="p">(</span><span class="nx">moveEvent</span><span class="p">));</span>
     <span class="p">}</span>
 <span class="p">}</span>
 

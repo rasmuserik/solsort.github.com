@@ -6,6 +6,7 @@ var notes = {
     type: 'scrollable',
     start: function() {
         var showdown;
+        $('body').css('background', '#fff');
         showdown = require('showdown');
         showdown = new showdown.converter();
         var app = this;
@@ -23,7 +24,7 @@ $('head').append('<style>' +
         'tt { font-family: "Ubuntu Mono", monospace; }' +
         'code { font-family: "Ubuntu Mono", monospace; }' +
         'pre { font-family: "Ubuntu Mono", monospace; }' +
-        'body { font-family: Ubuntu, sans-serif; }</style>');
+        'body { background: "black"; font-family: Ubuntu, sans-serif; }</style>');
 
 var menuXml = ["ul",
     ["li","solsort",["ul",

@@ -575,7 +575,7 @@ function init() {
         corrects[i] = true;
     }
     shuffle();
-    $('body').html('<img src="img/denmark.jpg" id=map><div id="cityname"></div><div id="locations"></div>');
+    $('#content').html('<img src="img/denmark.jpg" id=map><div id="cityname"></div><div id="locations"></div>');
     var locstr = '';
     for(i = 0; i < count; ++i) {
         locstr += '<image id="loc' + i + '">';
@@ -625,17 +625,17 @@ function registerEvents() {
     }
 
     if ('ontouchstart' in document.documentElement) {
-        $('body').bind('touchstart', xyWrapper(downEvent));
+        $('#content').bind('touchstart', xyWrapper(downEvent));
     } else {
-        $('body').bind('mousedown', xyWrapper(downEvent));
+        $('#content').bind('mousedown', xyWrapper(downEvent));
     }
 
-    $('body').bind('mouseout mouseup touchend', xyWrapper(upEvent));
+    $('#content').bind('mouseout mouseup touchend', xyWrapper(upEvent));
 
     if ('ontouchmove' in document.documentElement) {
-        $('body').bind('touchmove', xyWrapper(moveEvent));
+        $('#content').bind('touchmove', xyWrapper(moveEvent));
     } else {
-        $('body').bind('mousemove', xyWrapper(moveEvent));
+        $('#content').bind('mousemove', xyWrapper(moveEvent));
     }
 }
 

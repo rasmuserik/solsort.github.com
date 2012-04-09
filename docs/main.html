@@ -6,6 +6,7 @@
     <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;scrollable&#39;</span><span class="p">,</span>
     <span class="nx">start</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">showdown</span><span class="p">;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background&#39;</span><span class="p">,</span> <span class="s1">&#39;#fff&#39;</span><span class="p">);</span>
         <span class="nx">showdown</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showdown&#39;</span><span class="p">);</span>
         <span class="nx">showdown</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">showdown</span><span class="p">.</span><span class="nx">converter</span><span class="p">();</span>
         <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
@@ -23,7 +24,7 @@
         <span class="s1">&#39;tt { font-family: &quot;Ubuntu Mono&quot;, monospace; }&#39;</span> <span class="o">+</span>
         <span class="s1">&#39;code { font-family: &quot;Ubuntu Mono&quot;, monospace; }&#39;</span> <span class="o">+</span>
         <span class="s1">&#39;pre { font-family: &quot;Ubuntu Mono&quot;, monospace; }&#39;</span> <span class="o">+</span>
-        <span class="s1">&#39;body { font-family: Ubuntu, sans-serif; }&lt;/style&gt;&#39;</span><span class="p">);</span>
+        <span class="s1">&#39;body { background: &quot;black&quot;; font-family: Ubuntu, sans-serif; }&lt;/style&gt;&#39;</span><span class="p">);</span>
 
 <span class="kd">var</span> <span class="nx">menuXml</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ul&quot;</span><span class="p">,</span>
     <span class="p">[</span><span class="s2">&quot;li&quot;</span><span class="p">,</span><span class="s2">&quot;solsort&quot;</span><span class="p">,[</span><span class="s2">&quot;ul&quot;</span><span class="p">,</span>

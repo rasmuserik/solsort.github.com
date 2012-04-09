@@ -64,6 +64,7 @@ exports.createApp = function(jsonml) {
     var menu;
     return {
         start: function() {
+            $('body').css('background', 'black');
             $('#content').html(require('jsxml').toDOM(jsonml));
             menu = elemToObj($('#content > ul > li')[0]);
             initMenu(menu);

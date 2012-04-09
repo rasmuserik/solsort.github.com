@@ -18,14 +18,56 @@ var Modernizr = require('modernizr');
 // # Browser window setup
 var app = {};
 
+function l(e) {
+    console.log(e);
+    return e;
+}
 function relayoutStyle() {
+    var lbar = $(window).width() > $(window).height();
+    var barsize = app.mobile?8:8;
+    $('#bar').css({
+        //boxShadow: '3px 3px 9px rgba(0, 0, 0, .4)',
+        //webkitBoxShadow: '3px 3px 9px rgba(0, 0, 0, .4)',
+        position: 'absolute',
+        left: '0px',
+        top: '0px',
+        margin: 0,
+        padding: 0,
+        textAlign: 'center',
+        overflow: 'visible',
+        //background: 'rgba(221,221,221,.9)',
+        width: lbar?barsize+'%':'100%',
+        height: lbar?'100%':barsize+'%'
+    }).html('<img class="barleft" src="img/help.png"> <img class="barleft" src="img/difficulty.png"> <img class="barright" src="img/score.png">');
+    var iconsize = lbar ? $('#bar').width() : $('#bar').height();
+    $('#bar img').css(({
+        width: iconsize * 0.6,
+        height: iconsize * 0.6,
+        boxShadow: '3px 3px 9px rgba(0, 0, 0, .4)',
+        webkitBoxShadow: '3px 3px 9px rgba(0, 0, 0, .4)',
+        background: 'rgba(255,255,255,.9)',
+        verticalAlign: 'top',
+        padding: iconsize * 0.1,
+        border: '1px solid black',
+        borderRadius: iconsize*0.2,
+        marginLeft: iconsize * 0.1,
+        marginBottom: iconsize *0.1,
+        marginRight: iconsize *0.1,
+        marginTop: iconsize * 0.1}));
+    $('#bar').css('position', 'fixed');
+
+    $('.barleft').css('float', 'left');
+    $('.barright').css('float', 'right');
+        
     $('#content')
         .css('position', 'absolute')
-        .css('left', 0)
-        .css('top', 1)
+        .css('left', lbar?barsize+'%':0)
+        .css('top', lbar?1:barsize+'%')
         .css('overflow', 'hidden')
-        .css('width', '100%')
-        .css('height', (app.type === 'scrollable') ? 'auto' : webutil.windowHeight());
+        .css('width', lbar?(100-barsize)+'%':'100%')
+        //.css('margin-top', 1)
+        .css('padding-bottom', 1)
+        .css('height', (app.type === 'scrollable') ? 'auto' : lbar?'100%':(100-barsize)+'%');
     window.scrollTo(0,1);
 }
 function relayout() {
@@ -33,6 +75,7 @@ function relayout() {
     if(typeof app.update === 'function') {
         app.update();
     }
+    window.scrollTo(0,1);
 }
 var relayoutDelayed = util.niceSingle(relayout);
 var isMobile = window.isMobile || !!window.navigator.userAgent.match(/mobile/i);
@@ -53,6 +96,8 @@ exports.start = function(opt) {
     } else {
         $('body').append('<div id="content"></div>');
     }
+    $('#bar').remove();
+    $('body').append('<div id="bar"></div>');
     app.$ = $('#content');
     app.elem = app.$[0];
     if(!Modernizr.touch) {
