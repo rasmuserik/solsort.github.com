@@ -242,7 +242,7 @@ f({ 'Rødby': { lng: 11.39999961853027, lat: 54.70000076293945 },
   'Greve Strand': { lng: 12.30000019073486, lat: 55.56666564941406 },
   Viborg: { lng: 9.399999618530273, lat: 56.45000076293945 },
   'Snoghøj': { lng: 9.716666221618652, lat: 55.51666641235352 },
-  Vordingborg: { lng: 11.89999961853027, lat: 56.15000152587891 },
+  //Vordingborg: { lng: 11.89999961853027, lat: 56.15000152587891 },
   Gedved: { lng: 9.850000381469727, lat: 55.93333435058594 },
   Stege: { lng: 12.30000019073486, lat: 54.98333358764648 },
   Malling: { lng: 10.18333339691162, lat: 56.03333282470703 },
@@ -436,33 +436,38 @@ function answer(ok, question) {
 
     zoomout(function() {
         function slidein() {
+            console.log(Date.now());
             $('#cityname')
                 .text(locations[newquiz][0])
                 .css('font-size', namesize)
                 .css('color', 'white')
                 .css('left', viewwidth)
                 .css('width', viewwidth)
-                .css('top', Math.round(viewheight/2 - namesize))
-                .animate({ left: 0 });
+                .css('top', Math.round(viewheight/2 - namesize));
+            setTimeout(function() {$('#cityname').animate({ left: 0 });}, 0);
         }
+        console.log('ok', ok);
 
         if(ok) {
+            console.log(Date.now());
             $('#cityname')
                 .animate({
                     top: viewheight,
                     left: 0,
                     'font-size': namesize*2,
                     'width': viewwidth
-                }, slidein);
+                });
+            setTimeout(slidein, 500);
         } else {
-            console.log(question, locations[question]);
+            console.log(Date.now(),question, locations[question]);
             $('#cityname')
                 .animate({
                     top: locations[question][2] * viewheight,
                     left: locations[question][1] * viewwidth,
                     'font-size': 0,
                     'width': 0
-                }, slidein);
+                });
+            setTimeout(slidein, 500);
     }
     });
 }
@@ -497,7 +502,8 @@ function animate(fn) {
         top: imposy,
         width: imwidth,
         height: imheight
-    }, fn);
+    });
+    setTimeout(fn, 500);
     for(var i = 0; i < count; ++i) {
         $("#loc" + i)
             .attr("src", 'img/location.png')
@@ -556,7 +562,8 @@ function zoomout(fn) {
         top: Math.round(viewheight/2 - namesize),
         'font-size': namesize,
         'width': $(window).width() - namesize
-    }, fn);
+    });
+    setTimeout(fn, 500);
 }
 
 function init() {
@@ -597,7 +604,7 @@ function init() {
 function main() {
     init();
     registerEvents();
-    zoomout('Et-eller-andet Bynavn');
+    zoomout(function() { console.log('here') ;});
 }
 
 function registerEvents() {
