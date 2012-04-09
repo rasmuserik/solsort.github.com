@@ -121,7 +121,16 @@ exports.start = function(opt) {
     $('body').append('<div id="bar"></div>');
     $('#bar').html('<div id="barleft"></div><div id="barright"></div>');
     //<img src="img/help.png"> <img src="img/difficulty.png"></div> <div id="barright"><img src="img/give-up.png"><img src="img/score.png"></div>');
-    $('#barleft').append($('<img src="img/help.png">').on('mousedown touchstart', function() {window.location.hash = "#menu"; }));
+    $('#barleft').append($('<img src="img/home.png">').on('mousedown touchstart', function() {window.location.hash = "#menu"; }));
+    if(window.location.hash.slice(0,7) === '#source') {
+        $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function() {
+            window.location.hash = "#" + window.location.hash.slice(8);
+        }));
+    } else {
+        $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function() {
+            window.location.hash = "#source/" + window.location.hash.slice(1);
+        }));
+    }
 
     app.$ = $('#content');
     app.elem = app.$[0];

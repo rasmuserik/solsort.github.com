@@ -15,6 +15,18 @@
         <span class="p">});</span>
     <span class="p">}</span>
 <span class="p">};</span>
+<span class="kd">var</span> <span class="nx">notessource</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;scrollable&#39;</span><span class="p">,</span>
+    <span class="nx">start</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">showdown</span><span class="p">;</span>
+        <span class="nx">showdown</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showdown&#39;</span><span class="p">);</span>
+        <span class="nx">showdown</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">showdown</span><span class="p">.</span><span class="nx">converter</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;notes/&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">param</span> <span class="o">+</span> <span class="s1">&#39;.md&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">app</span><span class="p">.</span><span class="nx">$</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;pre&gt;&#39;</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">text</span><span class="p">));</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;style&gt;&#39;</span> <span class="o">+</span>
         <span class="s1">&#39;@font-face { font-family: Ubuntu; src: url(&quot;img/Ubuntu-R.ttf&quot;); }&#39;</span> <span class="o">+</span>
         <span class="s1">&#39;@font-face { font-family: sans-serif; src: url(&quot;img/Ubuntu-R.ttf&quot;); }&#39;</span> <span class="o">+</span>
@@ -100,6 +112,10 @@
     <span class="nx">notescore</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;notescore&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>
     <span class="nx">dkcities</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;dkcities&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>
     <span class="nx">plasma</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;demoPlasma&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>
+    <span class="nx">test</span><span class="o">:</span> <span class="p">{</span> <span class="nx">update</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&lt;div style=&quot;text-align: center; letter-spacing: -10pt; line-height: 60%; font-family: \&#39;Ubuntu Condensed\&#39;;font-size:230pt&quot;&gt;&lt;br/&gt;code&lt;div style=&quot;font-size: 170pt&quot;&gt;source&#39;</span><span class="p">);</span>
+    <span class="p">}},</span>
+    <span class="s1">&#39;source/notes/&#39;</span><span class="o">:</span> <span class="nx">notessource</span><span class="p">,</span>
     <span class="s1">&#39;source/&#39;</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;showSource&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>
     <span class="nx">timelog</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;timelog&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>
     <span class="s1">&#39;js1k/&#39;</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;js1k&#39;</span><span class="p">).</span><span class="nx">app</span><span class="p">,</span>

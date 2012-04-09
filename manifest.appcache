@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Mon Apr 09 2012 13:49:56 GMT+0200 (CEST)
+# Mon Apr 09 2012 15:23:56 GMT+0200 (CEST)
 
 NETWORK:
 *
@@ -95,8 +95,10 @@ CACHE:
 /img/Ubuntu-C.ttf
 /img/keys.jpg
 /img/Ubuntu-R.ttf
+/img/home.png
 /img/fclef.png
 /img/location.png
+/img/sourcecode.png
 /img/note-green.png
 /img/photos
 /img/score.png

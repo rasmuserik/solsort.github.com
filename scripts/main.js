@@ -15,6 +15,18 @@ var notes = {
         });
     }
 };
+var notessource = {
+    type: 'scrollable',
+    start: function() {
+        var showdown;
+        showdown = require('showdown');
+        showdown = new showdown.converter();
+        var app = this;
+        $.get('notes/' + this.param + '.md', function(text) {
+            app.$.html($('<pre>').text(text));
+        });
+    }
+};
 $('head').append('<style>' +
         '@font-face { font-family: Ubuntu; src: url("img/Ubuntu-R.ttf"); }' +
         '@font-face { font-family: sans-serif; src: url("img/Ubuntu-R.ttf"); }' +
@@ -100,6 +112,10 @@ var apps = {
     notescore: require('notescore').app,
     dkcities: require('dkcities').app,
     plasma: require('demoPlasma').app,
+    test: { update: function() {
+        $('#content').html('<div style="text-align: center; letter-spacing: -10pt; line-height: 60%; font-family: \'Ubuntu Condensed\';font-size:230pt"><br/>code<div style="font-size: 170pt">source');
+    }},
+    'source/notes/': notessource,
     'source/': require('showSource').app,
     timelog: require('timelog').app,
     'js1k/': require('js1k').app,
