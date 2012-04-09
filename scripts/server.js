@@ -275,7 +275,7 @@ var modules =  ["scripts/util.js",
                 "scripts/notescore.js",
                 "scripts/dkcities.js",
                 "scripts/js1k.js",
-                "scripts/demoPlasma.js",
+                "scripts/plasma.js",
                 "scripts/bidiv.js",
                 "scripts/webutil.js",
                 "scripts/fullbrows.js"];

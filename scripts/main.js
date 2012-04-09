@@ -49,7 +49,7 @@ var menuXml = ["ul",
             ["li",["a",{"href":"#notes/tommelfingerregler-for-skrivning"},"Tommel\xadfinger\xadregler for skrivning"]],
             ["li",["a",{"href":"#notes/fototips"},"Foto\xadtips"]],
             ["li",["a",{"href":"#notes/speak-eval"},"Evalu\xadering af taler"]]]],
-        ["li","Images",["ul" ]],
+        ["li","Images",["ul", ['li', 'not here yet']]],
         ["li","Code Demos",["ul",
             ["li",["a",{"href":"#plasma"},"Diamond-square plasma generation"]],
             ["li",["a",{"href":"#js1k/sierp"},"Tweetsize Sierpinsky tri\xadangle"]],
@@ -112,7 +112,7 @@ var apps = {
     bidiv: require('bidiv').app,
     notescore: require('notescore').app,
     dkcities: require('dkcities').app,
-    plasma: require('demoPlasma').app,
+    plasma: require('plasma').app,
     test: { update: function() {
         $('#content').html('<div style="text-align: center; letter-spacing: -10pt; line-height: 60%; font-family: \'Ubuntu Condensed\';font-size:230pt"><br/>code<div style="font-size: 170pt">source');
     }},

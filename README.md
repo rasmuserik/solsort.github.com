@@ -30,7 +30,7 @@
     - Apps
         - combigame
         - notescore
-        - *danske byer*
+        - danske byer
     - *Images*
         - ...
     - Code Demos
