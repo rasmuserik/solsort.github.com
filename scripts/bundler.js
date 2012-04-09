@@ -27,3 +27,6 @@ bundler = {};
     module('console', 'module.exports=window.console || {log: function() {}}');
 })(bundler);
 require = bundler.require;
+if(typeof window.console === undefined) {
+    window.console = require('console');
+}
