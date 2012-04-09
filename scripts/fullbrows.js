@@ -122,19 +122,19 @@ exports.start = function(opt) {
     $('body').append('<div id="bar"></div>');
     $('#bar').html('<div id="barleft"></div><div id="barright"></div>');
     //<img src="img/help.png"> <img src="img/difficulty.png"></div> <div id="barright"><img src="img/give-up.png"><img src="img/score.png"></div>');
-    $('#barleft').append($('<img src="img/home.png">').on('mousedown touchstart', function() {
+    $('#barleft').append($('<img src="img/home.png">').on('mousedown touchstart', function(e) {
         window.location.hash = "#menu";
-        return false;
+        e.preventDefault();
     }));
     if(window.location.hash.slice(0,7) === '#source') {
-        $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function() {
+        $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function(e) {
             window.location.hash = "#" + window.location.hash.slice(8);
-            return false;
+            e.preventDefault();
         }));
     } else {
-        $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function() {
+        $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function(e) {
             window.location.hash = "#source/" + window.location.hash.slice(1);
-            return false;
+            e.preventDefault();
         }));
     }
 
