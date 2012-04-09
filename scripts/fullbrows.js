@@ -125,16 +125,19 @@ exports.start = function(opt) {
     $('#barleft').append($('<img src="img/home.png">').on('mousedown touchstart', function(e) {
         window.location.hash = "#menu";
         e.preventDefault();
+        return false;
     }));
     if(window.location.hash.slice(0,7) === '#source') {
         $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function(e) {
             window.location.hash = "#" + window.location.hash.slice(8);
             e.preventDefault();
+            return false;
         }));
     } else {
         $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function(e) {
             window.location.hash = "#source/" + window.location.hash.slice(1);
             e.preventDefault();
+            return false;
         }));
     }
 

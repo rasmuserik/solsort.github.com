@@ -63,6 +63,7 @@ var menuXml = ["ul",
 var currentName = '';
 
 function dispatch() {
+    $('#content').html('... working ...');
     var param = window.location.hash.slice(1);
     for(var name in apps) {
         if(param.slice(0,name.length) === name) {
