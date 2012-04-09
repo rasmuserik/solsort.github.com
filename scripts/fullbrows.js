@@ -123,13 +123,13 @@ exports.start = function(opt) {
     $('#bar').html('<div id="barleft"></div><div id="barright"></div>');
     //<img src="img/help.png"> <img src="img/difficulty.png"></div> <div id="barright"><img src="img/give-up.png"><img src="img/score.png"></div>');
     $('#barleft').append($('<img src="img/home.png">').on('mousedown touchstart', function(e) {
-        window.location.hash = "#menu";
+        window.location.hash = '';
         e.preventDefault();
         return false;
     }));
     if(window.location.hash.slice(0,7) === '#source') {
         $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function(e) {
-            window.location.hash = "#" + window.location.hash.slice(8);
+            window.location.hash = '#' + window.location.hash.slice(8);
             e.preventDefault();
             return false;
         }));

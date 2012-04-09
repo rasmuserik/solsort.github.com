@@ -121,6 +121,5 @@ var apps = {
     timelog: require('timelog').app,
     'js1k/': require('js1k').app,
     'notes/': notes,
-    menu: require('./menu').createApp(menuXml),
-    'default': {start: function () { }}
+    'default': require('./menu').createApp(menuXml)
 };
