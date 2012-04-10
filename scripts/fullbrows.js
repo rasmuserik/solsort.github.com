@@ -93,7 +93,7 @@ function relayoutStyle() {
         .css('position', 'absolute')
         .css('left', 0 /*vbar?barsize+'%':0*/)
         .css('top', vbar?1:barsize+'%')
-        .css('overflow', 'hidden')
+        .css('overflow', 'visible')
         .css('width', vbar?(100-barsize)+'%':'100%')
         //.css('margin-top', 1)
         .css('padding-bottom', 1)
@@ -158,19 +158,21 @@ exports.start = function(opt) {
     $('body').append('<div id="bar"></div>');
     $('#bar').html('<div id="barleft"></div><div id="barright"></div>');
     //<img src="img/help.png"> <img src="img/difficulty.png"></div> <div id="barright"><img src="img/give-up.png"><img src="img/score.png"></div>');
-    $('#barright').append($('<img src="img/home.png">').on('mousedown touchstart', function(e) {
-        window.location.hash = '';
-        e.preventDefault();
-        return false;
-    }));
-    if(window.location.hash.slice(0,7) === '#source') {
-        addButton({text: 'run', id: 'sourcebutton', pos: 'right', callback: function() {
-            window.location.hash = '#' + window.location.hash.slice(8);
+    if(!app.hideButtons) {
+        addButton({imagePath: 'img/home.png', pos: 'right', callback: function() {
+            window.location.hash = '';
         }});
+        if(window.location.hash.slice(0,7) === '#source') {
+            addButton({text: 'run', id: 'sourcebutton', pos: 'right', callback: function() {
+                window.location.hash = '#' + window.location.hash.slice(8);
+            }});
+        } else {
+            addButton({text: 'code', id: 'sourcebutton', pos: 'right', callback: function() {
+                window.location.hash = "#source/" + window.location.hash.slice(1);
+            }});
+        }
     } else {
-        addButton({text: 'code', id: 'sourcebutton', pos: 'right', callback: function() {
-            window.location.hash = "#source/" + window.location.hash.slice(1);
-        }});
+        relayoutStyle();
     }
 
     app.$ = $('#content');

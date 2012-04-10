@@ -64,6 +64,7 @@ function initMenu(menu) {
 exports.createApp = function(jsonml) {
     var menu;
     return {
+        hideButtons: true,
         underbar: true,
         start: function() {
             $('body').css('background', 'black');
@@ -73,7 +74,6 @@ exports.createApp = function(jsonml) {
             this.update(this.elem);
         },
         update: function() {
-            $('#bar').html('');
             var elem = this.elem;
             console.log(elem);
             position(menu, -margin,-margin,$(elem).width()+margin, $(elem).height()+margin);

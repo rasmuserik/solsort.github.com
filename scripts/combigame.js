@@ -158,7 +158,7 @@ function partialScore($t, title, log) {
         $t.append($('<div>Median time: ' + (log[(log.length >> 1)].time/10|0)/100 + 's'));
     }
 }
-function showScore() { fullbrows.start({update:function() {
+function showScore() { fullbrows.start({hideButtons: true, update:function() {
     var $t = $('<div>');
     var log = _(logData)
             .filter(function(elem) { return !elem.hint && elem.difficulty === difficulty; })
@@ -326,7 +326,7 @@ function startGame() {
     fullbrows.addButton({text: '' + difficulty, callback: showDifficulty});
 
             function showHelp() {
-                fullbrows.start({update:function() {
+                fullbrows.start({hideButtons: true, update:function() {
                     var html = require('jsxml').toXml(
                         ["div",
                             ["h2", "CombiGame"],
@@ -372,7 +372,7 @@ function startGame() {
     doLayout();
 }
 
-function menu(items) { fullbrows.start({update: function() {
+function menu(items) { fullbrows.start({hideButtons: true, update: function() {
     var item;
     var s = Math.min($('#content').height() + $('#content').width());
     var $menu = $('<div>');
