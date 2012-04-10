@@ -48,14 +48,14 @@ var menuXml = ["ul",
             ["li",["a",{"href":"#notes/tekststruktur-for-rapporter"},"Tekst\xadstruktur for rapporter"]],
             ["li",["a",{"href":"#notes/tommelfingerregler-for-skrivning"},"Tommel\xadfinger\xadregler for skrivning"]],
             ["li",["a",{"href":"#notes/fototips"},"Foto\xadtips"]],
-            ["li",["a",{"href":"#notes/speak-eval"},"Evalu\xadering af taler"]]]],
-        ["li","Images",["ul", ['li', 'not here yet']]],
+            ["li",["a",{"href":"#notes/speak-eval"},"Speech Evaluation Notes"]]]],
+        //["li","Images",["ul", ['li', 'not here yet']]],
         ["li","Code Demos",["ul",
             ["li",["a",{"href":"#plasma"},"Diamond-square plasma generation"]],
             ["li",["a",{"href":"#sierp"},"Tweetsize Sierpinsky tri\xadangle"]],
             ["li",["a",{"href":"#brown"},"Tweetsize brownian noise animation"]],
             ["li",["a",{"href":"#rain"},"Rain\xaddrops on water simulation"]],
-            ["li",["a",{"href":"#js1k/julia4d"},"Projection of 4d-julia\xadbrot fractal"]],
+            ["li",["a",{"href":"#julia4d"},"Projection of 4d-julia\xadbrot fractal"]],
             ]]
     ]]];
 
@@ -123,7 +123,7 @@ var apps = {
     'rasmuserik': require('rasmuserik').app,
     'brown': require('brown').app,
     'rain': require('rain').app,
-    'js1k/': require('js1k').app,
+    'julia4d': require('julia4d').app,
     'notes/': notes,
     'default': require('./menu').createApp(menuXml)
 };

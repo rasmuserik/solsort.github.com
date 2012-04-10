@@ -6,76 +6,7 @@ exports.app = {
     start: function() {
         c = this.elem;
         a = c.getContext('2d');
-        js1k[this.param]();
-    },
-    stop: function() {
-        var i, t;
-        t = setTimeout(function(){}, 10000);
-        for(i = 0; i <= t; ++i) {
-            clearTimeout(i);
-        }
-        t = setInterval(function(){}, 10000);
-        for(i = 0; i <= t; ++i) {
-            clearInterval(i);
-        }
-    }
-};
 
-var js1k = {
-    rain: function() {
-        var d,e,g,h,x,i,j,t;
-        c.width = 256;
-        c.height= 256;
-        d = a.getImageData(0,0,c.width,c.height);
-        e = d.data;
-
-        function blit() {
-            a.putImageData(d,0,0);
-        }
-
-        g=[];
-        h = [];
-        for(x=0;x<10000;++x) {
-            //g[x]=h[x]= 127;
-        }
-        function f() {
-            for(i=0;i<65536;++i) {
-                h[i] = ((g[i-1]+g[i+1]+g[i-256]+g[i+256])/2 - h[i])*0.99 || 0;
-                //h[i] = ((g[i-257]+g[i-256]+g[i-255]+g[i-1]+g[i+1]+g[i+255]+g[i+256]+g[i+257])/4 - h[i])*.97 ||0;
-                //e[i*4+1] = 0|(-g[i]/*-g[i+1]-g[i+256]*/);
-                //e[i*4+2] = 0|(g[i]/*-g[i+1]-g[i+256]*/);
-                e[i*4+3] = 255;
-                e[i*4+2] = 255&(128+g[i]-g[i-257]);
-            }
-            j = g;
-            g = h;
-            h = j;
-            t = Math.random()*65536|0;
-            g[t] =  127;
-            g[t+1] =  127;
-            g[t+2] =  127;
-            //g[256+t] =  127;
-            g[256+t+1] =  127;
-            //g[256+t+2] =  127;
-            //g[512+t] =  127;
-            g[512+t+1] =  127;
-            //g[512+t+2] =  127;
-            blit();
-            setTimeout(f, 0);
-        }
-        f();
-    },
-    sierp: function() {
-        c.width = c.height = 1000;
-        var b,i,t=1000;
-        for(b=[i=1];i<t*t;)(b[i+t]=b[i]^b[i++-1])&&a.fillRect(i%t,i/t,1,1)
-    },
-    brown: function() {
-        c.width = c.height = 128;
-        d=a.getImageData(p=0,0,128,128);setInterval("for(i=k=66055;--i;d.data[p%k]++)p+=Math.random()*k*k&k;a.putImageData(d,0,0)",50)
-    },
-    'julia4d': function() {
-        // start of submission //
         c.width=796;
         c.height=512;
         /*
@@ -84,7 +15,7 @@ var js1k = {
         c.style.width="95%";
         c.style.height="95%";
         */
-         var d,p, e, vs, k, pts, w0, wi0, w1, wi1, pts0, kcount, w, wi, j, Cx, Cy, v1, v2, x, y, i;
+        var d,p, e, vs, k, pts, w0, wi0, w1, wi1, pts0, kcount, w, wi, j, Cx, Cy, v1, v2, x, y, i;
 
 
 
@@ -277,5 +208,16 @@ var js1k = {
             }
         }
         */
+    },
+    stop: function() {
+        var i, t;
+        t = setTimeout(function(){}, 10000);
+        for(i = 0; i <= t; ++i) {
+            clearTimeout(i);
+        }
+        t = setInterval(function(){}, 10000);
+        for(i = 0; i <= t; ++i) {
+            clearInterval(i);
+        }
     }
 };
