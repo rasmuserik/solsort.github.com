@@ -24,7 +24,7 @@ function l(e) {
 }
 function relayoutStyle() {
     var vbar = $(window).width() > $(window).height();
-    var barsize = app.mobile?12:12;
+    var barsize = app.mobile?10:8;
     $('#bar').css({
         position: 'fixed',
         left: vbar?100-barsize+'%' : '0px',

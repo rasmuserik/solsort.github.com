@@ -66,6 +66,7 @@ var doLayout = function() {
         opacity: 1,
         'margin-top': -size/2,
         'margin-left': -size/2,
+        background: 'none',
         width: 0.9*size,
         height: 0.9*size
     };
