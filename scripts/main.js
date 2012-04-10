@@ -52,9 +52,9 @@ var menuXml = ["ul",
         ["li","Images",["ul", ['li', 'not here yet']]],
         ["li","Code Demos",["ul",
             ["li",["a",{"href":"#plasma"},"Diamond-square plasma generation"]],
-            ["li",["a",{"href":"#js1k/sierp"},"Tweetsize Sierpinsky tri\xadangle"]],
+            ["li",["a",{"href":"#sierp"},"Tweetsize Sierpinsky tri\xadangle"]],
             ["li",["a",{"href":"#js1k/brown"},"Tweetsize brownian noise animation"]],
-            ["li",["a",{"href":"#js1k/rain"},"Rain\xaddrops on water simulation"]],
+            ["li",["a",{"href":"#rain"},"Rain\xaddrops on water simulation"]],
             ["li",["a",{"href":"#js1k/julia4d"},"Projection of 4d-julia\xadbrot fractal"]],
             ]]
     ]]];
@@ -119,6 +119,8 @@ var apps = {
     'source/notes/': notessource,
     'source/': require('showSource').app,
     timelog: require('timelog').app,
+    'sierp': require('sierp').app,
+    'rain': require('rain').app,
     'js1k/': require('js1k').app,
     'notes/': notes,
     'default': require('./menu').createApp(menuXml)

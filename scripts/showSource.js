@@ -46,6 +46,12 @@ function docco(text) {
     var code = [];
     for(i = 0; i < result.length; i += 2) {
         docs.push(result[i]);
+        if(result[i+1][result[i+1].length-1].line.trim().length === 0) {
+            console.log('xxx');
+            console.log(result[i+1].length);
+            result[i+1].pop();
+            console.log(result[i+1].length);
+        }
         code.push(result[i+1]);
     }
     docs = docs.map(function(doc) { return '<div class="docblock">' + showdown.makeHtml(doc.join('\n')) + '</div>'; });
@@ -55,16 +61,11 @@ function docco(text) {
         }).join('') + '</div>';
     });
 
-    //result = ['<table>'];
     result = [];
     for(i = 0; i < docs.length; ++i) {
-    //    result.push('<tr><td style="vertical-align: top">');
         result.push(docs[i]);
-    //    result.push('</td><td style="vertical-align: top">');
         result.push(code[i]);
-    //    result.push('</td></tr>');
     }
-    //result.push('</table>');
     return result.join('');
 
 }
@@ -86,8 +87,11 @@ function style(app) {
         //fontFamily: 'Ubuntu Mono'
         fontFamily: 'Ubuntu Mono'
     });
+    $('.docblock p').css({ margin: 0, padding: 0 });
     $('.docblock').css({
         fontSize: '10pt',
+        margin: 0,
+        padding: 0,
         marginTop: app.mobile?'.1pt':'2pt',
         borderTop: app.mobile?'none':'1px solid #eee',
         'vertical-align': 'top',
