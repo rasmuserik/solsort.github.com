@@ -34,7 +34,7 @@ var doLayout = function() {
     var i, x, y;
 
     pos = [];
-    size = Math.min(Math.max(w,h)/4, Math.min(w,h)/3)*0.85;
+    size = Math.min(Math.max(w,h)/4, Math.min(w,h)/3); //*0.85;
 
     if(w > h) {
         topPad = (h - size * 3) >> 1;
@@ -44,8 +44,8 @@ var doLayout = function() {
         leftPad = (w - size * 3) >> 1;
         landscape = false;
     }
-    topPad += 0.05*size;
-    leftPad += 0.05*size;
+    topPad += 0; //0.05*size;
+    leftPad += 0; //0.05*size;
 
     for(i = 0; i < 12; ++i) {
         if(landscape) {
@@ -90,18 +90,6 @@ var doLayout = function() {
     $('.menuIcon').css({width: size/1.5, height: size/1.5});
     $('.menuEast').css({left: w - size/1.5});
     $('.menuSouth').css({top: h - size/1.5});
-
-    $('.difficultyStatus').css({
-        position: 'absolute',
-        width: size/2.3,
-        top: size/1.5,
-        'text-align': 'right',
-        height: size*2,
-        left: w - size/2
-    });
-    webutil.scaleText($('.difficultyStatus'));
-    $('.difficultyStatus').css('overflow', 'visible');
-
 };
 
 var lastClickTime = 0;
@@ -328,10 +316,15 @@ function startGame() {
         return true;
     });
 
-    $content.append(
-        $('<img class="menuIcon" src="img/help.png" alt="How to play">')
-            .css('position', 'absolute')
-            .bind('click', function() {
+    difficulty = difficulty || localStorage.getItem('combigameDifficulty') || 'normal';
+
+    fullbrows.addButton({imagePath: "img/help.png", callback: showHelp});
+    //fullbrows.addButton({imagePath: "img/difficulty.png", callback: showDifficulty});
+    fullbrows.addButton({imagePath: "img/give-up.png", callback: hint});
+    fullbrows.addButton({imagePath: "img/score.png", callback: showScore});
+    fullbrows.addButton({text: '' + difficulty, callback: showDifficulty});
+
+            function showHelp() {
                 fullbrows.start({update:function() {
                     var html = require('jsxml').toXml(
                         ["div",
@@ -348,17 +341,14 @@ function startGame() {
 
                         var $t = $('<div>');
                         $t.html(html);
-                        $content.html('').append($t);
+                        $('#content').html('').append($t);
                         $t.css({width: '90%', height:'90%'});
                         webutil.scaleText($t);
                         $t.css({margin: '2% 5% 8% 5%', overflow: 'visible'});
                         $t.bind('mousedown touchstart', fullbrows.startFn(exports.app));
                 }});
-            })
-    ).append(
-        $('<img class="menuIcon menuEast" src="img/difficulty.png" alt="Difficulty">')
-            .css('position', 'absolute')
-            .bind('click', function() { menu(
+            }
+            function showDifficulty() { menu(
                 {  easy: function() {
                     difficulty = 'easy';
                     fullbrows.start(exports.app);
@@ -368,21 +358,9 @@ function startGame() {
                 }, hard: function() {
                     difficulty = 'hard';
                     fullbrows.start(exports.app);
-                }});})
-    ).append(
-        $('<img class="menuIcon menuSouth" src="img/give-up.png" alt="Give up">')
-            .css('position', 'absolute')
-            .bind('click', hint)
-    ).append(
-        $('<img class="menuIcon menuEast menuSouth" src="img/score.png" alt="Score">')
-            .css('position', 'absolute')
-            .bind('click', showScore)
-    );
+            }});}
 
-    difficulty = difficulty || localStorage.getItem('combigameDifficulty') || 'normal';
     localStorage.setItem('combigameDifficulty', difficulty);
-    $('#content').append($('<div class="difficultyStatus">').text(difficulty));
-
 
     shuffle(function() {
         cards = [];

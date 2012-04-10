@@ -24,7 +24,7 @@ function l(e) {
 }
 function relayoutStyle() {
     var vbar = $(window).width() > $(window).height();
-    var barsize = app.mobile?12:8;
+    var barsize = app.mobile?12:12;
     $('#bar').css({
         position: 'fixed',
         left: vbar?100-barsize+'%' : '0px',
@@ -45,7 +45,10 @@ function relayoutStyle() {
         '-o-box-shadow': '0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)',
         'box-shadow': '0px 0px 32px rgba(255, 255, 255, 1), 2px 2px 14px rgba(0, 0, 0, .7)',
         background: 'rgba(255,255,255,1)',
+        border: iconsize * 0.02 +'px solid #000',
         verticalAlign: 'top',
+        textAlign: 'center',
+        fontFamily: 'Ubuntu Condensed',
         padding: iconsize * 0.1,
         borderRadius: iconsize*0.2,
         marginLeft: iconsize * 0.1,
@@ -53,7 +56,10 @@ function relayoutStyle() {
         marginRight: iconsize *0.1,
         marginTop: iconsize * 0.1};
     $('#bar img').css(barItemStyle);
+
+    require('webutil').scaleText($('#bar span'));
     $('#bar span').css(barItemStyle);
+
 
     $('#barleft img').css('float', 'left');
     $('#barleft span').css('float', 'left');
@@ -76,6 +82,8 @@ function relayoutStyle() {
             top: 'auto'
         });
     }
+
+
         
     if(app.underbar) {
         barsize = 0;
@@ -92,11 +100,39 @@ function relayoutStyle() {
         .css('height', (app.type === 'scrollable') ? 'auto' : vbar?'100%':(100-barsize)+'%');
     window.scrollTo(0,1);
 }
-function relayout() {
+exports.addButton = addButton;
+function addButton(obj) {
+    var pos = (obj.pos==='right')?'#barright':'#barleft';
+
+    var button;
+    if(obj.imagePath) {
+        button = $('<img src="' + obj.imagePath + '">');
+    } else {
+        button = $('<span>').text(obj.text);
+    }
+    $(pos).append(button);
+    if(obj.id) {
+        button.attr('id', obj.id);
+    }
+    console.log(button);
+    try {
+    button.on('mousedown touchstart', function(e) {
+        if(typeof obj.callback === 'function') {
+            obj.callback();
+        }
+        e.preventDefault();
+        return false;
+    });
+    } catch(e) {
+    }
     relayoutStyle();
+}
+
+function relayout() {
     if(typeof app.update === 'function') {
         app.update();
     }
+    relayoutStyle();
     window.scrollTo(0,1);
 }
 var relayoutDelayed = util.niceSingle(relayout);
@@ -122,23 +158,19 @@ exports.start = function(opt) {
     $('body').append('<div id="bar"></div>');
     $('#bar').html('<div id="barleft"></div><div id="barright"></div>');
     //<img src="img/help.png"> <img src="img/difficulty.png"></div> <div id="barright"><img src="img/give-up.png"><img src="img/score.png"></div>');
-    $('#barleft').append($('<img src="img/home.png">').on('mousedown touchstart', function(e) {
+    $('#barright').append($('<img src="img/home.png">').on('mousedown touchstart', function(e) {
         window.location.hash = '';
         e.preventDefault();
         return false;
     }));
     if(window.location.hash.slice(0,7) === '#source') {
-        $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function(e) {
+        addButton({text: 'run', id: 'sourcebutton', pos: 'right', callback: function() {
             window.location.hash = '#' + window.location.hash.slice(8);
-            e.preventDefault();
-            return false;
-        }));
+        }});
     } else {
-        $('#barleft').append($('<img id="sourcebutton" src="img/sourcecode.png">').on('mousedown touchstart', function(e) {
+        addButton({text: 'code', id: 'sourcebutton', pos: 'right', callback: function() {
             window.location.hash = "#source/" + window.location.hash.slice(1);
-            e.preventDefault();
-            return false;
-        }));
+        }});
     }
 
     app.$ = $('#content');
@@ -164,8 +196,8 @@ exports.start = function(opt) {
             'background': '#fff'
     });
     app.start = app.start || app.update;
-    relayoutStyle();
     app.start();
+    relayoutStyle();
 };
 
 exports.startFn = function(app) { console.log(1); return function() { console.log(2);exports.start(app); } ; };

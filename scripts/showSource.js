@@ -87,6 +87,7 @@ function style(app) {
         fontFamily: 'Ubuntu Mono'
     });
     $('.docblock').css({
+        fontSize: '10pt',
         marginTop: app.mobile?'.1pt':'2pt',
         borderTop: app.mobile?'none':'1px solid #eee',
         'vertical-align': 'top',

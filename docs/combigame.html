@@ -34,7 +34,7 @@
     <span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">;</span>
 
     <span class="nx">pos</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="nx">size</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="nx">h</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="nx">h</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="mf">0.85</span><span class="p">;</span>
+    <span class="nx">size</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="nx">h</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="nx">h</span><span class="p">)</span><span class="o">/</span><span class="mi">3</span><span class="p">);</span> <span class="c1">//*0.85;</span>
 
     <span class="k">if</span><span class="p">(</span><span class="nx">w</span> <span class="o">&gt;</span> <span class="nx">h</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">topPad</span> <span class="o">=</span> <span class="p">(</span><span class="nx">h</span> <span class="o">-</span> <span class="nx">size</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
@@ -44,8 +44,8 @@
         <span class="nx">leftPad</span> <span class="o">=</span> <span class="p">(</span><span class="nx">w</span> <span class="o">-</span> <span class="nx">size</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
         <span class="nx">landscape</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="nx">topPad</span> <span class="o">+=</span> <span class="mf">0.05</span><span class="o">*</span><span class="nx">size</span><span class="p">;</span>
-    <span class="nx">leftPad</span> <span class="o">+=</span> <span class="mf">0.05</span><span class="o">*</span><span class="nx">size</span><span class="p">;</span>
+    <span class="nx">topPad</span> <span class="o">+=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//0.05*size;</span>
+    <span class="nx">leftPad</span> <span class="o">+=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//0.05*size;</span>
 
     <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span><span class="p">(</span><span class="nx">landscape</span><span class="p">)</span> <span class="p">{</span>
@@ -90,18 +90,6 @@
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.menuIcon&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">});</span>
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.menuEast&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nx">left</span><span class="o">:</span> <span class="nx">w</span> <span class="o">-</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">});</span>
     <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.menuSouth&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="nx">h</span> <span class="o">-</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">});</span>
-
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.difficultyStatus&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
-        <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;absolute&#39;</span><span class="p">,</span>
-        <span class="nx">width</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mf">2.3</span><span class="p">,</span>
-        <span class="nx">top</span><span class="o">:</span> <span class="nx">size</span><span class="o">/</span><span class="mf">1.5</span><span class="p">,</span>
-        <span class="s1">&#39;text-align&#39;</span><span class="o">:</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span>
-        <span class="nx">height</span><span class="o">:</span> <span class="nx">size</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span>
-        <span class="nx">left</span><span class="o">:</span> <span class="nx">w</span> <span class="o">-</span> <span class="nx">size</span><span class="o">/</span><span class="mi">2</span>
-    <span class="p">});</span>
-    <span class="nx">webutil</span><span class="p">.</span><span class="nx">scaleText</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.difficultyStatus&#39;</span><span class="p">));</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.difficultyStatus&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;overflow&#39;</span><span class="p">,</span> <span class="s1">&#39;visible&#39;</span><span class="p">);</span>
-
 <span class="p">};</span>
 
 <span class="kd">var</span> <span class="nx">lastClickTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -325,10 +313,13 @@
         <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">});</span>
 
-    <span class="nx">$content</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;img class=&quot;menuIcon&quot; src=&quot;img/help.png&quot; alt=&quot;How to play&quot;&gt;&#39;</span><span class="p">)</span>
-            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">)</span>
-            <span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">difficulty</span> <span class="o">=</span> <span class="nx">difficulty</span> <span class="o">||</span> <span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s1">&#39;combigameDifficulty&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;normal&#39;</span><span class="p">;</span>
+
+    <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">addButton</span><span class="p">({</span><span class="nx">imagePath</span><span class="o">:</span> <span class="s2">&quot;img/help.png&quot;</span><span class="p">,</span> <span class="nx">callback</span><span class="o">:</span> <span class="nx">showHelp</span><span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>fullbrows.addButton({imagePath: "img/difficulty.png", callback: showDifficulty});</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">addButton</span><span class="p">({</span><span class="nx">imagePath</span><span class="o">:</span> <span class="s2">&quot;img/give-up.png&quot;</span><span class="p">,</span> <span class="nx">callback</span><span class="o">:</span> <span class="nx">hint</span><span class="p">});</span>
+    <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">addButton</span><span class="p">({</span><span class="nx">imagePath</span><span class="o">:</span> <span class="s2">&quot;img/score.png&quot;</span><span class="p">,</span> <span class="nx">callback</span><span class="o">:</span> <span class="nx">showScore</span><span class="p">});</span>
+    <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">addButton</span><span class="p">({</span><span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">difficulty</span><span class="p">,</span> <span class="nx">callback</span><span class="o">:</span> <span class="nx">showDifficulty</span><span class="p">});</span>
+
+            <span class="kd">function</span> <span class="nx">showHelp</span><span class="p">()</span> <span class="p">{</span>
                 <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">({</span><span class="nx">update</span><span class="o">:</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
                     <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;jsxml&#39;</span><span class="p">).</span><span class="nx">toXml</span><span class="p">(</span>
                         <span class="p">[</span><span class="s2">&quot;div&quot;</span><span class="p">,</span>
@@ -345,17 +336,14 @@
 
                         <span class="kd">var</span> <span class="nx">$t</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div&gt;&#39;</span><span class="p">);</span>
                         <span class="nx">$t</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
-                        <span class="nx">$content</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">$t</span><span class="p">);</span>
+                        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">$t</span><span class="p">);</span>
                         <span class="nx">$t</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="s1">&#39;90%&#39;</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span><span class="s1">&#39;90%&#39;</span><span class="p">});</span>
                         <span class="nx">webutil</span><span class="p">.</span><span class="nx">scaleText</span><span class="p">(</span><span class="nx">$t</span><span class="p">);</span>
                         <span class="nx">$t</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">margin</span><span class="o">:</span> <span class="s1">&#39;2% 5% 8% 5%&#39;</span><span class="p">,</span> <span class="nx">overflow</span><span class="o">:</span> <span class="s1">&#39;visible&#39;</span><span class="p">});</span>
                         <span class="nx">$t</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;mousedown touchstart&#39;</span><span class="p">,</span> <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">startFn</span><span class="p">(</span><span class="nx">exports</span><span class="p">.</span><span class="nx">app</span><span class="p">));</span>
                 <span class="p">}});</span>
-            <span class="p">})</span>
-    <span class="p">).</span><span class="nx">append</span><span class="p">(</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;img class=&quot;menuIcon menuEast&quot; src=&quot;img/difficulty.png&quot; alt=&quot;Difficulty&quot;&gt;&#39;</span><span class="p">)</span>
-            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">)</span>
-            <span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">menu</span><span class="p">(</span>
+            <span class="p">}</span>
+            <span class="kd">function</span> <span class="nx">showDifficulty</span><span class="p">()</span> <span class="p">{</span> <span class="nx">menu</span><span class="p">(</span>
                 <span class="p">{</span>  <span class="nx">easy</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
                     <span class="nx">difficulty</span> <span class="o">=</span> <span class="s1">&#39;easy&#39;</span><span class="p">;</span>
                     <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">exports</span><span class="p">.</span><span class="nx">app</span><span class="p">);</span>
@@ -365,21 +353,9 @@
                 <span class="p">},</span> <span class="nx">hard</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
                     <span class="nx">difficulty</span> <span class="o">=</span> <span class="s1">&#39;hard&#39;</span><span class="p">;</span>
                     <span class="nx">fullbrows</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">exports</span><span class="p">.</span><span class="nx">app</span><span class="p">);</span>
-                <span class="p">}});})</span>
-    <span class="p">).</span><span class="nx">append</span><span class="p">(</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;img class=&quot;menuIcon menuSouth&quot; src=&quot;img/give-up.png&quot; alt=&quot;Give up&quot;&gt;&#39;</span><span class="p">)</span>
-            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">)</span>
-            <span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">hint</span><span class="p">)</span>
-    <span class="p">).</span><span class="nx">append</span><span class="p">(</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;img class=&quot;menuIcon menuEast menuSouth&quot; src=&quot;img/score.png&quot; alt=&quot;Score&quot;&gt;&#39;</span><span class="p">)</span>
-            <span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;absolute&#39;</span><span class="p">)</span>
-            <span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">showScore</span><span class="p">)</span>
-    <span class="p">);</span>
+            <span class="p">}});}</span>
 
-    <span class="nx">difficulty</span> <span class="o">=</span> <span class="nx">difficulty</span> <span class="o">||</span> <span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s1">&#39;combigameDifficulty&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;normal&#39;</span><span class="p">;</span>
     <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="s1">&#39;combigameDifficulty&#39;</span><span class="p">,</span> <span class="nx">difficulty</span><span class="p">);</span>
-    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;difficultyStatus&quot;&gt;&#39;</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">difficulty</span><span class="p">));</span>
-
 
     <span class="nx">shuffle</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="nx">cards</span> <span class="o">=</span> <span class="p">[];</span>
