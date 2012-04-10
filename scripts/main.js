@@ -120,6 +120,7 @@ var apps = {
     'source/': require('showSource').app,
     timelog: require('timelog').app,
     'sierp': require('sierp').app,
+    'rasmuserik': require('rasmuserik').app,
     'brown': require('brown').app,
     'rain': require('rain').app,
     'js1k/': require('js1k').app,
