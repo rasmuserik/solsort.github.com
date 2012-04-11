@@ -1,3 +1,4 @@
+// ## Dependencies
 /*global localStorage: true*/
 var $ = require('zquery');
 var _ = require('underscore');
@@ -5,6 +6,21 @@ var webutil = require('webutil');
 var fullbrows = require('fullbrows');
 var Modernizr = require('modernizr');
 
+// ## App definition
+exports.app = {
+    start: startGame,
+    update: doLayout
+};
+
+// ## Game state
+var difficulty;
+var prevtime;
+var giveup;
+var selected = {};
+var cards = [];
+
+
+// ## Styles
 var hidden = {
     opacity: 0,
     width: 0,
@@ -21,9 +37,9 @@ var transitionStyle = {
 var visibleStyle;
 var selectedStyle;
 var unselectedStyle;
-var pos;
-var size;
-var difficulty;
+var cardPositions;
+
+// ## Layout
 var doLayout = function() {
     var $content = $('#content');
     $content.css('background', 'white');
@@ -32,8 +48,9 @@ var doLayout = function() {
     var topPad, leftPad;
     var landscape = true;
     var i, x, y;
+    var size;
 
-    pos = [];
+    cardPositions = [];
     size = Math.min(Math.max(w,h)/4, Math.min(w,h)/3); //*0.85;
 
     if(w > h) {
@@ -49,12 +66,12 @@ var doLayout = function() {
 
     for(i = 0; i < 12; ++i) {
         if(landscape) {
-            pos.push({
+            cardPositions.push({
                 top: topPad + (0.5 + (i%3)) * size,
                 left: leftPad + (0.5 + (i/3|0)) * size
             });
         } else {
-            pos.push({
+            cardPositions.push({
                 left: leftPad + (0.5 + (i%3)) * size,
                 top: topPad + (0.5 + (i/3|0)) * size
             });
@@ -88,38 +105,52 @@ var doLayout = function() {
     for(i = 0; i < 12; ++i) {
         anim(i, $('#card' + cards[i]))();
     }
-    $('.menuIcon').css({width: size/1.5, height: size/1.5});
-    $('.menuEast').css({left: w - size/1.5});
-    $('.menuSouth').css({top: h - size/1.5});
 };
-
-var lastClickTime = 0;
-var prevCard = '';
-function click(card) {
-    if(card === prevCard && Date.now() - lastClickTime < 100) {
-            return;
-    }
-    prevCard = card;
-    lastClickTime = Date.now();
-    if(exports.selected[card]) {
-        $('#card' + card).css(unselectedStyle);
-        delete exports.selected[card];
-    } else {
-        $('#card' + card).css(selectedStyle);
-        exports.selected[card] = true;
-    }
-    testSelected();
+// ### Animate that a card fades in
+function anim(i, $card) {
+    return function() {
+        $card.css(cardPositions[i]);
+        setTimeout(function() { $card.css(transitionStyle).css(visibleStyle); }, 0);
+    };
 }
 
-function shuffle(fn) {
+// ## Handle clicking on cards
+var click = (function() {
+    // private variables, to make sure we only click once, even if the browser sends several events.
+    var lastClickTime = 0;
+    var prevCard = '';
+    return function(card) {
+        if(card === prevCard && Date.now() - lastClickTime < 100) {
+            return;
+        }
+        prevCard = card;
+        lastClickTime = Date.now();
+        // swap whether the card is selected
+        if(selected[card]) {
+            $('#card' + card).css(unselectedStyle);
+            delete selected[card];
+        } else {
+            $('#card' + card).css(selectedStyle);
+            selected[card] = true;
+        }
+        // test if selected cards makes a valid combination
+        testSelected();
+    };
+})();
+
+// ## Shuffle cards until a valid combination
+// reshuffle 10 times, and take the worst/best combination if hard/easy
+function reshuffle(shuffleFn) {
     var score, bestscore = -10000, saved;
     var i;
     for(i=0;i<10;++i) {
+        // shuffle until we have a valid combination. (score=0 => no valid set)
         do {
-            fn();
+            shuffleFn();
             score = okDeck();
         } while(!score);
 
+        // if normal difficulty, just shuffle once.
         if(difficulty === 'normal') {
             saved = cards;
             break;
@@ -136,6 +167,7 @@ function shuffle(fn) {
     cards = saved;
 }
 
+// ## Keep track of score
 var logData;
 var curDate;
 function log(obj) {
@@ -151,13 +183,7 @@ function log(obj) {
     }, 0);
 }
 
-function partialScore($t, title, log) {
-    if(log.length > 0) {
-        if(title) { $t.append($('<div><b>' + title+ '</b></div>')); }
-        $t.append($('<div>Best time: ' + (log[0].time/10|0)/100 + 's'));
-        $t.append($('<div>Median time: ' + (log[(log.length >> 1)].time/10|0)/100 + 's'));
-    }
-}
+// ## Score reporting
 function showScore() { fullbrows.start({hideButtons: true, update:function() {
     var $t = $('<div>');
     var log = _(logData)
@@ -183,58 +209,64 @@ function showScore() { fullbrows.start({hideButtons: true, update:function() {
     $t.css({margin: '3% 10% 7% 10%', overflow: 'visible'});
     $t.bind('mousedown touchstart', fullbrows.startFn(exports.app));
 }});}
-
-function testSelected() {
-    var list = Object.keys(exports.selected);
-    if(list.length >= 3) {
-        if(okSet(list[0], list[1], list[2])) {
-            var now = Date.now();
-            log({time: now - prevtime, hint: giveup, cards: cards.slice(0), choosen: list, now: now, difficulty: difficulty});
-            giveup = false;
-            prevtime = now;
-
-            setTimeout(function() {
-                list.forEach(function(id) {
-                    $('#card'+id).css('opacity', 0);
-                });
-            }, 0);
-            setTimeout(function() {
-                $('.card').css(unselectedStyle);
-                var ids = [_(cards).indexOf(list[0]), _(cards).indexOf(list[1]), _(cards).indexOf(list[2])];
-                shuffle(function() {
-                    for(var i = 0; i < 3; ++i) {
-                        cards[ids[i]] = randomCard();
-                    }
-                });
-                doLayout();
-            }, 1000);
-        } else {
-            $('.card').css(unselectedStyle);
-        }
-        exports.selected = {};
+function partialScore($t, title, log) {
+    if(log.length > 0) {
+        if(title) { $t.append($('<div><b>' + title+ '</b></div>')); }
+        $t.append($('<div>Best time: ' + (log[0].time/10|0)/100 + 's'));
+        $t.append($('<div>Median time: ' + (log[(log.length >> 1)].time/10|0)/100 + 's'));
     }
 }
 
+// ## Check whether the selected figures yields a valid combination
+function testSelected() {
+    var list = Object.keys(selected);
+    // 3 not selected yet, break
+    if(list.length < 3) {
+        return;
+    }
+    if(okSet(list[0], list[1], list[2])) {
+        // valid combination, log to score
+        var now = Date.now();
+        log({time: now - prevtime, hint: giveup, cards: cards.slice(0), choosen: list, now: now, difficulty: difficulty});
+        giveup = false;
+        prevtime = now;
 
-exports.selected = {};
+        // fade-out the cards
+        setTimeout(function() {
+            list.forEach(function(id) {
+                $('#card'+id).css('opacity', 0);
+            });
+        }, 0);
 
-function anim(i, $card) {
-    return function() {
-        $card.css(pos[i]);
-        setTimeout(function() { $card.css(transitionStyle).css(visibleStyle); }, 0);
-    };
+        // reshuffle, and bring in 3 new cards
+        setTimeout(function() {
+            $('.card').css(unselectedStyle);
+            var ids = [_(cards).indexOf(list[0]), _(cards).indexOf(list[1]), _(cards).indexOf(list[2])];
+            reshuffle(function() {
+                for(var i = 0; i < 3; ++i) {
+                    cards[ids[i]] = randomCard();
+                }
+            });
+            doLayout();
+        }, 1000);
+
+    // invalid combination clear selection
+    } else {
+        $('.card').css(unselectedStyle);
+    }
+    selected = {};
 }
 
+// ## Random card id
+function randomCard() {
+    return '' + rnd3() + rnd3() + rnd3() + rnd3();
+}
+// ### Randomly 0, 1, or 2
 function rnd3() {
     return Math.random() * 3 | 0;
 }
 
-function randomCard() {
-    return '' + rnd3() + rnd3() + rnd3() + rnd3();
-}
-
-var cards = [];
-
+// ## return true if the three card-ids forms a valid combination
 function okSet(a, b, c) {
     for(var i = 0; i < 4; ++i) {
         var ok = (a[i] === b[i] && b[i] === c[i]) ||
@@ -246,8 +278,9 @@ function okSet(a, b, c) {
     return true;
 }
 
+// ## show where there is a valid set
 function hint() {
-    exports.selected = {};
+    selected = {};
     $('.card').css(unselectedStyle);
     var a, b, c;
     for(a = 0; a < 10; ++a) {
@@ -271,6 +304,7 @@ function hint() {
     }
 }
 
+// ## The number of valid combinations among the 12 figures
 function okDeck() {
     var cardHash = {};
     var a, b, c;
@@ -294,8 +328,7 @@ function okDeck() {
     return ok;
 }
 
-var prevtime;
-var giveup;
+// ## Initialisation function
 function startGame() {
     giveup = false;
     var $content = $('#content');
@@ -310,7 +343,7 @@ function startGame() {
     } } } }
     $('.card').css({position: 'absolute', opacity: '0'});
 
-    
+   
     $('.card').bind('touchstart mousedown', function(e) {
         click(e.target.id.slice(4));
         e.preventDefault();
@@ -363,7 +396,7 @@ function startGame() {
 
     localStorage.setItem('combigameDifficulty', difficulty);
 
-    shuffle(function() {
+    reshuffle(function() {
         cards = [];
         for(var i = 0; i < 12; ++i) {
             cards.push(randomCard());
@@ -372,6 +405,7 @@ function startGame() {
     doLayout();
 }
 
+// # Utility for showing a menu
 function menu(items) { fullbrows.start({hideButtons: true, update: function() {
     var item;
     var s = Math.min($('#content').height() + $('#content').width());
@@ -398,8 +432,3 @@ function menu(items) { fullbrows.start({hideButtons: true, update: function() {
     $menu.css('position', 'absolute');
     $menu.css('width', '100%');
 }});}
-
-exports.app = {
-    start: startGame,
-    update: doLayout
-};
