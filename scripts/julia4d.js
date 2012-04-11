@@ -1,4 +1,5 @@
-/*jshint evil:true curly:false asi:true expr:true */
+// # 4d julia-mandelbrot set
+// Just playing around :)
 var running;
 exports.app = {
     underbar: true,
@@ -13,93 +14,89 @@ exports.app = {
     }
 };
 
+// First we project into 3d by taking a line(segment) mandelbrotplane as the z-axis, and for each point on the line, find the corresponding julia-pointcloud in the xy-plane.
 function julia4d(canvas) {
-    var pts;
+    var pts = [];
+    // ## Projection from 4d to 3d
+    (function() {
+        var k;
 
-        var d,p, e, k, w0, wi0, w1, wi1, pts0, kcount, w, wi, j, Cx, Cy, v1, v2, x, y, i;
+        // utility function
+        function sign(x) { return x > 0 ? 1 : -1; }
 
-
-
-
-        k=0;
-        pts = [];
-        w0 = Math.random()*(Math.random() - Math.random());
-        wi0 = Math.random()*(Math.random() - Math.random());
-        w1 = Math.random()*(Math.random() - Math.random());
-        wi1 = Math.random()*(Math.random() - Math.random());
-        w0=wi0=w1=wi1=0;
-        pts0 = [];
-        kcount = 30000;
+        // w0-w1 is the line segment in the mandelbrot plane along which we are tracing the julia sets.
+        var w0, wi0, w1, wi1;
+        // randomise position of line segment
+        w0 = wi0 = w1 = wi1 = 0;
         newpts();
         function newpts() {
-            w0 += Math.random()*-0.5;
-            wi0 += Math.random()*-0.5;
-            w1 += Math.random()*-0.5;
-            wi1 +=  Math.random()*-0.5;
+            w0 += Math.random()-0.5;
+            wi0 += Math.random()-0.5;
+            w1 += Math.random()-0.5;
+            wi1 +=  Math.random()-0.5;
             k = 0;
-            if(running) {
-                setTimeout(drawpts,0);
-            }
+            // dispatch to do the actual projection
+            setTimeout(drawpts,0);
         }
-        function sign(x) {
-            return x>0?1:-1;
-        }
-        function drawpts() {
-            for(;;){
-            var z, zi, t, ti, r, s, Newz, Newzi;
-            var random = Math.random;
-            var sqrt = Math.sqrt;
-            w = k/kcount*w0 + (1-k/kcount) * w1;
-            wi = k/kcount*wi0 + (1-k/kcount) * wi1;
-                z = random() * 2 - 1;
-                zi = random() * 2 - 1;
-                for(j=0;j<20;++j) {
-                        Cx = w;
-                        Cy = wi;
 
-                        z=z-Cx;
-                        zi=zi-Cy;
-                        if (z>0)
-                        {
+        // trace along the line segment and generate the 3d point cloud
+        function drawpts() {
+            // number of discrete samplings along the line in the mandelbrot plane
+            var kcount = 30000;
+            for(;;){
+                if(!running) {
+                    return;
+                }
+                var Newz, Newzi;
+                var random = Math.random;
+                var sqrt = Math.sqrt;
+                var w = k/kcount*w0 + (1-k/kcount) * w1;
+                var wi = k/kcount*wi0 + (1-k/kcount) * wi1;
+                var z = random() * 2 - 1;
+                var zi = random() * 2 - 1;
+                for(var j=0;j<20;++j) {
+                    var Cx = w;
+                    var Cy = wi;
+                    z=z-Cx;
+                    zi=zi-Cy;
+                    if (z>0) {
                          Newz=sqrt((z+sqrt(z*z+zi*zi))/2);
                          Newzi=zi/(2*Newz);
-                         }
-                         else /* ZX <= 0 */
-                         {
-                          if (z<0)
-                             {
-                              Newzi=sign(zi)*sqrt((-z+sqrt(z*z+zi*zi))/2);
-                              Newz=zi/(2*Newzi);
-                              }
-                              else /* z=0 */
-                              {
-                               Newz=sqrt(Math.abs(zi)/2);
-                               if (Newz>0) Newzi=zi/(2*Newz);
-                                  else Newzi=0;
-                              }
-                         }
-                      if (random()<0.5)
-                      {
-                          z=Newz;
-                          zi=Newzi;
-                          }
-                      else {z=-Newz;
-                          zi=-Newzi; }
-
-
+                    } else /* ZX <= 0 */ {
+                        if(z<0) {
+                            Newzi=sign(zi)*sqrt((-z+sqrt(z*z+zi*zi))/2);
+                            Newz=zi/(2*Newzi);
+                        } else /* z=0 */ {
+                            Newz=sqrt(Math.abs(zi)/2);
+                            if (Newz>0) {
+                                Newzi=zi/(2*Newz);
+                            } else {
+                                Newzi=0;
+                            }
+                        }
+                    }
+                    if (random()<0.5) {
+                        z=Newz;
+                        zi=Newzi;
+                    } else {
+                        z=-Newz;
+                        zi=-Newzi;
+                    }
                     pts[k] = ({x:z/8, y:zi/8, z:k/kcount/2-0.25});
                 }
-            ++k;
-            if(k%300===0) {
-            if(k < kcount) {
-                setTimeout(drawpts, 0);
-            } else {
-                setTimeout(newpts,0);
-            }
-                return
+                ++k;
+
+                if(k%300===0) {
+                    if(k < kcount) {
+                        setTimeout(drawpts, 0);
+                    } else {
+                        setTimeout(newpts,0);
+                    }
+                    return;
+                }
             }
         }
-        }
+    })();
 
 
     // ## Project the 3d point cloud onto the screen
@@ -131,6 +128,9 @@ function julia4d(canvas) {
             }
         }
         function drawToScreen() {
+                if(!running) {
+                    return;
+                }
                 clear();
                 for(var i=0;i<pts.length;++i) {
                     var p = pts[i];
@@ -139,9 +139,7 @@ function julia4d(canvas) {
                 }
                 ++baseAngle;
                 ctx.putImageData(image,0,0);
-                if(running) {
-                    setTimeout(drawToScreen, 20);
-                }
+                setTimeout(drawToScreen, 20);
         }
         drawToScreen();
     })();
