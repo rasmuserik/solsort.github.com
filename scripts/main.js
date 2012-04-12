@@ -121,6 +121,7 @@ var apps = {
     'source/': require('showSource').app,
     timelog: require('timelog').app,
     'sierp': require('sierp').app,
+    'listboxer': require('listboxer').app,
     'graph': require('graph').app,
     'rasmuserik': require('rasmuserik').app,
     'brown': require('brown').app,
