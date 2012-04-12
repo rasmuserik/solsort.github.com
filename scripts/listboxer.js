@@ -25,9 +25,73 @@ exports.app = {
         ctx.fillStyle = '#ccc';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        //drawLine({val: ['hello world', ['foo', 'bar']], x: 0.5, y: 0.5, w: canvas.width, h: canvas.height});
-        drawLine({val: tree, x: 0.5, y: 0.5, w: canvas.width, h: canvas.height});
+        drawBox({val: tree, x: 0.5, y: 0.5, w: canvas.width, h: canvas.height});
+        //drawBox({val: ['hello world', ['aoo', 'bar', ['baz']], ['boo', 'bar', ['baz'], ['coo', 'bar', ['baz'], ['doo', 'bar', ['baz']], ['eoo', 'bar', ['baz']]]], ['foo', 'bar', ['baz']]], x: 0.5, y: 0.5, w: canvas.width-1, h: canvas.height-1});
 
+        function drawBox(obj) {
+            //console.log('drawBox', obj);
+            var w = obj.w;
+            var h = obj.h;
+            var x = obj.x;
+            var y = obj.y;
+            //console.log('y0:', y);
+            var val = obj.val;
+            var size = lineSize(obj.val, obj.w);
+            if(Array.isArray(val)) {
+                ctx.fillStyle = '#' + (0xc0c0c0 | Math.random() * 0x1000000).toString(16);
+                ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = '#000';
+                ctx.fillRect(x, y, w, 1);
+                ctx.fillRect(x, y, 1, h);
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(x, y+h, w, 1);
+                ctx.fillRect(x+w, y, 1, h);
+                ctx.fillStyle = '#000';
+                x += 8; y += 4; h -= 8; w-= 12;
+                var x1 = x + 8;
+                var w1 = x + 8;
+                for(var i = 0; i < val.length; ++i) {
+                    var childSize = boxSize(val[i], w);
+                    var child = {
+                            x: x,
+                            y: y,
+                            h: childSize.h,
+                            w: w,
+                            val: val[i] };
+                    //console.log('child', child);
+                    if(childSize.w < w) {
+                        drawLine(child);
+                    } else {
+                        drawBox(child);
+                    }
+                    //w = w1; x = x1;
+                    //console.log('y1:', y);
+                    y += childSize.h + 2;
+                    //console.log('y2:', y, childSize);
+                }
+                return;
+            }
+            ctx.fillText(val, x, y + textsize);
+        }
+        function boxSize(obj, w) {
+            var line = lineSize(obj);
+            if(Array.isArray(obj)) {
+                if(obj.boxSize) {
+                    return obj.boxSize;
+                }
+                if(line.w > w && Array.isArray(obj)) {
+                    var h = 2;
+                    for(var i = 0; i < obj.length; ++i) {
+                        h += boxSize(obj[i], w - 12).h + 2;
+                    }
+                    obj.boxSize = {w : w, h: h+4};
+                } else {
+                    obj.boxSize = line;
+                }
+                return obj.boxSize;
+            }
+            return line;
+        }
         
         function drawLine(obj) {
             //console.log('drawLine',(obj));
@@ -39,8 +103,9 @@ exports.app = {
             y = y + (h - size.h) / 2;
             h = size.h;
             var w = size.w;
-            //ctx.fillRect(x, y, w, h);
             if(Array.isArray(val)) {
+                ctx.fillStyle = '#' + (0xc0c0c0 | Math.random() * 0x1000000).toString(16);
+                ctx.fillRect(x, y, w, h);
                 ctx.fillStyle = '#000';
                 ctx.fillRect(x, y, w, 1);
                 ctx.fillRect(x, y, 1, h);
@@ -61,7 +126,6 @@ exports.app = {
                 return;
             }
             if(true || typeof val === 'string') {
-                //console.log('here', val, x, y, textsize);
                 ctx.fillText(val, x, y + textsize);
                 return;
             }
