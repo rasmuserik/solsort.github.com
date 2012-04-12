@@ -1,3 +1,5 @@
+// # Spring-based graph layout
+// This is experimental code, not really intended for reading yet.
 var running;
 exports.app = {
     underbar: true,
@@ -10,14 +12,28 @@ exports.app = {
         canvas.height = this.$.height();
         running = true;
         var basegraph = {};
-        for(var i = 0; i <100; ++i) {
+        var i;
+        for(i = 0; i <100; ++i) {
             basegraph[i] = [];
-            basegraph[Math.random() * Math.random()*i|0].push(i);
-            basegraph[Math.random() * Math.random()*i|0].push(i);
+            //while(i>4 && Math.random() < 0.2) {basegraph[i-2-Math.random() * Math.random()*(i-2)|0].push(i);}
+            basegraph[Math.random() *i|0].push(i);
         }
-        //   var basegraph = {"1":[2],"2":[100,101,102],"3":[4,5,6],"4":[69,46,70,48,71],"5":[59,60],"6":[],"7":[8],"8":[19,31,32,33],"9":[2],"10":[11,12,13,14],"11":[],"12":[],"13":[],"14":[],"15":[16],"16":[],"17":[18],"18":[30],"19":[20,21,22],"20":[41],"21":[],"22":[11,12,13,14,89],"23":[24,25,26,27,28],"24":[],"25":[62],"26":[],"27":[],"28":[],"29":[3,23],"30":[19,31,32,33],"31":[50,51,52,53],"32":[],"33":[64,65,66],"34":[35,36],"35":[89],"36":[],"37":[38],"38":[54],"39":[40],"40":[8],"41":[],"42":[43,44,45],"43":[],"44":[],"45":[],"46":[47],"47":[],"48":[43,44,45],"49":[50,51,52,53],"50":[],"51":[],"52":[],"53":[],"54":[20,21,22],"55":[56,57,58],"56":[69,46,70,48,71],"57":[],"58":[],"59":[],"60":[],"61":[59,60],"62":[72,73,74],"63":[64,65,66],"64":[],"65":[],"66":[],"67":[68],"68":[],"69":[91,92,93,94],"70":[],"71":[15],"72":[],"73":[],"74":[],"75":[34,76,77,67],"76":[90,110],"77":[],"78":[79],"79":[54],"80":[79],"81":[82,83],"82":[],"83":[],"84":[7],"85":[86,87,88],"86":[],"87":[],"88":[],"89":[16],"90":[86,87,88],"91":[],"92":[],"93":[],"94":[],"95":[47],"96":[91,92,93,94],"97":[15,82,83],"98":[34,76,77,67],"99":[100,101,102],"100":[35,36],"101":[],"102":[],"103":[40],"104":[18],"105":[7],"106":[107],"107":[38],"108":[56,57,58],"109":[75],"110":[],"111":[30],"112":[113,97,114],"113":[],"114":[],"115":[113,97,114,116,117],"116":[],"117":[],"118":[98]};
+        for(i=0;i<99;++i) {
+            if(Math.random() < 0.2) {
+                basegraph[i].push(i+1);
+            }
+        }
+        //basegraph = {"?Gårdmand1":["Rasmus2"],"Rasmus2":["Ruth100","Alice101","Ellen102"],"adolf3":["Ingrid4","Helen5","Erling6"],"Ingrid4":["Michal69","eyal46","amnon70","eytan48","Joav71"],"Helen5":["mirah59","benny60"],"Erling6":[],"Anders7":["Elsebeth8"],"Elsebeth8":["Bodil19","Ib31","Gunnar32","Karsten33"],"Ane9":["Rasmus2"],"Anne10":["kat11","km12","johan13","Jakob14"],"kat11":[],"km12":[],"johan13":[],"Jakob14":[],"Bettina15":["Theodor16"],"Theodor16":[],"Bianca17":["Harald18"],"Harald18":["Eivig30"],"Bodil19":["Elsebeth20","Jens21","Niels22"],"Elsebeth20":["Maja41"],"Jens21":[],"Niels22":["kat11","km12","johan13","Jakob14","Rasmus89"],"effi23":["inger24","herluf25","Anne26","hans27","mille28"],"inger24":[],"herluf25":["irene62"],"Anne26":[],"hans27":[],"mille28":[],"effiparent29":["adolf3","effi23"],"Eivig30":["Bodil19","Ib31","Gunnar32","Karsten33"],"Ib31":["Dorthe50","Lisbeth51","Marianne52","Henrik53"],"Gunnar32":[],"Karsten33":["Bodil64","Michael65","Susanne66"],"Ejlif34":["MariAnne35","Kirsten36"],"MariAnne35":["Rasmus89"],"Kirsten36":[],"Elisabeth37":["Jensine38"],"Jensine38":["Harry54"],"Elsebeth39":["Pauline40"],"Pauline40":["Elsebeth8"],"Maja41":[],"elsemarie42":["sarah43","simon44","jakob45"],"sarah43":[],"simon44":[],"jakob45":[],"eyal46":["samuel47"],"samuel47":[],"eytan48":["sarah43","simon44","jakob45"],"Grethe49":["Dorthe50","Lisbeth51","Marianne52","Henrik53"],"Dorthe50":[],"Lisbeth51":[],"Marianne52":[],"Henrik53":[],"Harry54":["Elsebeth20","Jens21","Niels22"],"heinz55":["Rafi56","banini57","giddi58"],"Rafi56":["Michal69","eyal46","amnon70","eytan48","Joav71"],"banini57":[],"giddi58":[],"mirah59":[],"benny60":[],"helmuth61":["mirah59","benny60"],"irene62":["lisa72","melany73","angelica74"],"Hildegard63":["Bodil64","Michael65","Susanne66"],"Bodil64":[],"Michael65":[],"Susanne66":[],"Inger67":["Anne68"],"Anne68":[],"Michal69":["Noam91","imbal92","gallia93","shahar94"],"amnon70":[],"Joav71":["Bettina15"],"lisa72":[],"melany73":[],"angelica74":[],"Jens75":["Ejlif34","Sven76","Peder77","Inger67"],"Sven76":["Michael90","Jens110"],"Peder77":[],"Jørgen78":["Therkel79"],"Therkel79":["Harry54"],"Karen80":["Therkel79"],"kemal81":["minna82","mariarasmussen83"],"minna82":[],"mariarasmussen83":[],"Laura84":["Anders7"],"Marianne85":["Jacob86","Freja87","Cecilie88"],"Jacob86":[],"Freja87":[],"Cecilie88":[],"Rasmus89":["Theodor16"],"Michael90":["Jacob86","Freja87","Cecilie88"],"Noam91":[],"imbal92":[],"gallia93":[],"shahar94":[],"monica95":["samuel47"],"motti96":["Noam91","imbal92","gallia93","shahar94"],"nina97":["Bettina15","minna82","mariarasmussen83"],"Nina98":["Ejlif34","Sven76","Peder77","Inger67"],"Oda99":["Ruth100","Alice101","Ellen102"],"Ruth100":["MariAnne35","Kirsten36"],"Alice101":[],"Ellen102":[],"Peter103":["Pauline40"],"Rasmus104":["Harald18"],"Rasmus105":["Anders7"],"Rasmus106":["Søren107"],"Søren107":["Jensine38"],"ruth108":["Rafi56","banini57","giddi58"],"Svend109":["Jens75"],"Jens110":[],"Thora111":["Eivig30"],"tovehedvig112":["jan113","nina97","hanne114"],"jan113":[],"hanne114":[],"verner115":["jan113","nina97","hanne114","?verner116","?verner117"],"?verner116":[],"?verner117":[],"Æ118":["Nina98"]};
+        basegraph = {}; for(var x=0;x<6;++x) { for(var y=0;y<6;++y) { if(y===5 || x === 5) { if(y!==x) { basegraph[x+','+y] = []; } } else { basegraph[x+','+y] = [(x+1)+','+y, x+','+(y+1)]; } } }
+        for(i = 0; i <40; ++i) {
+            basegraph[i] = [];
+            basegraph[Math.random() *i|0].push(i);
+        }
+        basegraph[0].push('0,0');
 
-//        basegraph = {1:[2,3,4], 2:[3,4], 3:[], 4:[], 5:[1], 6:[2]};
+
+        //basegraph=[]; for(i = 0; i <20; ++i) { basegraph[i] = []; for(var j=0; j <i; ++j) { basegraph[j].push(i); } }
+        //basegraph = {1:[2,3,4], 2:[3,4], 3:[], 4:[], 5:[1], 6:[2]};
         var id;
         for(id in basegraph) {
             basegraph[id] = {
@@ -63,32 +79,42 @@ exports.app = {
         function vneg(v) {
             return {x:-v.x, y:-v.y};
         }
-        var timestep = 0.03;
-        var dampening = 0.3;
-        var spring = 100;
-        var repuls = 100;
+        var spring = 10000;
+        var repuls = 1000;
+        var passt = 0;
+        var gnum;
+        var timestep = 0.005;
+        var dampening = 0.99;
         function run() {
-            timestep = 0.03;//*Math.random() * Math.random();
+            if(passt > 0) {
+                passt -= 0.01;
+            }
+
             // ### Calculate force
             graph.forEach(function(elem) {
                 elem.force = {x:0,y:0};
             });
-            var a = graph[0];
+
             graph.forEach(function(a) {
                 a.children.forEach(function(b) {
-                    var force = vscale(spring, vsub(b.pos, a.pos));
+                    var doit = Math.random()*Math.random()*4 > passt;
+                    if(doit) {
+                    var v = vsub(b.pos, a.pos);
+                    var force = vscale(spring*0.1*Math.min(vlen(v), 100), v);
                     a.force = vadd(a.force, force);
                     b.force = vadd(b.force, vneg(force));
+                    }
                 });
             });
-            
+          
+            var doit = Math.random() * Math.random()*2 > passt;
             graph.forEach(function(a) {
                 graph.forEach(function(b) {
-                    if(a.id !== b.id) {
+                    if(a.id !== b.id && doit) {
                         var v = norm(vsub(a.pos, b.pos));
                         var d = dist(b.pos, a.pos);
                         if(d < Math.PI/2){
-                            a.force = vadd(a.force, vscale(Math.cos(d), v));
+                            a.force = vadd(a.force, vscale(repuls*Math.cos(d), v));
                         }
                     }
                 });
@@ -100,7 +126,8 @@ exports.app = {
             });
             // ### Calculate position
             graph.forEach(function(elem) {
-                elem.pos = vadd(elem.pos, vscale(timestep, elem.velocity));
+                var rescale = vlen(elem.velocity);
+                elem.pos = vadd(elem.pos, vscale(timestep/Math.sqrt(1+rescale), elem.velocity));
             });
             // ### Blit and repeat
             drawGraph();
@@ -128,19 +155,34 @@ exports.app = {
             ctx.clearRect(0,0,canvas.width, canvas.height);
             ctx.beginPath();
             function line(a,b) {
+                ctx.lineWidth = 3;
                 var p1 = transform(a);
                 ctx.moveTo(p1.x, p1.y);
                 var p2 = transform(b);
                 ctx.lineTo(p2.x, p2.y);
             }
+            function dot(a) {
+                var p = transform(a.pos);
+                var sz = 24;
+                ctx.lineWidth = 1;
+                ctx.strokeRect(p.x-sz, p.y-sz, sz*2, sz*2);
+                ctx.fillStyle = 'rgba(255,255,255,.7)';
+                ctx.fillRect(p.x-sz+1, p.y-sz+1, sz*2-2, sz*2-2);
+                ctx.fillStyle = '#000';
+                ctx.fillText(a.id, p.x-17,p.y);
+            }
             graph.forEach(function(a) {
                 a.children.forEach(function(b) {
-                    line(a.pos,b.pos);
+                        line(a.pos,b.pos);
                 });
+
             });
             ctx.stroke();
-            ctx.fillText(JSON.stringify({minx:minx,maxx:maxx,miny:miny,maxy:maxy}), 0,20);
-            ctx.fillText(JSON.stringify(graph.map(function(b){return dist(graph[0].pos, b.pos);})), 0,40);
+            graph.forEach(function(a) {
+                dot(a);
+            });
+            ctx.fillText(passt, 0,20);
+            //ctx.fillText(JSON.stringify(graph.map(function(b){return dist(graph[0].pos, b.pos);})), 0,40);
         }
     },
     stop: function() {
