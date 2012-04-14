@@ -1,30 +1,56 @@
-[def tokenRegEx [RegExp call RegExp [" \\s*(\\\[|\\\]|(\\\\.|\[^\\s\\\[\\\]\])+)] [" g]]]
-[def unescapeRegEx [RegExp call RegExp [" \\\\(.)] [" g]]]
+[# bug: double escaping needed - both for js-strings and yolan strings ]
+[def tokenRegEx [RegExp call RegExp "\\\\s*(\\\\\[|\\\\\]|(\\\\\\\\.|\[^\\\\s\\\\\[\\\\\]\])+)" "g"]]
+
+[def unescapeRegEx [RegExp call RegExp "\\\\\\\\(.)" "g"]]
+
 [def yolan [object]]
+
 [yolan set tokenize [fn [str]
     [def result [array]]
     [str replace tokenRegEx [fn [_ token]
         [result push token]]]
-    [return result]]]
+    result]]
+
 [yolan set parse [fn [tokens]
     [set tokens [tokens reverse]]
     [def stack [array]]
-    [def current [array [" do]]]
+    [def current [array "do"]]
     [while [tokens get length]
         [def token [tokens pop]]
         [cond
-            [[token === [" \[]]
+            [[eq? token "\["]
                 [stack push current]
                 [set current [array]]]
-            [[token === [" \]]]
+            [[eq? token "\]"]
                 [def t current]
                 [set current [stack pop]]
                 [current push t]]
             [true [current push token]]]]
-    [return current]]]
+    current]]
+
+[def complieJS [object
+    [JsTypeOf [fn [syn syn1] [+ "typeof" syn1]]]
+    [do [fn [syn] [[[syn slice 1] map [yolan get toJS]] join ";"]]]
+    [def [fn [syn syn1] [+ "var\ " syn1 "=" [yolan toJs [syn get 2]]]]]
+    [set [fn [syn syn1] [+ syn1 "=" [yolan toJS [syn get 2]]]]]
+    [object [fn [syn syn1] [+ "{" 
+        [[[syn slice 1] map [fn [pair] 
+            [+ [JSON stringify [[pair get 0] toString]] ":" [yolan toJS [pair get 1]]]]]
+        join ","] "}"]]]
+    [fn [fn [syn syn1] [+ "function(" [syn1 join ","] "){" [[[syn slice 2 -1] map [yolan get toJS]] join ";"] ";return" [yolan toJS [syn get [- [syn length] 1]]] "}"]]]
+    [while [fn [syn syn1] [+ "while(" [yolan toJS syn1] "){" [[[syn slice 2] map [yolan get toJS]] join ";"] "}"]]]
+]]
+[# 
+    'cond': function(syn, syn1) { return syn.slice(1).map(function(cond) { return 'if(' + yolan.toJS(cond[0]) + '){' + cond.slice(1).map(yolan.toJS).join(';') + '}'; }).join('else '); },
+    '#': function(syn, syn1) { return ''; },
+    'return': function(syn, syn1) { return 'return ' + yolan.toJS(syn1); },
+    '"': function(syn, syn1) { return JSON.stringify(syn.slice(1).join(' ')); },
+    '+': function(syn, syn1) { return syn.slice(1).map(yolan.toJS).join('+'); },
+    'eq?': function(syn, syn1) { return yolan.toJS(syn[1]) + '===' + yolan.toJS(syn[2]) }]
 
 
-[[require call null [" fs]] readFile [" yolan.yl] [" utf8] [fn [err data]
+
+[[require call null "fs"] readFile "yolan.yl" "utf8" [fn [err data]
     [# console log [JSON stringify [yolan tokenize data]]]
     [# console log [yolan parse [yolan tokenize data]]]
     [console log [JSON stringify [yolan parse [yolan tokenize data]]]]
