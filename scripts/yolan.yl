@@ -25,19 +25,20 @@
                 [def t current]
                 [set current [stack pop]]
                 [current push t]]
-            [true [current push token]]]]
+            [true [current push [token replace unescapeRegEx [fn [_ a] a]]]]]]
     current]]
 
 [def compileJS [object
-    [JsTypeOf [fn [syn syn1] [+ 'typeof' syn1]]]
+    [JsTypeOf [fn [syn syn1] [+ 'typeof\ ' syn1]]]
     [do [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join ';']]]
-    [def [fn [syn syn1] [+ 'var\ ' syn1 '=' [yolan toJs [syn get 2]]]]]
+    [def [fn [syn syn1] [+ 'var\ ' syn1 '=' [yolan toJS [syn get 2]]]]]
     [set [fn [syn syn1] [+ syn1 '=' [yolan toJS [syn get 2]]]]]
     [object [fn [syn syn1] [+ '{' 
         [[[syn slice 1] map [fn [pair] 
             [+ [JSON stringify [[pair get 0] toString]] ':' [yolan toJS [pair get 1]]]]]
         join ','] '}']]]
-    [fn [fn [syn syn1] [+ 'function(' [syn1 join ','] '){' [[[syn slice 2 -1] map [yolan get 'toJS']] join ';'] ';return' [yolan toJS [syn get [- [syn length] 1]]] '}']]]
+    [array [fn [syn syn1] [+ '\[' [[[syn slice 1] map [yolan get 'toJS']] join ',']'\]']]]
+    [fn [fn [syn syn1] [+ 'function(' [syn1 join ','] '){' [[[syn slice 2 -1] map [yolan get 'toJS']] join ';'] ';return\ ' [yolan toJS [syn get [- [syn get 'length'] 1]]] '}']]]
     [while [fn [syn syn1] [+ 'while(' [yolan toJS syn1] '){' [[[syn slice 2] map [yolan get 'toJS']] join ';'] '}']]]
     [cond [fn [syn] 
         [[[syn slice 1] map 
@@ -45,28 +46,32 @@
                 'if(' 
                 [yolan toJS [pair get 0]] 
                 '){' 
-                [[pair slice 1] map [yolan get 'toJS'] join ';'] 
+                [[[pair slice 1] map [yolan get 'toJS']] join ';'] 
                 '}']]] join 'else\ ']]]
      [# [fn [] '']]
      [return [fn [syn syn1] [+ 'return\ ' [yolan toJS syn1]]]]
      [+ [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '+']]]
+     [- [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '-']]]
      [eq? [fn [syn syn1] [+ [yolan toJS syn1] '===' [yolan toJS [syn get 2]]]]]
 ]]
-
-[yolan set id [fn [a] a]]
 
 [yolan set toJS [fn [syn]
     [def syn0 [syn get 0]]
     [def syn1 [syn get 1]]
     [cond
-        [[eq? [JsTypeOf syn] "string"] [return syn]]
-]
-    true
+        [[eq? [JsTypeOf syn] 'string'] [return syn]]
+        [[compileJS get syn0] [return [[compileJS get syn0] call null syn syn1]]]
+        [[eq? syn1 'set'] [return [+ syn0 '.' [syn get 2] '=' [yolan toJS [syn get 3]]]]]
+        [[eq? syn1 'get'] [return [+ syn0 '\[' [yolan toJS [syn get 2]] '\]']]]
+        [[eq? [JsTypeOf syn0] 'string'] [ return [+ [yolan toJS syn0] '.' syn1 '(' [[[syn slice 2] map [yolan get 'toJS']] join ','] ')']]]
+    ]
+    [+ [yolan toJS syn0] '.' syn1 '(' [[[syn slice 2] map [yolan get 'toJS']] join ','] ')']
 ]]
 
 
 [[require call null 'fs'] readFile 'yolan.yl' 'utf8' [fn [err data]
     [# console log [JSON stringify [yolan tokenize data]]]
     [# console log [yolan parse [yolan tokenize data]]]
-    [console log [JSON stringify [yolan parse [yolan tokenize data]]]]
+    [console log [yolan toJS [yolan parse [yolan tokenize data]]]]
+    [# console log [JSON stringify [yolan parse [yolan tokenize data]]]]
 ]]

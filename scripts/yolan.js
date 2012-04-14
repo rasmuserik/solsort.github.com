@@ -50,6 +50,7 @@ var compileJS= {
     'return': function(syn, syn1) { return 'return ' + yolan.toJS(syn1); }, 
     //'"': function(syn, syn1) { return JSON.stringify(syn.slice(1).join(' ')); },
     '+': function(syn, syn1) { return syn.slice(1).map(yolan.toJS).join('+'); },
+    '-': function(syn, syn1) { return syn.slice(1).map(yolan.toJS).join('-'); },
     'eq?': function(syn, syn1) { return yolan.toJS(syn[1]) + '===' + yolan.toJS(syn[2]) } 
 }
 
@@ -65,16 +66,11 @@ yolan.toJS = function(syn) {
     if(syn1 === 'set') {
         return syn0 + '.' + syn[2] + '=' + yolan.toJS(syn[3]);
     }
-    if(syn1 === '.') {
-        return syn0 + '["' + syn[2] + '"]';
-    }
     if(syn1 === 'get') {
         return syn0 + '[' + yolan.toJS(syn[2]) + ']';
     }
     if(typeof syn[1] === 'string') {
         return yolan.toJS(syn0) + '.' + syn1 + '(' + syn.slice(2).map(yolan.toJS).join(',') + ')';
-    } else {
-        return yolan.toJS(syn0) + '[' + yolan.toJS(syn1) + '](' + syn.slice(2).map(yolan.toJS).join(',') + ')';
     }
 }
 
@@ -83,8 +79,5 @@ require.call(null, 'fs').readFile('yolan.yl', 'utf8', function(err, data) {
     var tokens = yolan.tokenize(data);
     var ast = yolan.parse(tokens);
     var js = yolan.toJS(ast);
-    console.log();
-    console.log(js);
-    console.log();
     eval(js);
 });
