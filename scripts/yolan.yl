@@ -15,7 +15,7 @@
     [set tokens [tokens reverse]]
     [def stack [array]]
     [def current [array 'do']]
-    [while [tokens get length]
+    [while [tokens get 'length']
         [def token [tokens pop]]
         [cond
             [[eq? token '\[']
@@ -30,26 +30,26 @@
 
 [def compileJS [object
     [JsTypeOf [fn [syn syn1] [+ 'typeof' syn1]]]
-    [do [fn [syn] [[[syn slice 1] map [yolan get toJS]] join ';']]]
+    [do [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join ';']]]
     [def [fn [syn syn1] [+ 'var\ ' syn1 '=' [yolan toJs [syn get 2]]]]]
     [set [fn [syn syn1] [+ syn1 '=' [yolan toJS [syn get 2]]]]]
     [object [fn [syn syn1] [+ '{' 
         [[[syn slice 1] map [fn [pair] 
             [+ [JSON stringify [[pair get 0] toString]] ':' [yolan toJS [pair get 1]]]]]
         join ','] '}']]]
-    [fn [fn [syn syn1] [+ 'function(' [syn1 join ','] '){' [[[syn slice 2 -1] map [yolan get toJS]] join ';'] ';return' [yolan toJS [syn get [- [syn length] 1]]] '}']]]
-    [while [fn [syn syn1] [+ 'while(' [yolan toJS syn1] '){' [[[syn slice 2] map [yolan get toJS]] join ';'] '}']]]
+    [fn [fn [syn syn1] [+ 'function(' [syn1 join ','] '){' [[[syn slice 2 -1] map [yolan get 'toJS']] join ';'] ';return' [yolan toJS [syn get [- [syn length] 1]]] '}']]]
+    [while [fn [syn syn1] [+ 'while(' [yolan toJS syn1] '){' [[[syn slice 2] map [yolan get 'toJS']] join ';'] '}']]]
     [cond [fn [syn] 
         [[[syn slice 1] map 
             [fn [pair] [+
                 'if(' 
                 [yolan toJS [pair get 0]] 
                 '){' 
-                [[pair slice 1] map [yolan get toJS] join ';'] 
+                [[pair slice 1] map [yolan get 'toJS'] join ';'] 
                 '}']]] join 'else\ ']]]
      [# [fn [] '']]
      [return [fn [syn syn1] [+ 'return\ ' [yolan toJS syn1]]]]
-     [+ [fn [syn] [[[syn slice 1] map [yolan get toJS]] join '+']]]
+     [+ [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '+']]]
      [eq? [fn [syn syn1] [+ [yolan toJS syn1] '===' [yolan toJS [syn get 2]]]]]
 ]]
 
