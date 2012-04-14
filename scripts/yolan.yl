@@ -72,6 +72,6 @@
 [[require call null 'fs'] readFile 'yolan.yl' 'utf8' [fn [err data]
     [# console log [JSON stringify [yolan tokenize data]]]
     [# console log [yolan parse [yolan tokenize data]]]
-    [console log [yolan toJS [yolan parse [yolan tokenize data]]]]
-    [# console log [JSON stringify [yolan parse [yolan tokenize data]]]]
+    [# console log [yolan toJS [yolan parse [yolan tokenize data]]]]
+    [console log [JSON stringify [yolan parse [yolan tokenize data]]]]
 ]]
