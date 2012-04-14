@@ -3,12 +3,14 @@ exports.app = {
     underbar: true,
     type: 'canvas',
     start: function() {
-        initTree();
-        treeParent(tree);
         var canvas = this.elem;
         canvas.height = this.$.height();
         canvas.width = this.$.width();
+
         var ctx = canvas.getContext('2d');
+
+        initTree();
+        treeParent(tree);
 
         function treeParent(tree, prev) {
             if(Array.isArray(tree)) {
@@ -20,12 +22,12 @@ exports.app = {
 
         var textsize = 14;
         ctx.font = textsize+'px sans-serif';
-        ctx.lineWidth = 0.3;
+        ctx.lineWidth = 1;
         ctx.textBaseline= 'bottom';
         ctx.fillStyle = '#ccc';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        drawBox({val: tree, x: 0.5, y: 0.5, w: canvas.width, h: canvas.height});
+        drawBox({val: tree, x: 0, y: 0, w: canvas.width, h: canvas.height});
         //drawBox({val: ['hello world', ['aoo', 'bar', ['baz']], ['boo', 'bar', ['baz'], ['coo', 'bar', ['baz'], ['doo', 'bar', ['baz']], ['eoo', 'bar', ['baz']]]], ['foo', 'bar', ['baz']]], x: 0.5, y: 0.5, w: canvas.width-1, h: canvas.height-1});
 
         function drawBox(obj) {

@@ -95,8 +95,8 @@ function relayoutStyle() {
         .css('top', vbar?1:barsize+'%')
         .css('overflow', 'visible')
         .css('width', vbar?(100-barsize)+'%':'100%')
-        //.css('margin-top', 1)
-        .css('padding-bottom', 1)
+        .css('margin-top', 1)
+        //.css('padding-bottom', 1)
         .css('height', (app.type === 'scrollable') ? 'auto' : vbar?'100%':(100-barsize)+'%');
     window.scrollTo(0,1);
 }
