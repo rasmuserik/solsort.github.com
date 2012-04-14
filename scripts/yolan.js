@@ -48,7 +48,7 @@ var compileJS= {
     'cond': function(syn, syn1) { return syn.slice(1).map(function(cond) { return 'if(' + yolan.toJS(cond[0]) + '){' + cond.slice(1).map(yolan.toJS).join(';') + '}'; }).join('else '); }, 
     '#': function(syn, syn1) { return ''; }, 
     'return': function(syn, syn1) { return 'return ' + yolan.toJS(syn1); }, 
-    '"': function(syn, syn1) { return JSON.stringify(syn.slice(1).join(' ')); },
+    //'"': function(syn, syn1) { return JSON.stringify(syn.slice(1).join(' ')); },
     '+': function(syn, syn1) { return syn.slice(1).map(yolan.toJS).join('+'); },
     'eq?': function(syn, syn1) { return yolan.toJS(syn[1]) + '===' + yolan.toJS(syn[2]) } 
 }

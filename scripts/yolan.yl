@@ -28,7 +28,7 @@
             [true [current push token]]]]
     current]]
 
-[def complieJS [object
+[def compileJS [object
     [JsTypeOf [fn [syn syn1] [+ "typeof" syn1]]]
     [do [fn [syn] [[[syn slice 1] map [yolan get toJS]] join ";"]]]
     [def [fn [syn syn1] [+ "var\ " syn1 "=" [yolan toJs [syn get 2]]]]]
@@ -39,12 +39,20 @@
         join ","] "}"]]]
     [fn [fn [syn syn1] [+ "function(" [syn1 join ","] "){" [[[syn slice 2 -1] map [yolan get toJS]] join ";"] ";return" [yolan toJS [syn get [- [syn length] 1]]] "}"]]]
     [while [fn [syn syn1] [+ "while(" [yolan toJS syn1] "){" [[[syn slice 2] map [yolan get toJS]] join ";"] "}"]]]
+    [cond [fn [syn] 
+        [[[syn slice 1] map 
+            [fn [pair] [+
+                "if(" 
+                [yolan toJS [pair get 0]] 
+                "){" 
+                [[pair slice 1] map [yolan get toJS] join ';'] 
+                "}"]]] join "else\ "]]]
+     [# [fn [] ""]]
+     [return [fn [syn syn1] [+ "return\ " [yolan toJS syn1]]]]
+     [+ [fn [syn] [[[syn slice 1] map [yolan get toJS]] join '+']]]
+     [eq? [fn [syn syn1] [+ [yolan toJS syn1] "===" [yolan toJS [syn get 2]]]]]
 ]]
 [# 
-    'cond': function(syn, syn1) { return syn.slice(1).map(function(cond) { return 'if(' + yolan.toJS(cond[0]) + '){' + cond.slice(1).map(yolan.toJS).join(';') + '}'; }).join('else '); },
-    '#': function(syn, syn1) { return ''; },
-    'return': function(syn, syn1) { return 'return ' + yolan.toJS(syn1); },
-    '"': function(syn, syn1) { return JSON.stringify(syn.slice(1).join(' ')); },
     '+': function(syn, syn1) { return syn.slice(1).map(yolan.toJS).join('+'); },
     'eq?': function(syn, syn1) { return yolan.toJS(syn[1]) + '===' + yolan.toJS(syn[2]) }]
 
