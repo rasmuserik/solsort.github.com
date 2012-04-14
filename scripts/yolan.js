@@ -55,7 +55,6 @@ var compileJS= {
 
 yolan.toJS = function(syn) {
     var syn0 = syn[0];
-    var len = syn.length;
     var syn1 = syn[1];
     if(typeof(syn) === 'string') {
         return syn;
@@ -66,12 +65,11 @@ yolan.toJS = function(syn) {
     if(syn1 === 'set') {
         return syn0 + '.' + syn[2] + '=' + yolan.toJS(syn[3]);
     }
+    if(syn1 === '.') {
+        return syn0 + '["' + syn[2] + '"]';
+    }
     if(syn1 === 'get') {
-        if(typeof syn[2] === 'string') {
-            return syn0 + '["' + syn[2] + '"]';
-        } else {
-            return syn0 + '[' + yolan.toJS(syn[2]) + ']';
-        }
+        return syn0 + '[' + yolan.toJS(syn[2]) + ']';
     }
     if(typeof syn[1] === 'string') {
         return yolan.toJS(syn0) + '.' + syn1 + '(' + syn.slice(2).map(yolan.toJS).join(',') + ')';

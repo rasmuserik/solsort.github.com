@@ -52,10 +52,17 @@
      [+ [fn [syn] [[[syn slice 1] map [yolan get toJS]] join '+']]]
      [eq? [fn [syn syn1] [+ [yolan toJS syn1] '===' [yolan toJS [syn get 2]]]]]
 ]]
-[# 
-    '+': function(syn, syn1) { return syn.slice(1).map(yolan.toJS).join('+'); },
-    'eq?': function(syn, syn1) { return yolan.toJS(syn[1]) + '===' + yolan.toJS(syn[2]) }]
 
+[yolan set id [fn [a] a]]
+
+[yolan set toJS [fn [syn]
+    [def syn0 [syn get 0]]
+    [def syn1 [syn get 1]]
+    [cond
+        [[eq? [JsTypeOf syn] "string"] [return syn]]
+]
+    true
+]]
 
 
 [[require call null 'fs'] readFile 'yolan.yl' 'utf8' [fn [err data]
