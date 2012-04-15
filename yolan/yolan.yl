@@ -108,6 +108,12 @@
         [[[pair slice 1] map [yolan get 'toJS']] join ';']
         '}']]] join
      'else\ ']]]
+  [if [fn [syn syn1]
+    [+ 'if('
+     [yolan toJS syn1]
+     '){'
+     [[[syn slice 2] map [yolan get 'toJS']] join ';']
+     '}']]]
   [# [fn [] '']]
   [return [fn [syn syn1] [+ 'return\ ' [yolan toJS syn1]]]]
   [throw [fn [syn syn1] [+ 'throw\ ' [yolan toJS syn1]]]]
@@ -146,33 +152,34 @@
 
 [def action [[process get 'argv'] get 2]]
 
-[cond [[eq? action 'compile'] [fs readFile
-   [[process get 'argv'] get 3]
-   'utf8'
-   [fn [err data]
-    [cond [err [return err]]]
-    [# compile yolan to js]
-    [def js [yolan toJS [yolan parse [yolan tokenize data]]]]
-    [# reformat js]
-    [def uglify [require call null 'uglify-js']]
-    [def jsp [uglify get 'parser']]
-    [def pro [uglify get 'uglify']]
-    [def ast [jsp parse js]]
-    [set js [pro gen_code ast [object [beautify true]]]]
-    [fs writeFile
-     [[process get 'argv'] get 4]
-     js
-     [fn [err data] [cond [err [return err]]] true]]]]]
- [[eq? action 'prettyprint'] [fs readFile
-   [[process get 'argv'] get 3]
-   'utf8'
-   [fn [err data]
-    [cond [err [return err]]]
-    [def ast [yolan parse [yolan tokenize data]]]
-    [def src [[[ast slice 1] map [yolan get 'prettyprint']] join '\\n\\n']]
-    [fs writeFile
-     [[process get 'argv'] get 4]
-     src
-     [fn [err data] [cond [err [return err]]] true]]
-    [console log src]
-    true]]]]
+[if [eq? action 'compile']
+ [fs readFile
+  [[process get 'argv'] get 3]
+  'utf8'
+  [fn [err data]
+   [if err [return err]]
+   [# compile yolan to js]
+   [def js [yolan toJS [yolan parse [yolan tokenize data]]]]
+   [# reformat js]
+   [def uglify [require call null 'uglify-js']]
+   [def jsp [uglify get 'parser']]
+   [def pro [uglify get 'uglify']]
+   [def ast [jsp parse js]]
+   [set js [pro gen_code ast [object [beautify true]]]]
+   [fs writeFile
+    [[process get 'argv'] get 4]
+    js
+    [fn [err data] [if err [return err]] true]]]]]
+
+[if [eq? action 'prettyprint']
+ [fs readFile
+  [[process get 'argv'] get 3]
+  'utf8'
+  [fn [err data]
+   [if err [return err]]
+   [def ast [yolan parse [yolan tokenize data]]]
+   [def src [[[ast slice 1] map [yolan get 'prettyprint']] join '\\n\\n']]
+   [fs writeFile
+    [[process get 'argv'] get 4]
+    src
+    [fn [err data] [cond [err [return err]]] true]]]]]

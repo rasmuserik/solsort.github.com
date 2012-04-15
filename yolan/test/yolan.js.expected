@@ -109,6 +109,9 @@ var compileJS = {
             return "if(" + yolan.toJS(pair[0]) + "){" + pair.slice(1).map(yolan["toJS"]).join(";") + "}";
         }).join("else ");
     },
+    "if": function(syn, syn1) {
+        return "if(" + yolan.toJS(syn1) + "){" + syn.slice(2).map(yolan["toJS"]).join(";") + "}";
+    },
     "#": function() {
         return "";
     },
@@ -185,20 +188,20 @@ if (action === "compile") {
             return true;
         });
     });
-} else if (action === "prettyprint") {
+}
+
+if (action === "prettyprint") {
     fs.readFile(process["argv"][3], "utf8", function(err, data) {
         if (err) {
             return err;
         }
         var ast = yolan.parse(yolan.tokenize(data));
         var src = ast.slice(1).map(yolan["prettyprint"]).join("\n\n");
-        fs.writeFile(process["argv"][4], src, function(err, data) {
+        return fs.writeFile(process["argv"][4], src, function(err, data) {
             if (err) {
                 return err;
             }
             return true;
         });
-        console.log(src);
-        return true;
     });
 }
