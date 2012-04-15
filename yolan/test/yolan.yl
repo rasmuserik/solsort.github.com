@@ -28,6 +28,40 @@
             [true [current push [token replace unescapeRegEx [fn [_ a] a]]]]]]
     current]]
 
+[def indent 0]
+[yolan set nspace [fn [n]
+    [def result [array]]
+    [while [< 0 n] [set n [- n 1]] [result push '\ ']]
+    [result join '']]]
+    
+[yolan set prettyprint [fn [ast]
+    [def pos 0]
+    [def width 78]
+    [def indentStep 2]
+    [def acc [array]]
+    [def pp [fn [ast]
+        [cond 
+            [[eq? 'string' [JsTypeOf ast]] [acc push ast ]]
+            [[Array isArray ast] 
+                [def str [+ '\[' [[ast map yolan.prettyprint] join '\ ' ] '\]']]
+                [set indent [+ indent 1]]
+                [cond 
+                  [[< [- width indent [str get 'length']] 0]
+                    [acc push '\[']
+                    [acc push [yolan prettyprint [ast get 0]]]
+                    [acc push '\ ']
+                    [acc push [[[ast slice 1] map yolan.prettyprint] join [+ '\\n' [yolan nspace indent]]]]
+                    [acc push '\]']]
+                  [true [acc push str]]]
+                [set indent [- indent 1]]
+            ]
+        ]
+        true
+    ]]
+    [pp call null ast]
+    [acc join '']
+]]
+
 [def compileJS [object
     [JsTypeOf [fn [syn syn1] [+ 'typeof\ ' syn1]]]
     [do [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join ';']]]
@@ -53,6 +87,11 @@
      [throw [fn [syn syn1] [+ 'throw\ ' [yolan toJS syn1]]]]
      [+ [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '+']]]
      [- [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '-']]]
+     [and [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '&&']]]
+     [or [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '||']]]
+     [not [fn [syn] [+ '!' [yolan toJS syn1]]]]
+     [< [fn [syn syn1] [+ [yolan toJS syn1] '<' [yolan toJS [syn get 2]]]]]
+     [<= [fn [syn syn1] [+ [yolan toJS syn1] '<=' [yolan toJS [syn get 2]]]]]
      [eq? [fn [syn syn1] [+ [yolan toJS syn1] '===' [yolan toJS [syn get 2]]]]]
 ]]
 
@@ -69,10 +108,12 @@
     [+ [yolan toJS syn0] '.' syn1 '(' [[[syn slice 2] map [yolan get 'toJS']] join ','] ')']
 ]]
 
+[def fs [require call null 'fs']]
+
 [def action [[process get 'argv'] get 2]]
+
 [cond 
     [[eq? action 'compile']
-        [def fs [require call null 'fs']]
         [fs readFile [[process get 'argv'] get 3] 'utf8' [fn [err data]
             [cond [err [return err]]]
             [# compile yolan to js]
@@ -84,6 +125,12 @@
             [def ast [jsp parse js]]
             [set js [pro gen_code ast [object [beautify true]]]]
             [fs writeFile [[process get 'argv'] get 4] js [fn [err data] [cond [err [return err]]] true]]]]]
-    [[eq? action 'hello']
-        [console log 'hello']]
+    [[eq? action 'prettyprint']
+        [fs readFile [[process get 'argv'] get 3] 'utf8' [fn [err data]
+            [cond [err [return err]]]
+            [def ast [yolan parse [yolan tokenize data]]]
+            [console log [yolan prettyprint ast]]
+            true
+        ]]
+    ]
 ]

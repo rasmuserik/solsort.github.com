@@ -1,3 +1,4 @@
+rm test/yolan.js
 # compile the new compiler
 node yolan.js compile yolan.yl yolan.new.js
 # compile the new compiler with itself

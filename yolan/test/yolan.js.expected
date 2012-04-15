@@ -34,6 +34,45 @@ yolan.parse = function(tokens) {
     return current;
 };
 
+var indent = 0;
+
+yolan.nspace = function(n) {
+    var result = [];
+    while (0 < n) {
+        n = n - 1;
+        result.push(" ");
+    }
+    return result.join("");
+};
+
+yolan.prettyprint = function(ast) {
+    var pos = 0;
+    var width = 78;
+    var indentStep = 2;
+    var acc = [];
+    var pp = function(ast) {
+        if ("string" === typeof ast) {
+            acc.push(ast);
+        } else if (Array.isArray(ast)) {
+            var str = "[" + ast.map(yolan.prettyprint).join(" ") + "]";
+            indent = indent + 1;
+            if (width - indent - str["length"] < 0) {
+                acc.push("[");
+                acc.push(yolan.prettyprint(ast[0]));
+                acc.push(" ");
+                acc.push(ast.slice(1).map(yolan.prettyprint).join("\n" + yolan.nspace(indent)));
+                acc.push("]");
+            } else if (true) {
+                acc.push(str);
+            }
+            indent = indent - 1;
+        }
+        return true;
+    };
+    pp.call(null, ast);
+    return acc.join("");
+};
+
 var compileJS = {
     JsTypeOf: function(syn, syn1) {
         return "typeof " + syn1;
@@ -81,6 +120,21 @@ var compileJS = {
     "-": function(syn) {
         return syn.slice(1).map(yolan["toJS"]).join("-");
     },
+    and: function(syn) {
+        return syn.slice(1).map(yolan["toJS"]).join("&&");
+    },
+    or: function(syn) {
+        return syn.slice(1).map(yolan["toJS"]).join("||");
+    },
+    not: function(syn) {
+        return "!" + yolan.toJS(syn1);
+    },
+    "<": function(syn, syn1) {
+        return yolan.toJS(syn1) + "<" + yolan.toJS(syn[2]);
+    },
+    "<=": function(syn, syn1) {
+        return yolan.toJS(syn1) + "<=" + yolan.toJS(syn[2]);
+    },
     "eq?": function(syn, syn1) {
         return yolan.toJS(syn1) + "===" + yolan.toJS(syn[2]);
     }
@@ -103,10 +157,11 @@ yolan.toJS = function(syn) {
     return yolan.toJS(syn0) + "." + syn1 + "(" + syn.slice(2).map(yolan["toJS"]).join(",") + ")";
 };
 
+var fs = require.call(null, "fs");
+
 var action = process["argv"][2];
 
 if (action === "compile") {
-    var fs = require.call(null, "fs");
     fs.readFile(process["argv"][3], "utf8", function(err, data) {
         if (err) {
             return err;
@@ -126,6 +181,13 @@ if (action === "compile") {
             return true;
         });
     });
-} else if (action === "hello") {
-    console.log("hello");
+} else if (action === "prettyprint") {
+    fs.readFile(process["argv"][3], "utf8", function(err, data) {
+        if (err) {
+            return err;
+        }
+        var ast = yolan.parse(yolan.tokenize(data));
+        console.log(yolan.prettyprint(ast));
+        return true;
+    });
 }
