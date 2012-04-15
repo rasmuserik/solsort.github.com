@@ -80,51 +80,6 @@
   [set indent [- indent 1]]
   [result join '']]]
 
-[# yolan set prettyprint
- [fn [ast]
-  [def width 78]
-  [def indentStep 2]
-  [def acc [array]]
-  [if [eq? indent 0] [set pos 0]]
-  [def pp
-   [fn [ast]
-    [cond
-     [[eq? 'string' [JsTypeOf ast]]
-      [acc push [ast replace escapeRegEx [fn [s] [+ '\\\\' s]]]]]
-     [[Array isArray ast]
-      [def str [+ '\[' [[ast map [yolan get 'prettyprint']] join '\ '] '\]']]
-      [set indent [+ indent 1]]
-      [cond
-       [[< width [+ pos [str get 'length']]] [acc push '\[']
-        [def prev [yolan prettyprint [ast get 0]]]
-        [acc push prev]
-        [def i 1]
-        [set pos [+ pos 1]]
-        [def space [+ '\\n' [yolan nspace indent]]]
-        [def isFirst true]
-        [while [< i [ast get 'length']]
-         [def current [ast get i]]
-         [def currentStr [yolan prettyprint current]]
-         [cond
-          [[and
-            [or isFirst
-             [and [eq? [JsTypeOf prev] 'string']
-              [eq? [JsTypeOf current] 'string']]]
-            [or true [< pos width]]]
-           [set isFirst false]
-           [set pos [+ pos 1]]
-           [acc push '\ ']]
-          [true [set pos indent] [acc push space]]]
-         [acc push currentStr]
-         [set pos [+ pos [currentStr get 'length']]]
-         [set i [+ i 1]]]
-        [acc push '\]']]
-       [true [acc push str]]]
-      [set indent [- indent 1]]]]
-    true]]
-  [pp call null ast]
-  [acc join '']]]
-
 [def compileJS
  [object [JsTypeOf [fn [syn syn1] [+ 'typeof\ ' [yolan toJS syn1]]]]
   [do [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join ';']]]
