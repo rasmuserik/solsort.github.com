@@ -1,4 +1,25 @@
-[# bug: double escaping needed - both for js-strings and yolan strings]
+[# bug:
+ double
+ escaping
+ needed
+ -
+ both
+ for
+ js-strings
+ and
+ yolan
+ strings
+ yadda
+ yadda
+ some
+ more
+ strings
+ to
+ demonstrate
+ long
+ list
+ prettyprint
+ bug]
 
 [def tokenRegEx
  [RegExp call
@@ -47,7 +68,6 @@
 [yolan set
  prettyprint
  [fn [ast]
-  [def pos 0]
   [def width 78]
   [def indentStep 2]
   [def acc [array]]
@@ -57,11 +77,14 @@
      [[Array isArray ast] [def str [+ '\[' [[ast map [yolan get 'prettyprint']] join '\ '] '\]']]
       [set indent [+ indent 1]]
       [cond [[< [- width indent [str get 'length']] 0] [acc push '\[']
-        [acc push [yolan prettyprint [ast get 0]]]
-        [acc push '\ ']
-        [acc push
-         [[[ast slice 1] map [yolan get 'prettyprint']] join
-          [+ '\\n' [yolan nspace indent]]]]
+        [def prev [yolan prettyprint [ast get 0]]]
+        [acc push prev]
+        [def i 1]
+        [def space [yolan nspace indent]]
+        [while [< i [ast get 'length']]
+         [acc push space]
+         [acc push [yolan prettyprint [acc get i]]]
+         [set i [+ i 1]]]
         [acc push '\]']]
        [true [acc push str]]]
       [set indent [- indent 1]]]]

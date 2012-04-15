@@ -1,4 +1,4 @@
-[# bug: double escaping needed - both for js-strings and yolan strings]
+[# bug: double escaping needed - both for js-strings and yolan strings yadda yadda some more strings to demonstrate long list prettyprint bug]
 
 [def tokenRegEx
  [RegExp call
@@ -44,10 +44,10 @@
   [while [< 0 n] [set n [- n 1]] [result push '\ ']]
   [result join '']]]
 
+[def pos 0]
 [yolan set
  prettyprint
  [fn [ast]
-  [def pos 0]
   [def width 78]
   [def indentStep 2]
   [def acc [array]]
@@ -56,10 +56,40 @@
     [cond [[eq? 'string' [JsTypeOf ast]] [acc push [ast replace escapeRegEx [fn [s] [+ '\\\\' s]]]]]
      [[Array isArray ast] [def str [+ '\[' [[ast map [yolan get 'prettyprint']] join '\ '] '\]']]
       [set indent [+ indent 1]]
-      [cond [[< [- width indent [str get 'length']] 0] [acc push '\[']
-        [acc push [yolan prettyprint [ast get 0]]]
-        [acc push '\ ']
-        [acc push
+      [cond [[< width [+ pos [str get 'length']]] [acc push '\[']
+        [def prev [yolan prettyprint [ast get 0]]]
+        [acc push prev]
+        [def i 1]
+        [set pos [+ pos 1]]
+        [def space [+ '\\n' [yolan nspace indent]]]
+        [def isFirst true]
+        [while [< i [ast get 'length']]
+            [def current [ast get i]]
+            [def currentStr [yolan prettyprint current]]
+            [set pos [+ pos 1 [currentStr get 'length']]]
+            [cond 
+              [ [or isFirst [and 
+                  [eq? [JsTypeOf prev] 'string'] 
+                  [eq? [JsTypeOf current] 'string']
+                  [< pos width]
+                ]]
+                [set isFirst false]
+                [acc push '\ ']] 
+              [true 
+                [set pos indent]
+                [acc push space]
+              ]]
+            [acc push currentStr]
+            [set i [+ i 1]]]
+        [# while [< i [ast get 'length']]
+            [console log i]
+            [def current [ast get i]]
+            [def currentStr [yolan prettyprint current]]
+            [set pos [+ pos 1 [currentStr get 'length']]]
+            [acc push [yolan prettyprint current]]
+            [set prev current]
+            [set i [+ i 1]]]
+        [# acc push
          [[[ast slice 1] map [yolan get 'prettyprint']] join
           [+ '\\n' [yolan nspace indent]]]]
         [acc push '\]']]

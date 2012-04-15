@@ -48,7 +48,6 @@ yolan.nspace = function(n) {
 };
 
 yolan.prettyprint = function(ast) {
-    var pos = 0;
     var width = 78;
     var indentStep = 2;
     var acc = [];
@@ -62,9 +61,15 @@ yolan.prettyprint = function(ast) {
             indent = indent + 1;
             if (width - indent - str["length"] < 0) {
                 acc.push("[");
-                acc.push(yolan.prettyprint(ast[0]));
-                acc.push(" ");
-                acc.push(ast.slice(1).map(yolan["prettyprint"]).join("\n" + yolan.nspace(indent)));
+                var prev = yolan.prettyprint(ast[0]);
+                acc.push(prev);
+                var i = 1;
+                var space = yolan.nspace(indent);
+                while (i < ast["length"]) {
+                    acc.push(space);
+                    acc.push(yolan.prettyprint(acc[i]));
+                    i = i + 1;
+                }
                 acc.push("]");
             } else if (true) {
                 acc.push(str);
