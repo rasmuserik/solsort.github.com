@@ -54,13 +54,13 @@ yolan.prettyprint = function(ast) {
         if ("string" === typeof ast) {
             acc.push(ast);
         } else if (Array.isArray(ast)) {
-            var str = "[" + ast.map(yolan.prettyprint).join(" ") + "]";
+            var str = "[" + ast.map(yolan["prettyprint"]).join(" ") + "]";
             indent = indent + 1;
             if (width - indent - str["length"] < 0) {
                 acc.push("[");
                 acc.push(yolan.prettyprint(ast[0]));
                 acc.push(" ");
-                acc.push(ast.slice(1).map(yolan.prettyprint).join("\n" + yolan.nspace(indent)));
+                acc.push(ast.slice(1).map(yolan["prettyprint"]).join("\n" + yolan.nspace(indent)));
                 acc.push("]");
             } else if (true) {
                 acc.push(str);
@@ -187,7 +187,8 @@ if (action === "compile") {
             return err;
         }
         var ast = yolan.parse(yolan.tokenize(data));
-        console.log(yolan.prettyprint(ast));
+        var src = ast.slice(1).map(yolan["prettyprint"]).join("\n\n");
+        console.log(src);
         return true;
     });
 }

@@ -43,14 +43,14 @@
         [cond 
             [[eq? 'string' [JsTypeOf ast]] [acc push ast ]]
             [[Array isArray ast] 
-                [def str [+ '\[' [[ast map yolan.prettyprint] join '\ ' ] '\]']]
+                [def str [+ '\[' [[ast map [yolan get 'prettyprint']] join '\ ' ] '\]']]
                 [set indent [+ indent 1]]
                 [cond 
                   [[< [- width indent [str get 'length']] 0]
                     [acc push '\[']
                     [acc push [yolan prettyprint [ast get 0]]]
                     [acc push '\ ']
-                    [acc push [[[ast slice 1] map yolan.prettyprint] join [+ '\\n' [yolan nspace indent]]]]
+                    [acc push [[[ast slice 1] map [yolan get 'prettyprint']] join [+ '\\n' [yolan nspace indent]]]]
                     [acc push '\]']]
                   [true [acc push str]]]
                 [set indent [- indent 1]]
@@ -129,7 +129,8 @@
         [fs readFile [[process get 'argv'] get 3] 'utf8' [fn [err data]
             [cond [err [return err]]]
             [def ast [yolan parse [yolan tokenize data]]]
-            [console log [yolan prettyprint ast]]
+            [def src [[[ast slice 1] map [yolan get 'prettyprint']] join '\\n\\n']]
+            [console log src]
             true
         ]]
     ]
