@@ -11,3 +11,5 @@ mv yolan.new.js yolan.js
 # make the new version of the compiler become the testcase
 cp yolan.yl test/yolan.yl
 cp yolan.js test/yolan.js.expected
+# run yolan with the newly compiled version
+node yolan.js $@
