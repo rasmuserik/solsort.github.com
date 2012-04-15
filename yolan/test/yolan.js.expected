@@ -2,7 +2,7 @@ var tokenRegEx = RegExp.call(RegExp, "\\s*(\\[|\\]|(\\\\.|[^\\s\\[\\]])+)", "g")
 
 var unescapeRegEx = RegExp.call(RegExp, "\\\\(.)", "g");
 
-var escapeRegEx = RegExp.call(RegExp, "[\\\\\\[\\],\\n\\r]", "g");
+var escapeRegEx = RegExp.call(RegExp, "[\\\\\\[\\] \\n\\r]", "g");
 
 var yolan = {};
 
