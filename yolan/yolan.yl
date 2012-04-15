@@ -1,201 +1,209 @@
 [# bug: double escaping needed - both for js-strings and yolan strings yadda
- yadda some more strings to demonstrate long list prettyprint bug]
+  yadda some more strings to demonstrate long list prettyprint bug]
 
 [def tokenRegEx
- [RegExp call RegExp
-  '\\\\s*(\\\\\[|\\\\\]|(\\\\\\\\.|\[^\\\\s\\\\\[\\\\\]\])+)' 'g']]
+  [RegExp call RegExp
+    '\\\\s*(\\\\\[|\\\\\]|(\\\\\\\\.|\[^\\\\s\\\\\[\\\\\]\])+)' 'g']]
 
 [def unescapeRegEx [RegExp call RegExp '\\\\\\\\(.)' 'g']]
 
 [def escapeRegEx
- [RegExp call RegExp '\[\\\\\\\\\\\\\[\\\\\]\ \\\\n\\\\r\]' 'g']]
+  [RegExp call RegExp '\[\\\\\\\\\\\\\[\\\\\]\ \\\\n\\\\r\]' 'g']]
 
 [def yolan [object]]
 
 [yolan set tokenize
- [fn [str]
-  [def result [array]]
-  [str replace tokenRegEx [fn [_ token] [result push token]]]
-  result]]
+  [fn [str]
+    [def result [array]]
+    [str replace tokenRegEx [fn [_ token] [result push token]]]
+    result]]
 
 [yolan set parse
- [fn [tokens]
-  [set tokens [tokens reverse]]
-  [def stack [array]]
-  [def current [array 'do']]
-  [while [tokens get 'length']
-   [def token [tokens pop]]
-   [cond [[eq? token '\['] [stack push current] [set current [array]]]
-    [[eq? token '\]'] [def t current]
-     [set current [stack pop]]
-     [current push t]]
-    [true [current push [token replace unescapeRegEx [fn [_ a] a]]]]]]
-  current]]
+  [fn [tokens]
+    [set tokens [tokens reverse]]
+    [def stack [array]]
+    [def current [array 'do']]
+    [while [tokens get 'length']
+      [def token [tokens pop]]
+      [cond [[eq? token '\['] [stack push current] [set current [array]]]
+        [[eq? token '\]'] [def t current]
+          [set current [stack pop]]
+          [current push t]]
+        [true [current push [token replace unescapeRegEx [fn [_ a] a]]]]]]
+    current]]
 
 [yolan set nspace
- [fn [n]
-  [def result [array]]
-  [while [< 0 n] [set n [- n 1]] [result push '\ ']]
-  [result join '']]]
+  [fn [n]
+    [def result [array]]
+    [while [< 0 n] [set n [- n 1]] [result push '\ ']]
+    [result join '']]]
 
 [def indent 0]
+
 [def screenWidth 78]
+
 [def indentStep 2]
 
 [yolan set prettyprint
- [fn [ast]
-  [if [eq? [JsTypeOf ast] 'string']
-   [return [ast replace escapeRegEx [fn [s] [+ '\\\\' s]]]]]
-  [if [eq? 0 [ast get 'length']] [return '\[\]']]
-  [set indent [+ indent indentStep]]
-  [def pos indent]
-  [set strs [ast map [yolan get 'prettyprint']]]
-  [if [< [+ pos [[strs join] get 'length'] 1] screenWidth]
-   [set indent [- indent indentStep]]
-   [return [+ '\[' [strs join '\ '] '\]']]]
-  [def space [+ '\\n' [yolan nspace indent]]]
-  [def result [array]]
-  [result push '\[']
-  [result push [strs get 0]]
-  [set pos [+ pos [[strs get 0] get 'length'] 1]]
-  [def i 1]
-  [def forceNewLine false]
-  [def currentIsString true]
-  [while [< i [ast get 'length']]
-   [def prevIsString currentIsString]
-   [set currentIsString [eq? [JsTypeOf [ast get i]] 'string']]
-   [set forceNewLine false]
-   [if [or [not prevIsString] [not currentIsString]] [set forceNewLine true]]
-   [if [< i 2] [set forceNewLine false]]
-   [def prevIsString currentIsString]
-   [result push '\ ']
-   [if [or forceNewLine [< screenWidth [+ pos [[strs get i] get 'length']]]]
-    [result pop]
-    [result push space]
-    [set pos indent]]
-   [result push [strs get i]]
-   [set pos [+ pos [[strs get i] get 'length'] 1]]
-   [set i [+ i 1]]]
-  [result push '\]']
-  [set indent [- indent indentStep]]
-  [result join '']]]
+  [fn [ast]
+    [if [eq? [JsTypeOf ast] 'string']
+      [return [ast replace escapeRegEx [fn [s] [+ '\\\\' s]]]]]
+    [if [eq? 0 [ast get 'length']] [return '\[\]']]
+    [set indent [+ indent indentStep]]
+    [def pos indent]
+    [set strs [ast map [yolan get 'prettyprint']]]
+    [if [< [+ pos [[strs join] get 'length'] 1] screenWidth]
+      [set indent [- indent indentStep]]
+      [return [+ '\[' [strs join '\ '] '\]']]]
+    [def space [+ '\\n' [yolan nspace indent]]]
+    [def result [array]]
+    [result push '\[']
+    [result push [strs get 0]]
+    [set pos [+ pos [[strs get 0] get 'length'] 1]]
+    [def i 1]
+    [def forceNewLine false]
+    [def currentIsString true]
+    [while [< i [ast get 'length']]
+      [def prevIsString currentIsString]
+      [set currentIsString [eq? [JsTypeOf [ast get i]] 'string']]
+      [set forceNewLine false]
+      [if [or [not prevIsString] [not currentIsString]]
+        [set forceNewLine true]]
+      [if [< i 2] [set forceNewLine false]]
+      [def prevIsString currentIsString]
+      [result push '\ ']
+      [if
+        [or forceNewLine
+          [< screenWidth [+ pos [[strs get i] get 'length']]]]
+        [result pop]
+        [result push space]
+        [set pos indent]]
+      [result push [strs get i]]
+      [set pos [+ pos [[strs get i] get 'length'] 1]]
+      [set i [+ i 1]]]
+    [result push '\]']
+    [set indent [- indent indentStep]]
+    [result join '']]]
 
 [def compileJS
- [object [JsTypeOf [fn [syn syn1] [+ 'typeof\ ' [yolan toJS syn1]]]]
-  [do [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join ';']]]
-  [def [fn [syn syn1] [+ 'var\ ' syn1 '=' [yolan toJS [syn get 2]]]]]
-  [set [fn [syn syn1] [+ syn1 '=' [yolan toJS [syn get 2]]]]]
-  [object
-   [fn [syn syn1]
-    [+ '{'
-     [[[syn slice 1] map
-       [fn [pair]
-        [+ [JSON stringify [[pair get 0] toString]]
-         ':'
-         [yolan toJS [pair get 1]]]]]
-      join ',']
-     '}']]]
-  [array
-   [fn [syn syn1]
-    [+ '\[' [[[syn slice 1] map [yolan get 'toJS']] join ','] '\]']]]
-  [fn
-   [fn [syn syn1]
-    [+ 'function('
-     [syn1 join ',']
-     '){'
-     [[[syn slice 2 -1] map [yolan get 'toJS']] join ';']
-     ';return\ '
-     [yolan toJS [syn get [- [syn get 'length'] 1]]]
-     '}']]]
-  [while
-   [fn [syn syn1]
-    [+ 'while('
-     [yolan toJS syn1]
-     '){'
-     [[[syn slice 2] map [yolan get 'toJS']] join ';']
-     '}']]]
-  [cond
-   [fn [syn]
-    [[[syn slice 1] map
-      [fn [pair]
-       [+ 'if('
-        [yolan toJS [pair get 0]]
-        '){'
-        [[[pair slice 1] map [yolan get 'toJS']] join ';']
-        '}']]]
-     join 'else\ ']]]
-  [if
-   [fn [syn syn1]
-    [+ 'if('
-     [yolan toJS syn1]
-     '){'
-     [[[syn slice 2] map [yolan get 'toJS']] join ';']
-     '}']]]
-  [# [fn [] '']]
-  [return [fn [syn syn1] [+ 'return\ ' [yolan toJS syn1]]]]
-  [throw [fn [syn syn1] [+ 'throw\ ' [yolan toJS syn1]]]]
-  [+ [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '+']]]
-  [- [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '-']]]
-  [and [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '&&']]]
-  [or [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '||']]]
-  [not [fn [syn syn1] [+ '!' [yolan toJS syn1]]]]
-  [< [fn [syn syn1] [+ [yolan toJS syn1] '<' [yolan toJS [syn get 2]]]]]
-  [<= [fn [syn syn1] [+ [yolan toJS syn1] '<=' [yolan toJS [syn get 2]]]]]
-  [eq? [fn [syn syn1] [+ [yolan toJS syn1] '===' [yolan toJS [syn get 2]]]]]]]
+  [object [JsTypeOf [fn [syn syn1] [+ 'typeof\ ' [yolan toJS syn1]]]]
+    [do [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join ';']]]
+    [def [fn [syn syn1] [+ 'var\ ' syn1 '=' [yolan toJS [syn get 2]]]]]
+    [set [fn [syn syn1] [+ syn1 '=' [yolan toJS [syn get 2]]]]]
+    [object
+      [fn [syn syn1]
+        [+ '{'
+          [[[syn slice 1] map
+              [fn [pair]
+                [+ [JSON stringify [[pair get 0] toString]]
+                  ':'
+                  [yolan toJS [pair get 1]]]]]
+            join ',']
+          '}']]]
+    [array
+      [fn [syn syn1]
+        [+ '\[' [[[syn slice 1] map [yolan get 'toJS']] join ','] '\]']]]
+    [fn
+      [fn [syn syn1]
+        [+ 'function('
+          [syn1 join ',']
+          '){'
+          [[[syn slice 2 -1] map [yolan get 'toJS']] join ';']
+          ';return\ '
+          [yolan toJS [syn get [- [syn get 'length'] 1]]]
+          '}']]]
+    [while
+      [fn [syn syn1]
+        [+ 'while('
+          [yolan toJS syn1]
+          '){'
+          [[[syn slice 2] map [yolan get 'toJS']] join ';']
+          '}']]]
+    [cond
+      [fn [syn]
+        [[[syn slice 1] map
+            [fn [pair]
+              [+ 'if('
+                [yolan toJS [pair get 0]]
+                '){'
+                [[[pair slice 1] map [yolan get 'toJS']] join ';']
+                '}']]]
+          join 'else\ ']]]
+    [if
+      [fn [syn syn1]
+        [+ 'if('
+          [yolan toJS syn1]
+          '){'
+          [[[syn slice 2] map [yolan get 'toJS']] join ';']
+          '}']]]
+    [# [fn [] '']]
+    [return [fn [syn syn1] [+ 'return\ ' [yolan toJS syn1]]]]
+    [throw [fn [syn syn1] [+ 'throw\ ' [yolan toJS syn1]]]]
+    [+ [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '+']]]
+    [- [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '-']]]
+    [and [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '&&']]]
+    [or [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '||']]]
+    [not [fn [syn syn1] [+ '!' [yolan toJS syn1]]]]
+    [< [fn [syn syn1] [+ [yolan toJS syn1] '<' [yolan toJS [syn get 2]]]]]
+    [<= [fn [syn syn1] [+ [yolan toJS syn1] '<=' [yolan toJS [syn get 2]]]]]
+    [eq? [fn [syn syn1] [+ [yolan toJS syn1] '===' [yolan toJS [syn get 2]]]]]]]
 
 [yolan set toJS
- [fn [syn]
-  [def syn0 [syn get 0]]
-  [def syn1 [syn get 1]]
-  [cond [[eq? [JsTypeOf syn] 'string'] [return syn]]
-   [[compileJS get syn0] [return [[compileJS get syn0] call null syn syn1]]]
-   [[eq? syn1 'set']
-    [return [+ [yolan toJS syn0] '.' [syn get 2] '=' [yolan toJS [syn get 3]]]]]
-   [[eq? syn1 'get']
-    [return [+ [yolan toJS syn0] '\[' [yolan toJS [syn get 2]] '\]']]]
-   [[eq? [JsTypeOf syn0] 'string']
-    [return
-     [+ [yolan toJS syn0]
+  [fn [syn]
+    [def syn0 [syn get 0]]
+    [def syn1 [syn get 1]]
+    [cond [[eq? [JsTypeOf syn] 'string'] [return syn]]
+      [[compileJS get syn0]
+        [return [[compileJS get syn0] call null syn syn1]]]
+      [[eq? syn1 'set']
+        [return
+          [+ [yolan toJS syn0] '.' [syn get 2] '=' [yolan toJS [syn get 3]]]]]
+      [[eq? syn1 'get']
+        [return [+ [yolan toJS syn0] '\[' [yolan toJS [syn get 2]] '\]']]]
+      [[eq? [JsTypeOf syn0] 'string']
+        [return
+          [+ [yolan toJS syn0]
+            '.' syn1 '('
+            [[[syn slice 2] map [yolan get 'toJS']] join ',']
+            ')']]]]
+    [+ [yolan toJS syn0]
       '.' syn1 '('
       [[[syn slice 2] map [yolan get 'toJS']] join ',']
-      ')']]]]
-  [+ [yolan toJS syn0]
-   '.' syn1 '('
-   [[[syn slice 2] map [yolan get 'toJS']] join ',']
-   ')']]]
+      ')']]]
 
 [def fs [require call null 'fs']]
 
 [def action [[process get 'argv'] get 2]]
 
 [if [eq? action 'compile']
- [fs readFile
-  [[process get 'argv'] get 3]
-  'utf8'
-  [fn [err data]
-   [if err [return err]]
-   [# compile yolan to js]
-   [def js [yolan toJS [yolan parse [yolan tokenize data]]]]
-   [# reformat js]
-   [def uglify [require call null 'uglify-js']]
-   [def jsp [uglify get 'parser']]
-   [def pro [uglify get 'uglify']]
-   [def ast [jsp parse js]]
-   [set js [pro gen_code ast [object [beautify true]]]]
-   [fs writeFile
-    [[process get 'argv'] get 4]
-    js
-    [fn [err data] [if err [return err]] true]]]]]
+  [fs readFile
+    [[process get 'argv'] get 3]
+    'utf8'
+    [fn [err data]
+      [if err [return err]]
+      [# compile yolan to js]
+      [def js [yolan toJS [yolan parse [yolan tokenize data]]]]
+      [# reformat js]
+      [def uglify [require call null 'uglify-js']]
+      [def jsp [uglify get 'parser']]
+      [def pro [uglify get 'uglify']]
+      [def ast [jsp parse js]]
+      [set js [pro gen_code ast [object [beautify true]]]]
+      [fs writeFile
+        [[process get 'argv'] get 4]
+        js
+        [fn [err data] [if err [return err]] true]]]]]
 
 [if [eq? action 'prettyprint']
- [fs readFile
-  [[process get 'argv'] get 3]
-  'utf8'
-  [fn [err data]
-   [if err [return err]]
-   [def ast [yolan parse [yolan tokenize data]]]
-   [def src [[[ast slice 1] map [yolan get 'prettyprint']] join '\\n\\n']]
-   [fs writeFile
-    [[process get 'argv'] get 4]
-    src
-    [fn [err data] [cond [err [return err]]] true]]]]]
+  [fs readFile
+    [[process get 'argv'] get 3]
+    'utf8'
+    [fn [err data]
+      [if err [return err]]
+      [def ast [yolan parse [yolan tokenize data]]]
+      [def src
+        [[[ast slice 1] map [yolan get 'prettyprint']] join '\\n\\n']]
+      [fs writeFile
+        [[process get 'argv'] get 4]
+        src
+        [fn [err data] [cond [err [return err]]] true]]]]]
