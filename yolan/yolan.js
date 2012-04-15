@@ -72,6 +72,9 @@ var compileJS = {
     "return": function(syn, syn1) {
         return "return " + yolan.toJS(syn1);
     },
+    "throw": function(syn, syn1) {
+        return "throw " + yolan.toJS(syn1);
+    },
     "+": function(syn) {
         return syn.slice(1).map(yolan["toJS"]).join("+");
     },
@@ -123,4 +126,6 @@ if (action === "compile") {
             return true;
         });
     });
+} else if (action === "hello") {
+    console.log("hello");
 }

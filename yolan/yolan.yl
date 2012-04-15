@@ -50,6 +50,7 @@
                 '}']]] join 'else\ ']]]
      [# [fn [] '']]
      [return [fn [syn syn1] [+ 'return\ ' [yolan toJS syn1]]]]
+     [throw [fn [syn syn1] [+ 'throw\ ' [yolan toJS syn1]]]]
      [+ [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '+']]]
      [- [fn [syn] [[[syn slice 1] map [yolan get 'toJS']] join '-']]]
      [eq? [fn [syn syn1] [+ [yolan toJS syn1] '===' [yolan toJS [syn get 2]]]]]
