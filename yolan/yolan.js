@@ -100,19 +100,27 @@ yolan.toJS = function(syn) {
     return yolan.toJS(syn0) + "." + syn1 + "(" + syn.slice(2).map(yolan["toJS"]).join(",") + ")";
 };
 
-var fs = require.call(null, "fs");
+var action = process["argv"][2];
 
-fs.readFile("yolan.yl", "utf8", function(err, data) {
-    if (err) {
-        return err;
-    }
-    var js = yolan.toJS(yolan.parse(yolan.tokenize(data)));
-    var uglify = require.call(null, "uglify-js");
-    var jsp = uglify["parser"];
-    var pro = uglify["uglify"];
-    var ast = jsp.parse(js);
-    console.log(pro.gen_code(ast, {
-        beautify: true
-    }));
-    return;
-});
+if (action === "compile") {
+    var fs = require.call(null, "fs");
+    fs.readFile(process["argv"][3], "utf8", function(err, data) {
+        if (err) {
+            return err;
+        }
+        var js = yolan.toJS(yolan.parse(yolan.tokenize(data)));
+        var uglify = require.call(null, "uglify-js");
+        var jsp = uglify["parser"];
+        var pro = uglify["uglify"];
+        var ast = jsp.parse(js);
+        js = pro.gen_code(ast, {
+            beautify: true
+        });
+        return fs.writeFile(process["argv"][4], js, function(err, data) {
+            if (err) {
+                return err;
+            }
+            return true;
+        });
+    });
+}
