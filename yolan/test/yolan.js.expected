@@ -36,8 +36,6 @@ yolan.parse = function(tokens) {
     return current;
 };
 
-var indent = 0;
-
 yolan.nspace = function(n) {
     var result = [];
     while (0 < n) {
@@ -49,6 +47,10 @@ yolan.nspace = function(n) {
 
 var indent = 0;
 
+var screenWidth = 78;
+
+var indentStep = 2;
+
 yolan.prettyprint = function(ast) {
     if (typeof ast === "string") {
         return ast.replace(escapeRegEx, function(s) {
@@ -58,11 +60,11 @@ yolan.prettyprint = function(ast) {
     if (0 === ast["length"]) {
         return "[]";
     }
-    indent = indent + 1;
+    indent = indent + indentStep;
     var pos = indent;
     strs = ast.map(yolan["prettyprint"]);
-    if (pos + strs.join()["length"] + 1 < 78) {
-        indent = indent - 1;
+    if (pos + strs.join()["length"] + 1 < screenWidth) {
+        indent = indent - indentStep;
         return "[" + strs.join(" ") + "]";
     }
     var space = "\n" + yolan.nspace(indent);
@@ -85,7 +87,7 @@ yolan.prettyprint = function(ast) {
         }
         var prevIsString = currentIsString;
         result.push(" ");
-        if (forceNewLine || 78 < pos + strs[i]["length"]) {
+        if (forceNewLine || screenWidth < pos + strs[i]["length"]) {
             result.pop();
             result.push(space);
             pos = indent;
@@ -95,7 +97,7 @@ yolan.prettyprint = function(ast) {
         i = i + 1;
     }
     result.push("]");
-    indent = indent - 1;
+    indent = indent - indentStep;
     return result.join("");
 };
 

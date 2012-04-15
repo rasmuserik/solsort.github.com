@@ -32,8 +32,6 @@
     [true [current push [token replace unescapeRegEx [fn [_ a] a]]]]]]
   current]]
 
-[def indent 0]
-
 [yolan set nspace
  [fn [n]
   [def result [array]]
@@ -41,17 +39,19 @@
   [result join '']]]
 
 [def indent 0]
+[def screenWidth 78]
+[def indentStep 2]
 
 [yolan set prettyprint
  [fn [ast]
   [if [eq? [JsTypeOf ast] 'string']
    [return [ast replace escapeRegEx [fn [s] [+ '\\\\' s]]]]]
   [if [eq? 0 [ast get 'length']] [return '\[\]']]
-  [set indent [+ indent 1]]
+  [set indent [+ indent indentStep]]
   [def pos indent]
   [set strs [ast map [yolan get 'prettyprint']]]
-  [if [< [+ pos [[strs join] get 'length'] 1] 78]
-   [set indent [- indent 1]]
+  [if [< [+ pos [[strs join] get 'length'] 1] screenWidth]
+   [set indent [- indent indentStep]]
    [return [+ '\[' [strs join '\ '] '\]']]]
   [def space [+ '\\n' [yolan nspace indent]]]
   [def result [array]]
@@ -69,7 +69,7 @@
    [if [< i 2] [set forceNewLine false]]
    [def prevIsString currentIsString]
    [result push '\ ']
-   [if [or forceNewLine [< 78 [+ pos [[strs get i] get 'length']]]]
+   [if [or forceNewLine [< screenWidth [+ pos [[strs get i] get 'length']]]]
     [result pop]
     [result push space]
     [set pos indent]]
@@ -77,7 +77,7 @@
    [set pos [+ pos [[strs get i] get 'length'] 1]]
    [set i [+ i 1]]]
   [result push '\]']
-  [set indent [- indent 1]]
+  [set indent [- indent indentStep]]
   [result join '']]]
 
 [def compileJS
