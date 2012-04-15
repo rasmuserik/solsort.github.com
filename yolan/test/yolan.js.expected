@@ -2,6 +2,8 @@ var tokenRegEx = RegExp.call(RegExp, "\\s*(\\[|\\]|(\\\\.|[^\\s\\[\\]])+)", "g")
 
 var unescapeRegEx = RegExp.call(RegExp, "\\\\(.)", "g");
 
+var escapeRegEx = RegExp.call(RegExp, "[\\\\\\[\\],\\n\\r]", "g");
+
 var yolan = {};
 
 yolan.tokenize = function(str) {
@@ -52,7 +54,9 @@ yolan.prettyprint = function(ast) {
     var acc = [];
     var pp = function(ast) {
         if ("string" === typeof ast) {
-            acc.push(ast);
+            acc.push(ast.replace(escapeRegEx, function(s) {
+                return "\\" + s;
+            }));
         } else if (Array.isArray(ast)) {
             var str = "[" + ast.map(yolan["prettyprint"]).join(" ") + "]";
             indent = indent + 1;
@@ -188,6 +192,12 @@ if (action === "compile") {
         }
         var ast = yolan.parse(yolan.tokenize(data));
         var src = ast.slice(1).map(yolan["prettyprint"]).join("\n\n");
+        fs.writeFile(process["argv"][4], src, function(err, data) {
+            if (err) {
+                return err;
+            }
+            return true;
+        });
         console.log(src);
         return true;
     });

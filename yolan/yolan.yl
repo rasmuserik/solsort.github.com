@@ -2,6 +2,7 @@
 [def tokenRegEx [RegExp call RegExp '\\\\s*(\\\\\[|\\\\\]|(\\\\\\\\.|\[^\\\\s\\\\\[\\\\\]\])+)' 'g']]
 
 [def unescapeRegEx [RegExp call RegExp '\\\\\\\\(.)' 'g']]
+[def escapeRegEx [RegExp call RegExp '\[\\\\\\\\\\\\\[\\\\\] \\\\n\\\\r\]' 'g']]
 
 [def yolan [object]]
 
@@ -41,7 +42,7 @@
     [def acc [array]]
     [def pp [fn [ast]
         [cond 
-            [[eq? 'string' [JsTypeOf ast]] [acc push ast ]]
+            [[eq? 'string' [JsTypeOf ast]] [acc push [ast replace escapeRegEx [fn [s] [+ '\\\\' s]]]]]
             [[Array isArray ast] 
                 [def str [+ '\[' [[ast map [yolan get 'prettyprint']] join '\ ' ] '\]']]
                 [set indent [+ indent 1]]
@@ -130,6 +131,7 @@
             [cond [err [return err]]]
             [def ast [yolan parse [yolan tokenize data]]]
             [def src [[[ast slice 1] map [yolan get 'prettyprint']] join '\\n\\n']]
+            [fs writeFile [[process get 'argv'] get 4] src [fn [err data] [cond [err [return err]]] true]]
             [console log src]
             true
         ]]
