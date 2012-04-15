@@ -47,39 +47,61 @@ yolan.nspace = function(n) {
     return result.join("");
 };
 
+var indent = 0;
+
 yolan.prettyprint = function(ast) {
-    var pos = 0;
-    var width = 78;
-    var indentStep = 2;
-    var acc = [];
-    var pp = function(ast) {
-        if ("string" === typeof ast) {
-            acc.push(ast.replace(escapeRegEx, function(s) {
-                return "\\" + s;
-            }));
-        } else if (Array.isArray(ast)) {
-            var str = "[" + ast.map(yolan["prettyprint"]).join(" ") + "]";
-            indent = indent + 1;
-            if (width - indent - str["length"] < 0) {
-                acc.push("[");
-                acc.push(yolan.prettyprint(ast[0]));
-                acc.push(" ");
-                acc.push(ast.slice(1).map(yolan["prettyprint"]).join("\n" + yolan.nspace(indent)));
-                acc.push("]");
-            } else if (true) {
-                acc.push(str);
-            }
-            indent = indent - 1;
+    if (typeof ast === "string") {
+        return ast.replace(escapeRegEx, function(s) {
+            return "\\" + s;
+        });
+    }
+    if (0 === ast["length"]) {
+        return "[]";
+    }
+    indent = indent + 1;
+    var pos = indent;
+    strs = ast.map(yolan["prettyprint"]);
+    if (pos + strs.join()["length"] + 1 < 78) {
+        indent = indent - 1;
+        return "[" + strs.join(" ") + "]";
+    }
+    var space = "\n" + yolan.nspace(indent);
+    var result = [];
+    result.push("[");
+    result.push(strs[0]);
+    pos = pos + strs[0]["length"] + 1;
+    var i = 1;
+    var forceNewLine = false;
+    var currentIsString = true;
+    while (i < ast["length"]) {
+        var prevIsString = currentIsString;
+        currentIsString = typeof ast[i] === "string";
+        forceNewLine = false;
+        if (!prevIsString || !currentIsString) {
+            forceNewLine = true;
         }
-        return true;
-    };
-    pp.call(null, ast);
-    return acc.join("");
+        if (i < 2) {
+            forceNewLine = false;
+        }
+        var prevIsString = currentIsString;
+        result.push(" ");
+        if (forceNewLine || 78 < pos + strs[i]["length"]) {
+            result.pop();
+            result.push(space);
+            pos = indent;
+        }
+        result.push(strs[i]);
+        pos = pos + strs[i]["length"] + 1;
+        i = i + 1;
+    }
+    result.push("]");
+    indent = indent - 1;
+    return result.join("");
 };
 
 var compileJS = {
     JsTypeOf: function(syn, syn1) {
-        return "typeof " + syn1;
+        return "typeof " + yolan.toJS(syn1);
     },
     "do": function(syn) {
         return syn.slice(1).map(yolan["toJS"]).join(";");
@@ -133,7 +155,7 @@ var compileJS = {
     or: function(syn) {
         return syn.slice(1).map(yolan["toJS"]).join("||");
     },
-    not: function(syn) {
+    not: function(syn, syn1) {
         return "!" + yolan.toJS(syn1);
     },
     "<": function(syn, syn1) {
