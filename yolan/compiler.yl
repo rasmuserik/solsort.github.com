@@ -38,7 +38,7 @@
       [fs writeFile
         [[process get 'argv] get 4]
         src
-        [fn [err data] [cond [err [return err]]] true]]]]]
+        [fn [err data] [if err [return err]] true]]]]]
 
 [if [action == 'transform]
   [fs readFile
@@ -54,7 +54,7 @@
       [fs writeFile
         [[process get 'argv] get 4]
         src
-        [fn [err data] [cond [err [return err]]] true]]]]]
+        [fn [err data] [if err [return err]] true]]]]]
 
 [if [action == 'test] [console log 'hello\ world]]
 
