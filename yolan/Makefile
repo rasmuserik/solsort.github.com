@@ -23,8 +23,7 @@ prettyprint: all $(CODE:.yl=.yl-pretty)
 	for x in *.yl-pretty; do mv $$x `echo $$x | sed -e s/-pretty$$//`; done
 
 transform: all $(CODE:.yl=.yl-transformed)
-	install -d out
-	for x in *.yl; do mv $$x-transformed out/$$x; done
+	for x in *.yl; do mv $$x-transformed $$x; done
 
 
 compiler: compiler-test

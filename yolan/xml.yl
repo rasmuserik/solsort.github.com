@@ -7,7 +7,7 @@
     [def tagname [xml shift]]
     [def attr [array]]
     [def attrData [xml get 0]]
-    [if [and attrData [Array isArray [attrData get 0]]]
+    [if [attrData and [Array isArray [attrData get 0]]]
       [set attr attrData]
       [xml shift]]
     [def content [[xml map [exports get 'fromYolan]] join '\ ]]
