@@ -8,5 +8,6 @@
       [result writeHead 200 [object ['Content-Type 'text/html]]]
       [result end
         [xml fromYolan
-          [quote [html [head [title Hello world]] [body [h1 hello world]]]]]]]]
+          '[html [head [title Hello world]] [body [h1 hello world]]]]]]]
   listen 1234 '127.0.0.1]
+

@@ -60,8 +60,7 @@
     ['not [fn [syn syn1] [+ '!( [exports toJS syn1] ')]]]
     ['< [fn [syn syn1] [+ [exports toJS syn1] '< [exports toJS [syn get 2]]]]]
     ['<=
-      [fn [syn syn1]
-        [+ [exports toJS syn1] '<= [exports toJS [syn get 2]]]]]
+      [fn [syn syn1] [+ [exports toJS syn1] '<= [exports toJS [syn get 2]]]]]
     ['eq?
       [fn [syn syn1]
         [+ [exports toJS syn1] '=== [exports toJS [syn get 2]]]]]]]
@@ -92,3 +91,4 @@
       '. syn1 '(
       [[[syn slice 2] map [exports get 'toJS]] join ',]
       ')]]]
+

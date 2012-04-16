@@ -5,13 +5,11 @@
     [def tokeniser [object]]
     [def c [str get 0]]
     [def nextc [fn [] [set i [+ i 1]] [set c [str get i]] c]]
-    [def isWs
-      [fn [] [or [eq? c '\ ] [eq? c '\n] [eq? c '\r] [eq? c '\t]]]]
+    [def isWs [fn [] [or [eq? c '\ ] [eq? c '\n] [eq? c '\r] [eq? c '\t]]]]
     [def isBracket [fn [] [or [eq? c '\[] [eq? c '\]]]]]
     [while c
       [while [isWs call] [nextc call]]
-      [cond 
-        [[eq? c '\[] [result push lbracket] [nextc call]]
+      [cond [[eq? c '\[] [result push lbracket] [nextc call]]
         [[eq? c '\]] [result push rbracket] [nextc call]]
         [[eq? c '\'] [result push quote] [nextc call]]
         [true [def symb ""]
@@ -27,7 +25,9 @@
     result]]
 
 [def quote [object ['quote true]]]
+
 [def lbracket [object ['lbracket true]]]
+
 [def rbracket [object ['rbracket true]]]
 
 [def addQuotes
@@ -71,12 +71,16 @@
 [def indentStep 2]
 
 [def escapeRegEx [RegExp call RegExp '\[\'\ \\\[\\\]\] 'g]]
+
 [def escapeRegEx2 [RegExp call RegExp '\\\\" 'g]]
 
 [exports set prettyprint
   [fn [ast]
     [if [eq? [JsTypeOf ast] 'string]
-      [return [[[[JSON stringify ast] slice 1 -1] replace escapeRegEx [fn [s] [+ '\\ s]]]replace escapeRegEx2 '" ]]]
+      [return
+        [[[[JSON stringify ast] slice 1 -1] replace escapeRegEx
+            [fn [s] [+ '\\ s]]]
+          replace escapeRegEx2 '"]]]
     [if [and [eq? 2 [ast get 'length]] [eq? 'quote [ast get 0]]]
       [return [+ '\' [exports prettyprint [ast get 1]]]]]
     [if [eq? 0 [ast get 'length]] [return '\[\]]]
@@ -96,7 +100,9 @@
     [def currentIsString true]
     [while [< i [ast get 'length]]
       [def prevIsString currentIsString]
-      [set currentIsString [or [eq? [JsTypeOf [ast get i]] 'string] [eq? 'quote [[ast get i] get 0]]]]
+      [set currentIsString
+        [or [eq? [JsTypeOf [ast get i]] 'string]
+          [eq? 'quote [[ast get i] get 0]]]]
       [set forceNewLine false]
       [if [or [not prevIsString] [not currentIsString]]
         [set forceNewLine true]]
@@ -104,8 +110,7 @@
       [def prevIsString currentIsString]
       [result push '\ ]
       [if
-        [or forceNewLine
-          [< screenWidth [+ pos [[strs get i] get 'length]]]]
+        [or forceNewLine [< screenWidth [+ pos [[strs get i] get 'length]]]]
         [result pop]
         [result push space]
         [set pos indent]]
@@ -115,3 +120,4 @@
     [result push '\]]
     [set indent [- indent indentStep]]
     [result join ""]]]
+

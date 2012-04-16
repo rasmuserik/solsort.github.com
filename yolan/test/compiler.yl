@@ -41,3 +41,4 @@
         [fn [err data] [cond [err [return err]]] true]]]]]
 
 [if [eq? action 'test] [console log 'hello\ world]]
+

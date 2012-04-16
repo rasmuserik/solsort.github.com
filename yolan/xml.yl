@@ -13,9 +13,8 @@
     [def content [[xml map [exports get 'fromYolan]] join '\ ]]
     [def attrStr
       [[attr map
-          [fn [attr]
-            [+ '\  [attr get 0] '=" [[attr slice 1] join '\ ] '"]]]
+          [fn [attr] [+ '\  [attr get 0] '=" [[attr slice 1] join '\ ] '"]]]
         join ""]]
-    [if content
-      [return [+ '< tagname attrStr '> content '</ tagname '>]]]
+    [if content [return [+ '< tagname attrStr '> content '</ tagname '>]]]
     [+ '< tagname attrStr '/>]]]
+
