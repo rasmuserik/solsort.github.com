@@ -114,12 +114,13 @@ var indentStep = 2;
 
 var escapeRegEx = RegExp.call(RegExp, "[' \\[\\]]", "g");
 
+var escapeRegEx2 = RegExp.call(RegExp, '\\\\"', "g");
+
 exports.prettyprint = function(ast) {
-    console.log(ast);
     if (typeof ast === "string") {
         return JSON.stringify(ast).slice(1, -1).replace(escapeRegEx, function(s) {
             return "\\" + s;
-        });
+        }).replace(escapeRegEx2, '"');
     }
     if (2 === ast["length"] && "quote" === ast[0]) {
         return "'" + exports.prettyprint(ast[1]);
@@ -144,7 +145,7 @@ exports.prettyprint = function(ast) {
     var currentIsString = true;
     while (i < ast["length"]) {
         var prevIsString = currentIsString;
-        currentIsString = typeof ast[i] === "string";
+        currentIsString = typeof ast[i] === "string" || "quote" === ast[i][0];
         forceNewLine = false;
         if (!prevIsString || !currentIsString) {
             forceNewLine = true;
