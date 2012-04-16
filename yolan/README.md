@@ -36,7 +36,6 @@ and no programming language have these features yet
 
 ### Features not implemented yet
 - next
-    - newline in prettyprinted file
     - split up in module
     - build system
     - better string syntax
