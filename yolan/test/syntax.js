@@ -1,4 +1,4 @@
-exports.tokenize = function(str) {
+exports["tokenize"] = function(str) {
     var result = [];
     var i = 0;
     var tokeniser = {};
@@ -75,7 +75,7 @@ var addQuotes = function(list) {
     return result;
 };
 
-exports.parse = function(tokens) {
+exports["parse"] = function(tokens) {
     tokens = tokens.reverse();
     var stack = [];
     var current = [ "do" ];
@@ -97,7 +97,7 @@ exports.parse = function(tokens) {
     return current;
 };
 
-exports.nspace = function(n) {
+exports["nspace"] = function(n) {
     var result = [];
     while (0 < n) {
         n = n - 1;
@@ -116,7 +116,7 @@ var escapeRegEx = RegExp.call(RegExp, "[' \\[\\]]", "g");
 
 var escapeRegEx2 = RegExp.call(RegExp, '\\\\"', "g");
 
-exports.prettyprint = function(ast) {
+exports["prettyprint"] = function(ast) {
     if (typeof ast === "string") {
         return JSON.stringify(ast).slice(1, -1).replace(escapeRegEx, function(s) {
             return "\\" + s;

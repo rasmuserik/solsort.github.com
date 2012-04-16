@@ -1,6 +1,6 @@
 [# yolan-xml data structure to an xml-string]
 
-[exports set fromYolan
+[exports set 'fromYolan
   [fn [xml]
     [if [eq? [JsTypeOf xml] 'string] [return xml]]
     [set xml [xml slice 0]]

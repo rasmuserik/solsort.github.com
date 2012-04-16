@@ -1,4 +1,4 @@
-exports.fromYolan = function(xml) {
+exports["fromYolan"] = function(xml) {
     if (typeof xml === "string") {
         return xml;
     }

@@ -71,7 +71,7 @@ var compileJS = {
     }
 };
 
-exports.toJS = function(syn) {
+exports["toJS"] = function(syn) {
     var syn0 = syn[0];
     var syn1 = syn[1];
     if (typeof syn === "string") {
@@ -79,7 +79,7 @@ exports.toJS = function(syn) {
     } else if (compileJS[syn0]) {
         return compileJS[syn0].call(null, syn, syn1);
     } else if (syn1 === "set") {
-        return exports.toJS(syn0) + "." + syn[2] + "=" + exports.toJS(syn[3]);
+        return exports.toJS(syn0) + "[" + exports.toJS(syn[2]) + "]=" + exports.toJS(syn[3]);
     } else if (syn1 === "get") {
         return exports.toJS(syn0) + "[" + exports.toJS(syn[2]) + "]";
     } else if (typeof syn0 === "string") {
