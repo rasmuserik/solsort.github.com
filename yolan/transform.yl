@@ -1,0 +1,5 @@
+[exports set 'transform
+  [fn [x]
+    [if [eq? [JsTypeOf x] 'string] [return x]]
+    [x map [exports get 'transform]]]]
+
