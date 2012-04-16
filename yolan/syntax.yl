@@ -9,10 +9,10 @@
     [def isBracket [fn [] [[c == '\[] or [c == '\]]]]]
     [while c
       [while [isWs call] [nextc call]]
-      [cond [[c == '\[] [result push lbracket] [nextc call]]
-        [[c == '\]] [result push rbracket] [nextc call]]
-        [[c == '\'] [result push quote] [nextc call]]
-        [true [def symb ""]
+      [if [c == '\[] [do[result push lbracket] [nextc call]]
+        [if[c == '\]] [do[result push rbracket] [nextc call]]
+        [if[c == '\'] [do[result push quote] [nextc call]]
+        [do[def symb ""]
           [while [c and [[isWs call] fails] [[isBracket call] fails]]
             [if [c == '\\]
               [do [nextc call]
@@ -21,7 +21,7 @@
             [if [c == '"] [set symb [symb + '\\]]]
             [set symb [symb + c]]
             [nextc call]]
-          [result push symb]]]]
+          [result push symb]]]]]]
     result]]
 
 [def quote [new object ['quote true]]]

@@ -21,28 +21,32 @@ exports["tokenize"] = function(str) {
         if (c === "[") {
             result.push(lbracket);
             nextc.call();
-        } else if (c === "]") {
-            result.push(rbracket);
-            nextc.call();
-        } else if (c === "'") {
-            result.push(quote);
-            nextc.call();
-        } else if (true) {
-            var symb = "";
-            while (c && !isWs.call() && !isBracket.call()) {
-                if (c === "\\") {
-                    nextc.call();
-                    if (!(isWs.call() || isBracket.call() || c === "'")) {
-                        symb = symb + "\\";
-                    } else {}
-                } else {}
-                if (c === '"') {
-                    symb = symb + "\\";
-                } else {}
-                symb = symb + c;
+        } else {
+            if (c === "]") {
+                result.push(rbracket);
                 nextc.call();
+            } else {
+                if (c === "'") {
+                    result.push(quote);
+                    nextc.call();
+                } else {
+                    var symb = "";
+                    while (c && !isWs.call() && !isBracket.call()) {
+                        if (c === "\\") {
+                            nextc.call();
+                            if (!(isWs.call() || isBracket.call() || c === "'")) {
+                                symb = symb + "\\";
+                            } else {}
+                        } else {}
+                        if (c === '"') {
+                            symb = symb + "\\";
+                        } else {}
+                        symb = symb + c;
+                        nextc.call();
+                    }
+                    result.push(symb);
+                }
             }
-            result.push(symb);
         }
     }
     return result;
