@@ -39,35 +39,8 @@ var compileJS = {
     "return": function(syn, syn1) {
         return "return " + exports.toJS(syn1);
     },
-    "throw": function(syn, syn1) {
-        return "throw " + exports.toJS(syn1);
-    },
     quote: function(syn, syn1) {
         return JSON.stringify(syn1);
-    },
-    "+": function(syn) {
-        return syn.slice(1).map(exports["toJS"]).join("+");
-    },
-    "-": function(syn) {
-        return syn.slice(1).map(exports["toJS"]).join("-");
-    },
-    and: function(syn) {
-        return syn.slice(1).map(exports["toJS"]).join("&&");
-    },
-    or: function(syn) {
-        return syn.slice(1).map(exports["toJS"]).join("||");
-    },
-    not: function(syn, syn1) {
-        return "!(" + exports.toJS(syn1) + ")";
-    },
-    "<": function(syn, syn1) {
-        return exports.toJS(syn1) + "<" + exports.toJS(syn[2]);
-    },
-    "<=": function(syn, syn1) {
-        return exports.toJS(syn1) + "<=" + exports.toJS(syn[2]);
-    },
-    "eq?": function(syn, syn1) {
-        return exports.toJS(syn1) + "===" + exports.toJS(syn[2]);
     }
 };
 

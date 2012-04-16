@@ -1,6 +1,9 @@
 [exports set 'transform
   [fn [x]
     [if [[JsTypeOf x] == 'string] [return x]]
+    [set x [x map [exports get 'transform]]]
     [if [[x get 0] == 'not] [x set 0 [x get 1]] [x set 1 'fails]]
-    [x map [exports get 'transform]]]]
+    [if [[[x get 0] == 'if] and [3 < [x get length]]]
+        return [array 'if [x get 1] [array 'do [x slice 2]]]]
+    x]]
 
