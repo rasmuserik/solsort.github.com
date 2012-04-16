@@ -1,6 +1,6 @@
 [exports set 'transform
   [fn [x]
     [if [[JsTypeOf x] == 'string] [return x]]
-    [if [[x get 0] == '<=] [x set 0 [x get 1]] [x set 1 '<=]]
+    [if [[x get 0] == 'not] [x set 0 [x get 1]] [x set 1 'fails]]
     [x map [exports get 'transform]]]]
 

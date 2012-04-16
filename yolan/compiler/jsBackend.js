@@ -95,7 +95,7 @@ exports["toJS"] = function(syn) {
         return "(" + exports.toJS(syn0) + "<" + exports.toJS(syn2) + ")";
     } else if (syn1 === "<=") {
         return "(" + exports.toJS(syn0) + "<=" + exports.toJS(syn2) + ")";
-    } else if (syn1 === "isFalse") {
+    } else if (syn1 === "fails") {
         return "!(" + exports.toJS(syn0) + ")";
     } else if (syn1 === "get") {
         return exports.toJS(syn0) + "[" + exports.toJS(syn2) + "]";

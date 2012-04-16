@@ -23,7 +23,7 @@
     [fn [request result]
       [def url [request get 'url]]
       [console log [request get 'url]]
-      [if [not [[url slice -3] == '.js]]
+      [if [[[url slice -3] == '.js] fails]
         [result writeHead 200 [object ['Content-Type 'text/html]]]
         [result end [head + body]]]
       [if [[url slice -3] == '.js]

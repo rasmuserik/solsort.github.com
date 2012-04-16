@@ -112,7 +112,7 @@
         [return ['( + [exports toJS syn0] '< [exports toJS syn2] ')]]]
       [[syn1 == '<=]
         [return ['( + [exports toJS syn0] '<= [exports toJS syn2] ')]]]
-      [[syn1 == 'isFalse] [return ['!( + [exports toJS syn0] ')]]]
+      [[syn1 == 'fails] [return ['!( + [exports toJS syn0] ')]]]
       [[syn1 == 'get]
         [return [[exports toJS syn0] + '\[ [exports toJS syn2] '\]]]]
       [[[JsTypeOf syn0] == 'string]
