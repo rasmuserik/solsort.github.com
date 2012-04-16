@@ -13,6 +13,9 @@ compiler-test: all
 
 test: compiler-test
 
+run-server: all
+	node server.js
+
 prettyprint-all: $(CODE:.yl=.yl-pretty)
 	for x in *.yl-pretty; do mv $$x `echo $$x | sed -e s/-pretty$$//`; done
 
