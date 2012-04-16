@@ -1,4 +1,5 @@
-all: compiler.js syntax.js jsBackend.js
+CODE=compiler.yl syntax.yl jsBackend.yl
+all: $(CODE:.yl=.js)
 clean:
 	rm *.js
 
@@ -9,6 +10,11 @@ compiler-test: all
 	cp *.js test/expected
 	cd test; for x in *.yl; do node ../compiler.js compile $$x `echo $$x | sed -e s/yl$$/js/`; done
 	cd test; for x in *.js; do diff $$x expected/$$x || exit 1; done
+
+test: compiler-test
+
+prettyprint-all: $(CODE:.yl=.yl-pretty)
+	for x in *.yl-pretty; do mv $$x `echo $$x | sed -e s/-pretty$$//`; done
 
 compiler: compiler-test
 	cd compiler; make

@@ -1,8 +1,8 @@
-var fs = require.call(null, "fs");
+var fs = module.require("fs");
 
-var syntax = require.call(null, "./syntax");
+var syntax = module.require("./syntax");
 
-var jsBackend = require.call(null, "./jsBackend");
+var jsBackend = module.require("./jsBackend");
 
 var action = process["argv"][2];
 

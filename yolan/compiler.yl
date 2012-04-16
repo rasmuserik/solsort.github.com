@@ -1,7 +1,8 @@
+[def fs [module require 'fs']]
 
-[def fs [require call null 'fs']]
-[def syntax [require call null './syntax']]
-[def jsBackend [require call null './jsBackend']]
+[def syntax [module require './syntax']]
+
+[def jsBackend [module require './jsBackend']]
 
 [def action [[process get 'argv'] get 2]]
 
@@ -32,10 +33,11 @@
       [if err [return err]]
       [def ast [syntax parse [syntax tokenize data]]]
       [def src
-        [+ [[[ast slice 1] map [syntax get 'prettyprint']] join '\\n\\n']] '\\n']
+        [+ [[[ast slice 1] map [syntax get 'prettyprint']] join '\\n\\n']]
+        '\\n']
       [fs writeFile
         [[process get 'argv'] get 4]
         src
         [fn [err data] [cond [err [return err]]] true]]]]]
-[if [eq? action 'test']
-    [console log 'hello\ world']]
+
+[if [eq? action 'test'] [console log 'hello\ world']]

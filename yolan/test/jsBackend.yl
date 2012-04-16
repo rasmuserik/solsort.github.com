@@ -58,8 +58,12 @@
     [or [fn [syn] [[[syn slice 1] map [exports get 'toJS']] join '||']]]
     [not [fn [syn syn1] [+ '!' [exports toJS syn1]]]]
     [< [fn [syn syn1] [+ [exports toJS syn1] '<' [exports toJS [syn get 2]]]]]
-    [<= [fn [syn syn1] [+ [exports toJS syn1] '<=' [exports toJS [syn get 2]]]]]
-    [eq? [fn [syn syn1] [+ [exports toJS syn1] '===' [exports toJS [syn get 2]]]]]]]
+    [<=
+      [fn [syn syn1]
+        [+ [exports toJS syn1] '<=' [exports toJS [syn get 2]]]]]
+    [eq?
+      [fn [syn syn1]
+        [+ [exports toJS syn1] '===' [exports toJS [syn get 2]]]]]]]
 
 [exports set toJS
   [fn [syn]
@@ -70,7 +74,11 @@
         [return [[compileJS get syn0] call null syn syn1]]]
       [[eq? syn1 'set']
         [return
-          [+ [exports toJS syn0] '.' [syn get 2] '=' [exports toJS [syn get 3]]]]]
+          [+ [exports toJS syn0]
+            '.'
+            [syn get 2]
+            '='
+            [exports toJS [syn get 3]]]]]
       [[eq? syn1 'get']
         [return [+ [exports toJS syn0] '\[' [exports toJS [syn get 2]] '\]']]]
       [[eq? [JsTypeOf syn0] 'string']
