@@ -1,94 +1,94 @@
 [def compileJS
-  [object [JsTypeOf [fn [syn syn1] [+ "typeof\ " [exports toJS syn1]]]]
-    [do [fn [syn] [[[syn slice 1] map [exports get "toJS"]] join ";"]]]
-    [def [fn [syn syn1] [+ "var\ " syn1 "=" [exports toJS [syn get 2]]]]]
-    [set [fn [syn syn1] [+ syn1 "=" [exports toJS [syn get 2]]]]]
+  [object [JsTypeOf [fn [syn syn1] [+ 'typeof\  [exports toJS syn1]]]]
+    [do [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join ';]]]
+    [def [fn [syn syn1] [+ 'var\  syn1 '= [exports toJS [syn get 2]]]]]
+    [set [fn [syn syn1] [+ syn1 '= [exports toJS [syn get 2]]]]]
     [object
       [fn [syn syn1]
-        [+ "{"
+        [+ '{
           [[[syn slice 1] map
               [fn [pair]
                 [+ [JSON stringify [[pair get 0] toString]]
-                  ":"
+                  ':
                   [exports toJS [pair get 1]]]]]
-            join ","]
-          "}"]]]
+            join ',]
+          '}]]]
     [array
       [fn [syn syn1]
-        [+ "\[" [[[syn slice 1] map [exports get "toJS"]] join ","] "\]"]]]
+        [+ '\[ [[[syn slice 1] map [exports get 'toJS]] join ',] '\]]]]
     [fn
       [fn [syn syn1]
-        [+ "function("
-          [syn1 join ","]
-          "){"
-          [[[syn slice 2 -1] map [exports get "toJS"]] join ";"]
-          ";return\ "
-          [exports toJS [syn get [- [syn get "length"] 1]]]
-          "}"]]]
+        [+ 'function(
+          [syn1 join ',]
+          '){
+          [[[syn slice 2 -1] map [exports get 'toJS]] join ';]
+          ';return\ 
+          [exports toJS [syn get [- [syn get 'length] 1]]]
+          '}]]]
     [while
       [fn [syn syn1]
-        [+ "while("
+        [+ 'while(
           [exports toJS syn1]
-          "){"
-          [[[syn slice 2] map [exports get "toJS"]] join ";"]
-          "}"]]]
+          '){
+          [[[syn slice 2] map [exports get 'toJS]] join ';]
+          '}]]]
     [cond
       [fn [syn]
         [[[syn slice 1] map
             [fn [pair]
-              [+ "if("
+              [+ 'if(
                 [exports toJS [pair get 0]]
-                "){"
-                [[[pair slice 1] map [exports get "toJS"]] join ";"]
-                "}"]]]
-          join "else\ "]]]
+                '){
+                [[[pair slice 1] map [exports get 'toJS]] join ';]
+                '}]]]
+          join 'else\ ]]]
     [if
       [fn [syn syn1]
-        [+ "if("
+        [+ 'if(
           [exports toJS syn1]
-          "){"
-          [[[syn slice 2] map [exports get "toJS"]] join ";"]
-          "}"]]]
+          '){
+          [[[syn slice 2] map [exports get 'toJS]] join ';]
+          '}]]]
     [# [fn [] ""]]
-    [return [fn [syn syn1] [+ "return\ " [exports toJS syn1]]]]
-    [throw [fn [syn syn1] [+ "throw\ " [exports toJS syn1]]]]
+    [return [fn [syn syn1] [+ 'return\  [exports toJS syn1]]]]
+    [throw [fn [syn syn1] [+ 'throw\  [exports toJS syn1]]]]
     [quote [fn [syn syn1] [JSON stringify syn1]]]
-    [+ [fn [syn] [[[syn slice 1] map [exports get "toJS"]] join "+"]]]
-    [- [fn [syn] [[[syn slice 1] map [exports get "toJS"]] join "-"]]]
-    [and [fn [syn] [[[syn slice 1] map [exports get "toJS"]] join "&&"]]]
-    [or [fn [syn] [[[syn slice 1] map [exports get "toJS"]] join "||"]]]
-    [not [fn [syn syn1] [+ "!(" [exports toJS syn1] ")"]]]
-    [< [fn [syn syn1] [+ [exports toJS syn1] "<" [exports toJS [syn get 2]]]]]
+    [+ [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '+]]]
+    [- [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '-]]]
+    [and [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '&&]]]
+    [or [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '||]]]
+    [not [fn [syn syn1] [+ '!( [exports toJS syn1] ')]]]
+    [< [fn [syn syn1] [+ [exports toJS syn1] '< [exports toJS [syn get 2]]]]]
     [<=
       [fn [syn syn1]
-        [+ [exports toJS syn1] "<=" [exports toJS [syn get 2]]]]]
+        [+ [exports toJS syn1] '<= [exports toJS [syn get 2]]]]]
     [eq?
       [fn [syn syn1]
-        [+ [exports toJS syn1] "===" [exports toJS [syn get 2]]]]]]]
+        [+ [exports toJS syn1] '=== [exports toJS [syn get 2]]]]]]]
 
 [exports set toJS
   [fn [syn]
     [def syn0 [syn get 0]]
     [def syn1 [syn get 1]]
-    [cond [[eq? [JsTypeOf syn] "string"] [return syn]]
+    [cond [[eq? [JsTypeOf syn] 'string] [return syn]]
       [[compileJS get syn0]
         [return [[compileJS get syn0] call null syn syn1]]]
-      [[eq? syn1 "set"]
+      [[eq? syn1 'set]
         [return
           [+ [exports toJS syn0]
-            "."
+            '.
             [syn get 2]
-            "="
+            '=
             [exports toJS [syn get 3]]]]]
-      [[eq? syn1 "get"]
-        [return [+ [exports toJS syn0] "\[" [exports toJS [syn get 2]] "\]"]]]
-      [[eq? [JsTypeOf syn0] "string"]
+      [[eq? syn1 'get]
+        [return [+ [exports toJS syn0] '\[ [exports toJS [syn get 2]] '\]]]]
+      [[eq? [JsTypeOf syn0] 'string]
         [return
           [+ [exports toJS syn0]
-            "." syn1 "("
-            [[[syn slice 2] map [exports get "toJS"]] join ","]
-            ")"]]]]
+            '. syn1 '(
+            [[[syn slice 2] map [exports get 'toJS]] join ',]
+            ')]]]]
     [+ [exports toJS syn0]
-      "." syn1 "("
-      [[[syn slice 2] map [exports get "toJS"]] join ","]
-      ")"]]]
+      '. syn1 '(
+      [[[syn slice 2] map [exports get 'toJS]] join ',]
+      ')]]]
