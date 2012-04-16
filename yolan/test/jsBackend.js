@@ -42,6 +42,9 @@ var compileJS = {
     "throw": function(syn, syn1) {
         return "throw " + exports.toJS(syn1);
     },
+    quote: function(syn, syn1) {
+        return JSON.stringify(syn1);
+    },
     "+": function(syn) {
         return syn.slice(1).map(exports["toJS"]).join("+");
     },

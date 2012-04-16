@@ -1,4 +1,4 @@
-CODE=compiler.yl syntax.yl jsBackend.yl
+CODE=$(shell ls *.yl)
 all: $(CODE:.yl=.js)
 clean:
 	rm *.js
