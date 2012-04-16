@@ -70,6 +70,8 @@ exports["toJS"] = function(syn) {
         return "(" + exports.toJS(syn0) + "<=" + exports.toJS(syn2) + ")";
     } else if (syn1 === "fails") {
         return "!(" + exports.toJS(syn0) + ")";
+    } else if (syn1 === "jsType") {
+        return "typeof " + exports.toJS(syn0);
     } else if (syn1 === "get") {
         return exports.toJS(syn0) + "[" + exports.toJS(syn2) + "]";
     } else if (typeof syn0 === "string") {

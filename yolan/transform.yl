@@ -2,9 +2,6 @@
   [fn [x]
     [if [[JsTypeOf x] == 'string] [return x]]
     [set x [x map [exports get 'transform]]]
-    [if [[x get 0] == 'not] [do [x set 0 [x get 1]] [x set 1 'fails]]]
-    [if [[[x get 0] == 'if] and [3 < [x get 'length]]]
-      [do [console log x]
-        [return [array 'if [x get 1] [[array 'do] concat [x slice 2]]]]]]
+    [if [[x get 0] == 'JsTypeOf] [do [x set 0 [x get 1]] [x set 1 'jsType]]]
     x]]
 
