@@ -2,7 +2,7 @@
 
 Why a new language?  I want the following when developing:
 
-- Suitable for developing on mobile phones
+- Suitable for doing development directly on mobile phones. Normal programming language syntax does not scale to this kind of screen size and input methods.
 - Expressive language - support for functional programming, metaprogramming, ...
 - Same code should run on low-end(j2me) as well as highend(html5+JS) phones, embedded systems (memory limitations) and servers with decent performance(optional static typing).
 
