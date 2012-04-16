@@ -88,14 +88,18 @@ exports["parse"] = function(tokens) {
         if (token === lbracket) {
             stack.push(current);
             current = [];
-        } else if (token === rbracket) {
-            var t = current;
-            current = stack.pop();
-            current.push(addQuotes.call(null, t));
-        } else if (token === quote) {
-            current.push(quote);
-        } else if (true) {
-            current.push(JSON.parse('"' + token + '"'));
+        } else {
+            if (token === rbracket) {
+                var t = current;
+                current = stack.pop();
+                current.push(addQuotes.call(null, t));
+            } else {
+                if (token === quote) {
+                    current.push(quote);
+                } else {
+                    current.push(JSON.parse('"' + token + '"'));
+                }
+            }
         }
     }
     return current;

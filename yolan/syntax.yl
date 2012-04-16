@@ -49,13 +49,12 @@
     [def current [new array 'do]]
     [while [tokens get 'length]
       [def token [tokens pop]]
-      [cond
-        [[token == lbracket] [stack push current] [set current [new array]]]
-        [[token == rbracket] [def t current]
+        [if [token == lbracket] [do[stack push current] [set current [new array]]]
+        [if [token == rbracket] [do[def t current]
           [set current [stack pop]]
           [current push [addQuotes call null t]]]
-        [[token == quote] [current push quote]]
-        [true [current push [JSON parse ['" + token '"]]]]]]
+        [if[token == quote] [current push quote]
+        [current push [JSON parse ['" + token '"]]]]]]]
     current]]
 
 [exports set 'nspace
