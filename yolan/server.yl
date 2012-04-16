@@ -17,8 +17,7 @@
   [+ '<body><script>function\ define(_,_,f){f()};</script>
     [[scriptList map [fn [name] [+ '<script\ src=" name '.js"></script>]]]
       join ""]
-    '<script>main();</script>
-    '</body></html>]]
+    '<script>main();</script> '</body></html>]]
 
 [[http createServer
     [fn [request result]
@@ -36,12 +35,10 @@
           [fn [err data]
             [if err [result end ""]]
             [result end
-              [+
-              'define(" name '",\["require","exports","module"\],function(require,exports,module){
-              [jsBackend toJS [syntax parse [syntax tokenize data]]]
-              '});
-              ]
-              ]]]]
+              [+ 'define(" name
+                '",\["require","exports","module"\],function(require,exports,module){
+                [jsBackend toJS [syntax parse [syntax tokenize data]]]
+                '});]]]]]
       true]]
   listen 1234 '127.0.0.1]
 
