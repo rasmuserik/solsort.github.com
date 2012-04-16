@@ -98,7 +98,7 @@ Lists are executed with the following semantics
     - `while` 
     - `return` 
     - `throw` 
-    - TODO: `quote`
+    - `quote`
     - `if` TODO: `[if cond then optional-else]` instead of `[if cond stmt1 stmt2 ...]`
     - `cond` TODO: deprecate
     - `+` TODO: method
