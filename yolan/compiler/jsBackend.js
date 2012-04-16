@@ -4,9 +4,9 @@ var unescapeRegEx = RegExp.call(RegExp, "\\\\(.)", "g");
 
 var escapeRegEx = RegExp.call(RegExp, "[\\\\\\[\\] \\n\\r]", "g");
 
-var yolan = {};
+var exports = {};
 
-yolan.tokenize = function(str) {
+exports.tokenize = function(str) {
     var result = [];
     str.replace(tokenRegEx, function(_, token) {
         return result.push(token);
@@ -14,7 +14,7 @@ yolan.tokenize = function(str) {
     return result;
 };
 
-yolan.parse = function(tokens) {
+exports.parse = function(tokens) {
     tokens = tokens.reverse();
     var stack = [];
     var current = [ "do" ];
@@ -36,7 +36,7 @@ yolan.parse = function(tokens) {
     return current;
 };
 
-yolan.nspace = function(n) {
+exports.nspace = function(n) {
     var result = [];
     while (0 < n) {
         n = n - 1;
@@ -51,7 +51,7 @@ var screenWidth = 78;
 
 var indentStep = 2;
 
-yolan.prettyprint = function(ast) {
+exports.prettyprint = function(ast) {
     if (typeof ast === "string") {
         return ast.replace(escapeRegEx, function(s) {
             return "\\" + s;
@@ -62,12 +62,12 @@ yolan.prettyprint = function(ast) {
     }
     indent = indent + indentStep;
     var pos = indent;
-    strs = ast.map(yolan["prettyprint"]);
+    strs = ast.map(exports["prettyprint"]);
     if (pos + strs.join()["length"] + 1 < screenWidth) {
         indent = indent - indentStep;
         return "[" + strs.join(" ") + "]";
     }
-    var space = "\n" + yolan.nspace(indent);
+    var space = "\n" + exports.nspace(indent);
     var result = [];
     result.push("[");
     result.push(strs[0]);
@@ -103,75 +103,75 @@ yolan.prettyprint = function(ast) {
 
 var compileJS = {
     JsTypeOf: function(syn, syn1) {
-        return "typeof " + yolan.toJS(syn1);
+        return "typeof " + exports.toJS(syn1);
     },
     "do": function(syn) {
-        return syn.slice(1).map(yolan["toJS"]).join(";");
+        return syn.slice(1).map(exports["toJS"]).join(";");
     },
     def: function(syn, syn1) {
-        return "var " + syn1 + "=" + yolan.toJS(syn[2]);
+        return "var " + syn1 + "=" + exports.toJS(syn[2]);
     },
     set: function(syn, syn1) {
-        return syn1 + "=" + yolan.toJS(syn[2]);
+        return syn1 + "=" + exports.toJS(syn[2]);
     },
     object: function(syn, syn1) {
         return "{" + syn.slice(1).map(function(pair) {
-            return JSON.stringify(pair[0].toString()) + ":" + yolan.toJS(pair[1]);
+            return JSON.stringify(pair[0].toString()) + ":" + exports.toJS(pair[1]);
         }).join(",") + "}";
     },
     array: function(syn, syn1) {
-        return "[" + syn.slice(1).map(yolan["toJS"]).join(",") + "]";
+        return "[" + syn.slice(1).map(exports["toJS"]).join(",") + "]";
     },
     fn: function(syn, syn1) {
-        return "function(" + syn1.join(",") + "){" + syn.slice(2, -1).map(yolan["toJS"]).join(";") + ";return " + yolan.toJS(syn[syn["length"] - 1]) + "}";
+        return "function(" + syn1.join(",") + "){" + syn.slice(2, -1).map(exports["toJS"]).join(";") + ";return " + exports.toJS(syn[syn["length"] - 1]) + "}";
     },
     "while": function(syn, syn1) {
-        return "while(" + yolan.toJS(syn1) + "){" + syn.slice(2).map(yolan["toJS"]).join(";") + "}";
+        return "while(" + exports.toJS(syn1) + "){" + syn.slice(2).map(exports["toJS"]).join(";") + "}";
     },
     cond: function(syn) {
         return syn.slice(1).map(function(pair) {
-            return "if(" + yolan.toJS(pair[0]) + "){" + pair.slice(1).map(yolan["toJS"]).join(";") + "}";
+            return "if(" + exports.toJS(pair[0]) + "){" + pair.slice(1).map(exports["toJS"]).join(";") + "}";
         }).join("else ");
     },
     "if": function(syn, syn1) {
-        return "if(" + yolan.toJS(syn1) + "){" + syn.slice(2).map(yolan["toJS"]).join(";") + "}";
+        return "if(" + exports.toJS(syn1) + "){" + syn.slice(2).map(exports["toJS"]).join(";") + "}";
     },
     "#": function() {
         return "";
     },
     "return": function(syn, syn1) {
-        return "return " + yolan.toJS(syn1);
+        return "return " + exports.toJS(syn1);
     },
     "throw": function(syn, syn1) {
-        return "throw " + yolan.toJS(syn1);
+        return "throw " + exports.toJS(syn1);
     },
     "+": function(syn) {
-        return syn.slice(1).map(yolan["toJS"]).join("+");
+        return syn.slice(1).map(exports["toJS"]).join("+");
     },
     "-": function(syn) {
-        return syn.slice(1).map(yolan["toJS"]).join("-");
+        return syn.slice(1).map(exports["toJS"]).join("-");
     },
     and: function(syn) {
-        return syn.slice(1).map(yolan["toJS"]).join("&&");
+        return syn.slice(1).map(exports["toJS"]).join("&&");
     },
     or: function(syn) {
-        return syn.slice(1).map(yolan["toJS"]).join("||");
+        return syn.slice(1).map(exports["toJS"]).join("||");
     },
     not: function(syn, syn1) {
-        return "!" + yolan.toJS(syn1);
+        return "!" + exports.toJS(syn1);
     },
     "<": function(syn, syn1) {
-        return yolan.toJS(syn1) + "<" + yolan.toJS(syn[2]);
+        return exports.toJS(syn1) + "<" + exports.toJS(syn[2]);
     },
     "<=": function(syn, syn1) {
-        return yolan.toJS(syn1) + "<=" + yolan.toJS(syn[2]);
+        return exports.toJS(syn1) + "<=" + exports.toJS(syn[2]);
     },
     "eq?": function(syn, syn1) {
-        return yolan.toJS(syn1) + "===" + yolan.toJS(syn[2]);
+        return exports.toJS(syn1) + "===" + exports.toJS(syn[2]);
     }
 };
 
-yolan.toJS = function(syn) {
+exports.toJS = function(syn) {
     var syn0 = syn[0];
     var syn1 = syn[1];
     if (typeof syn === "string") {
@@ -179,13 +179,13 @@ yolan.toJS = function(syn) {
     } else if (compileJS[syn0]) {
         return compileJS[syn0].call(null, syn, syn1);
     } else if (syn1 === "set") {
-        return yolan.toJS(syn0) + "." + syn[2] + "=" + yolan.toJS(syn[3]);
+        return exports.toJS(syn0) + "." + syn[2] + "=" + exports.toJS(syn[3]);
     } else if (syn1 === "get") {
-        return yolan.toJS(syn0) + "[" + yolan.toJS(syn[2]) + "]";
+        return exports.toJS(syn0) + "[" + exports.toJS(syn[2]) + "]";
     } else if (typeof syn0 === "string") {
-        return yolan.toJS(syn0) + "." + syn1 + "(" + syn.slice(2).map(yolan["toJS"]).join(",") + ")";
+        return exports.toJS(syn0) + "." + syn1 + "(" + syn.slice(2).map(exports["toJS"]).join(",") + ")";
     }
-    return yolan.toJS(syn0) + "." + syn1 + "(" + syn.slice(2).map(yolan["toJS"]).join(",") + ")";
+    return exports.toJS(syn0) + "." + syn1 + "(" + syn.slice(2).map(exports["toJS"]).join(",") + ")";
 };
 
 var fs = require.call(null, "fs");
@@ -197,7 +197,7 @@ if (action === "compile") {
         if (err) {
             return err;
         }
-        var js = yolan.toJS(yolan.parse(yolan.tokenize(data)));
+        var js = exports.toJS(exports.parse(exports.tokenize(data)));
         var uglify = require.call(null, "uglify-js");
         var jsp = uglify["parser"];
         var pro = uglify["uglify"];
@@ -219,8 +219,8 @@ if (action === "prettyprint") {
         if (err) {
             return err;
         }
-        var ast = yolan.parse(yolan.tokenize(data));
-        var src = ast.slice(1).map(yolan["prettyprint"]).join("\n\n");
+        var ast = exports.parse(exports.tokenize(data));
+        var src = ast.slice(1).map(exports["prettyprint"]).join("\n\n");
         return fs.writeFile(process["argv"][4], src, function(err, data) {
             if (err) {
                 return err;
@@ -228,4 +228,8 @@ if (action === "prettyprint") {
             return true;
         });
     });
+}
+
+if (action === "test") {
+    console.log("hello world");
 }
