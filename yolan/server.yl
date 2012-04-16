@@ -11,11 +11,11 @@
 [def scriptList '[webloader webmain]]
 
 [def head
-  [+ '<!DOCTYPE\ html><html> [xml fromYolan '[head [title Hello world]]]]]
+  ['<!DOCTYPE\ html><html> + [xml fromYolan '[head [title Hello world]]]]]
 
 [def body
-  [+ '<body><script>function\ define(_,_,f){f()};</script>
-    [[scriptList map [fn [name] [+ '<script\ src=" name '.js"></script>]]]
+  ['<body><script>function\ define(_,_,f){f()};</script> +
+    [[scriptList map [fn [name] ['<script\ src=" + name '.js"></script>]]]
       join ""]
     '<script>require("./webmain").run();</script> '</body></html>]]
 
@@ -25,17 +25,17 @@
       [console log [request get 'url]]
       [if [not [eq? [url slice -3] '.js]]
         [result writeHead 200 [object ['Content-Type 'text/html]]]
-        [result end [+ head body]]]
+        [result end [head + body]]]
       [if [eq? [url slice -3] '.js]
         [result writeHead 200 [object ['Content-Type 'text/javascript]]]
-        [def name [+ '. [url slice 0 -3]]]
+        [def name ['. + [url slice 0 -3]]]
         [fs readFile
-          [+ name '.yl]
+          [name + '.yl]
           'utf8
           [fn [err data]
             [if err [result end ""]]
             [result end
-              [+ 'define(" name
+              ['define(" + name
                 '",\["require","exports","module"\],function(require,exports,module){
                 [jsBackend toJS [syntax parse [syntax tokenize data]]]
                 '});]]]]]

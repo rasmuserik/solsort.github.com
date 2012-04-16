@@ -33,7 +33,7 @@
       [if err [return err]]
       [def ast [syntax parse [syntax tokenize data]]]
       [def src
-        [+ [[[ast slice 1] map [syntax get 'prettyprint]] join '\n\n]]
+        [[[[ast slice 1] map [syntax get 'prettyprint]] join '\n\n] +]
         '\n]
       [fs writeFile
         [[process get 'argv] get 4]
@@ -49,7 +49,7 @@
       [def ast [syntax parse [syntax tokenize data]]]
       [set ast [[module require './transform] transform ast]]
       [def src
-        [+ [[[ast slice 1] map [syntax get 'prettyprint]] join '\n\n]]
+        [[[[ast slice 1] map [syntax get 'prettyprint]] join '\n\n] +]
         '\n]
       [fs writeFile
         [[process get 'argv] get 4]
