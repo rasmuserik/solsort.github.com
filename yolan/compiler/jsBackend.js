@@ -31,7 +31,7 @@ var compileJS = {
         }).join("else ");
     },
     "if": function(syn, syn1) {
-        return "if(" + exports.toJS(syn1) + "){" + syn.slice(2).map(exports["toJS"]).join(";") + "}";
+        return "if(" + exports.toJS(syn1) + "){" + exports.toJS(syn[2]) + "}";
     },
     "#": function() {
         return "";
