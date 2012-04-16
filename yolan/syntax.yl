@@ -70,10 +70,15 @@
 
 [def indentStep 2]
 
+[def escapeRegEx [RegExp call RegExp '\[\'\ \\\[\\\]\] 'g]]
+
 [exports set prettyprint
   [fn [ast]
+    [console log ast]
     [if [eq? [JsTypeOf ast] 'string]
-      [return [ast replace escapeRegEx [fn [s] [+ '\\ s]]]]]
+      [return [[[JSON stringify ast] slice 1 -1] replace escapeRegEx [fn [s] [+ '\\ s]]]]]
+    [if [and [eq? 2 [ast get 'length]] [eq? 'quote [ast get 0]]]
+      [return [+ '\' [exports prettyprint [ast get 1]]]]]
     [if [eq? 0 [ast get 'length]] [return '\[\]]]
     [set indent [+ indent indentStep]]
     [def pos indent]

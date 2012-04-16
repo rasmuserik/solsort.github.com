@@ -35,16 +35,14 @@ and no programming language have these features yet
 - Pretty-printer for going from AST to source code
 
 ### Features not implemented yet
-- next
-    - split up in module
-    - build system
-    - better string syntax
 - Type system
     - type analysis
 - JVM backend
 - LLVM backend
     - Virtual machine/garbage collector (simple stop-the-world generational copycollector + mark-and-compact (sw-for compatibility + inplace for minimal memory usage))
+
 ### Changelog
+- 120416 New syntax for strings/quoting instead of JS-hack
 - 120415 Prettyprinter for yolan implemented
 - 120414 Bootstrapped the compiler on JavaScript
 - Version 1 was a part of my master thesis, and source code has been scrapped while the syntax lives on.
@@ -53,8 +51,6 @@ and no programming language have these features yet
 ## Language
 
 ### Syntax
-
-TODO: quote not implemented yet, currently javascript-like strings instead.
 
 Code is written as an explicit AST a la lisp, though using square brackets instead of parentheses. Lisp-like quotes are also implemented. Strings are just quoted atoms. Spaces, and newlines, backslashes, quotes and brackets can be escaped with backslash. Example:
 
