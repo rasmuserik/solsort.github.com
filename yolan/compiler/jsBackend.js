@@ -90,11 +90,11 @@ exports["toJS"] = function(syn) {
     } else if (syn1 === "or") {
         return "(" + [ exports.toJS(syn0) ].concat(syn.slice(2).map(exports["toJS"])).join("||") + ")";
     } else if (syn1 === "==") {
-        return "(" + exports.toJS(syn0);
+        return "(" + exports.toJS(syn0) + "===" + exports.toJS(syn2) + ")";
     } else if (syn1 === "<") {
-        return "(" + exports.toJS(syn0);
+        return "(" + exports.toJS(syn0) + "<" + exports.toJS(syn2) + ")";
     } else if (syn1 === "<=") {
-        return "(" + exports.toJS(syn0);
+        return "(" + exports.toJS(syn0) + "<=" + exports.toJS(syn2) + ")";
     } else if (syn1 === "isFalse") {
         return "!(" + exports.toJS(syn0);
     } else if (syn1 === "get") {
