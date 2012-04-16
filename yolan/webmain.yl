@@ -1,3 +1,6 @@
 [[document get 'body] set 'innerHTML
   ['[<h1>yay I am here again!!!</h1>] join '\ ]]
-
+[exports set 'run
+    [fn []
+[[document get 'body] set 'innerHTML
+  ['[<h1>RUNNING!</h1>] join '\ ]]]]

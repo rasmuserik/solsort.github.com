@@ -17,7 +17,7 @@
   [+ '<body><script>function\ define(_,_,f){f()};</script>
     [[scriptList map [fn [name] [+ '<script\ src=" name '.js"></script>]]]
       join ""]
-    '<script>main();</script> '</body></html>]]
+    '<script>require("./webmain").run();</script> '</body></html>]]
 
 [[http createServer
     [fn [request result]
