@@ -96,7 +96,7 @@ exports["toJS"] = function(syn) {
     } else if (syn1 === "<=") {
         return "(" + exports.toJS(syn0) + "<=" + exports.toJS(syn2) + ")";
     } else if (syn1 === "isFalse") {
-        return "!(" + exports.toJS(syn0);
+        return "!(" + exports.toJS(syn0) + ")";
     } else if (syn1 === "get") {
         return exports.toJS(syn0) + "[" + exports.toJS(syn2) + "]";
     } else if (typeof syn0 === "string") {
