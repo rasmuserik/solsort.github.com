@@ -22,7 +22,7 @@
           '){
           [[[syn slice 2 -1] map [exports get 'toJS]] join ';]
           ';return\ 
-          [exports toJS [syn get [- [syn get 'length] 1]]]
+          [exports toJS [syn get [[syn get 'length] - 1]]]
           '}]]]
     ['while
       [fn [syn syn1]
@@ -79,21 +79,40 @@
             '\]=
             [exports toJS [syn get 3]]]]]
       [[eq? syn1 '+]
-        [return ['( + [[[array [exports toJS syn0]] concat [[syn slice 2] map [exports get 'toJS]]] join '+] ')]]]
+        [return
+          ['( +
+            [[[array [exports toJS syn0]] concat
+                [[syn slice 2] map [exports get 'toJS]]]
+              join '+]
+            ')]]]
       [[eq? syn1 '-]
-        [return ['( + [[[array [exports toJS syn0]] concat [[syn slice 2] map [exports get 'toJS]]] join '-] ')]]]
+        [return
+          ['( +
+            [[[array [exports toJS syn0]] concat
+                [[syn slice 2] map [exports get 'toJS]]]
+              join '-]
+            ')]]]
       [[eq? syn1 'and]
-        [return ['( + [[[array [exports toJS syn0]] concat [[syn slice 2] map [exports get 'toJS]]] join '&&] ')]]]
+        [return
+          ['( +
+            [[[array [exports toJS syn0]] concat
+                [[syn slice 2] map [exports get 'toJS]]]
+              join '&&]
+            ')]]]
       [[eq? syn1 'or]
-        [return ['( + [[[array [exports toJS syn0]] concat [[syn slice 2] map [exports get 'toJS]]] join '||] ')]]]
+        [return
+          ['( +
+            [[[array [exports toJS syn0]] concat
+                [[syn slice 2] map [exports get 'toJS]]]
+              join '||]
+            ')]]]
       [[eq? syn1 '==]
         [return ['( + [exports toJS syn0]] '=== [exports toJS syn2] ')]]
       [[eq? syn1 '<]
         [return ['( + [exports toJS syn0]] '< [exports toJS syn2] ')]]
       [[eq? syn1 '<=]
         [return ['( + [exports toJS syn0]] '<= [exports toJS syn2] ')]]
-      [[eq? syn1 'isFalse]
-        [return ['!( + [exports toJS syn0]] ')]]
+      [[eq? syn1 'isFalse] [return ['!( + [exports toJS syn0]] ')]]
       [[eq? syn1 'get]
         [return [[exports toJS syn0] + '\[ [exports toJS syn2] '\]]]]
       [[eq? [JsTypeOf syn0] 'string]
