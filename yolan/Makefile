@@ -1,22 +1,17 @@
-#rm test/yolan.js
-## compile the new compiler
-#node yolan.js compile yolan.yl yolan.new.js
-## compile the new compiler with itself
-#node yolan.new.js compile yolan.yl yolan.new.js
-## compile testcases
-#node yolan.new.js compile test/yolan.yl test/yolan.js
-## make sure the compiled code is as expected, or exit
-#diff -u test/yolan.js test/yolan.js.expected || exit 1
-## install the new compiler
-#mv yolan.new.js yolan.js
-## make the new version of the compiler become the testcase
-#cp yolan.yl test/yolan.yl
-#cp yolan.js test/yolan.js.expected
-
-# run yolan with the newly compiled version
-#node yolan.js $@
-
 all: yolan.js syntax.js jsBackend.js
+clean:
+	rm *.js
+
+compiler-test: all
+	cd test; for x in *.yl; do node ../yolan.js compile $$x `echo $$x | sed -e s/yl$$/js/`; done
+	cd test; for x in *.js; do diff $$x expected/$$x || exit 1; done
+	cp *.yl test
+	cp *.js test/expected
+	cd test; for x in *.yl; do node ../yolan.js compile $$x `echo $$x | sed -e s/yl$$/js/`; done
+	cd test; for x in *.js; do diff $$x expected/$$x || exit 1; done
+
+compiler: compiler-test
+	cd compiler; make
 
 .SUFFIXES: .js .yl .yl-pretty
 
