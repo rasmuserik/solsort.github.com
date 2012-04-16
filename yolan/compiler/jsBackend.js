@@ -25,11 +25,6 @@ var compileJS = {
     "while": function(syn, syn1) {
         return "while(" + exports.toJS(syn1) + "){" + syn.slice(2).map(exports["toJS"]).join(";") + "}";
     },
-    cond: function(syn) {
-        return syn.slice(1).map(function(pair) {
-            return "if(" + exports.toJS(pair[0]) + "){" + pair.slice(1).map(exports["toJS"]).join(";") + "}";
-        }).join("else ");
-    },
     "if": function(syn, syn1) {
         return "if(" + exports.toJS(syn1) + "){" + exports.toJS(syn[2]) + "}else{" + exports.toJS(syn[3]) + "}";
     },

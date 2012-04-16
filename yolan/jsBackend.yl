@@ -34,16 +34,6 @@
           '){
           [[[syn slice 2] map [exports get 'toJS]] join ';]
           '}]]]
-    ['cond
-      [fn [syn]
-        [[[syn slice 1] map
-            [fn [pair]
-              ['if( +
-                [exports toJS [pair get 0]]
-                '){
-                [[[pair slice 1] map [exports get 'toJS]] join ';]
-                '}]]]
-          join 'else\ ]]]
     ['if
       [fn [syn syn1]
         ['if( +
