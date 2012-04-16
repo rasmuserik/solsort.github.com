@@ -73,9 +73,6 @@ exports["toJS"] = function(syn) {
     if (syn1 === "<") {
         return "(" + exports.toJS(syn0) + "<" + exports.toJS(syn2) + ")";
     } else {}
-    if (syn1 === "<=") {
-        return "(" + exports.toJS(syn0) + "<=" + exports.toJS(syn2) + ")";
-    } else {}
     if (syn1 === "fails") {
         return "!(" + exports.toJS(syn0) + ")";
     } else {}

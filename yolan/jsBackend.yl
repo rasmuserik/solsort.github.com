@@ -94,8 +94,6 @@
       [return ['( + [exports toJS syn0] '=== [exports toJS syn2] ')]]]
     [if [syn1 == '<]
       [return ['( + [exports toJS syn0] '< [exports toJS syn2] ')]]]
-    [if [syn1 == '<=]
-      [return ['( + [exports toJS syn0] '<= [exports toJS syn2] ')]]]
     [if [syn1 == 'fails] [return ['!( + [exports toJS syn0] ')]]]
     [if [syn1 == 'jsType] [return ['typeof\  + [exports toJS syn0]]]]
     [if [syn1 == 'get]

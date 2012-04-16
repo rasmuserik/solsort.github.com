@@ -42,7 +42,7 @@ and no programming language have these features yet
     - Virtual machine/garbage collector (simple stop-the-world generational copycollector + mark-and-compact (sw-for compatibility + inplace for minimal memory usage))
 
 ### Changelog
-- 120416 New syntax for strings/quoting instead of JS-hack
+- 120416 New syntax for strings/quoting instead of JS-hack, fewer-macros-more-methods, sample webapp + server, code transformation and cleanup, yl->xml transformation tool
 - 120415 Prettyprinter for yolan implemented
 - 120414 Bootstrapped the compiler on JavaScript
 - Version 1 was a part of my master thesis, and source code has been scrapped while the syntax lives on.
@@ -88,27 +88,23 @@ Lists are executed with the following semantics
     - `do` 
     - `def` 
     - `set` 
-    - `object` 
-    - `array` 
+    - `new object` 
+    - `new array` 
     - `fn` 
-    - `while` 
     - `return` 
-    - `throw` 
     - `quote`
-    - `if` TODO: `[if cond then optional-else]` instead of `[if cond stmt1 stmt2 ...]`
-    - `cond` TODO: deprecate
-    - `+` TODO: method
-    - `-` TODO: method
-    - `and` TODO: method
-    - `or` TODO: method
-    - `not` TODO: method
-    - `<` TODO: method
-    - `<=` TODO: method
-    - `eq?` TODO: method
+    - `if` 
 - types
     - JSObject
         - methods are done using dynamic lookup a la javascript method invocation
         - additional methods added to javascript object
             - `[a` get `b]` -> `a[b]`
             - `[a` set `b c]` -> `a[b] = c`
-            - TODO: `[a` getJsType `]` -> `typeof a`
+            - `+`
+            - `-`
+            - `<`
+            - `==`
+            - `and`
+            - `or`
+            - `fails`
+            - `jsType`
