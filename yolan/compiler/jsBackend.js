@@ -1,7 +1,4 @@
 var compileJS = {
-    JsTypeOf: function(syn, syn1) {
-        return "typeof " + exports.toJS(syn1);
-    },
     "do": function(syn) {
         return syn.slice(1).map(exports["toJS"]).join(";");
     },
@@ -10,6 +7,14 @@ var compileJS = {
     },
     set: function(syn, syn1) {
         return syn1 + "=" + exports.toJS(syn[2]);
+    },
+    "new": function(syn, syn1) {
+        if (syn1 === "object") {
+            return "{" + syn.slice(2).map(function(pair) {
+                return exports.toJS(pair[0]) + ":" + exports.toJS(pair[1]);
+            }).join(",") + "}";
+        }
+        return undefined;
     },
     object: function(syn, syn1) {
         return "{" + syn.slice(1).map(function(pair) {

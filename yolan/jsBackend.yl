@@ -1,8 +1,22 @@
 [def compileJS
-  [object 
-    ['do [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join ';]]]
+  [object ['do [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join ';]]]
     ['def [fn [syn syn1] ['var\  + syn1 '= [exports toJS [syn get 2]]]]]
     ['set [fn [syn syn1] [syn1 + '= [exports toJS [syn get 2]]]]]
+    ['new
+      [fn [syn syn1]
+        [if [syn1 == 'object]
+          [return
+            ['{ +
+              [[[syn slice 2] map
+                  [fn [pair]
+                    [[exports toJS [pair get 0]] + ':
+                      [exports toJS [pair get 1]]]]]
+                join ',]
+              '}]]
+          [if [syn1 == 'array]
+            [return
+              ['\[ + [[[syn slice 2] map [exports get 'toJS]] join ',] '\]]]]]
+        undefined]]
     ['object
       [fn [syn syn1]
         ['{ +
