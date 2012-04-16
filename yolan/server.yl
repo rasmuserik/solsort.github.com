@@ -24,21 +24,21 @@
       [def url [request get 'url]]
       [console log [request get 'url]]
       [if [[[url slice -3] == '.js] fails]
-        [result writeHead 200 [object ['Content-Type 'text/html]]]
-        [result end [head + body]]]
+        [do [result writeHead 200 [object ['Content-Type 'text/html]]]
+          [result end [head + body]]]]
       [if [[url slice -3] == '.js]
-        [result writeHead 200 [object ['Content-Type 'text/javascript]]]
-        [def name ['. + [url slice 0 -3]]]
-        [fs readFile
-          [name + '.yl]
-          'utf8
-          [fn [err data]
-            [if err [result end ""]]
-            [result end
-              ['define(" + name
-                '",\["require","exports","module"\],function(require,exports,module){
-                [jsBackend toJS [syntax parse [syntax tokenize data]]]
-                '});]]]]]
+        [do [result writeHead 200 [object ['Content-Type 'text/javascript]]]
+          [def name ['. + [url slice 0 -3]]]
+          [fs readFile
+            [name + '.yl]
+            'utf8
+            [fn [err data]
+              [if err [result end ""]]
+              [result end
+                ['define(" + name
+                  '",\["require","exports","module"\],function(require,exports,module){
+                  [jsBackend toJS [syntax parse [syntax tokenize data]]]
+                  '});]]]]]]
       true]]
   listen 1234 '127.0.0.1]
 
