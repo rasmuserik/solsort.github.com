@@ -18,18 +18,6 @@
           [return
             ['\[ + [[[syn slice 2] map [exports get 'toJS]] join ',] '\]]]]
         undefined]]
-    ['object
-      [fn [syn syn1]
-        ['{ +
-          [[[syn slice 1] map
-              [fn [pair]
-                [[exports toJS [pair get 0]] + ':
-                  [exports toJS [pair get 1]]]]]
-            join ',]
-          '}]]]
-    ['array
-      [fn [syn syn1]
-        ['\[ + [[[syn slice 1] map [exports get 'toJS]] join ',] '\]]]]
     ['fn
       [fn [syn syn1]
         ['function( +
@@ -68,58 +56,58 @@
     [def syn0 [syn get 0]]
     [def syn1 [syn get 1]]
     [def syn2 [syn get 2]]
-    [cond [[[syn jsType] == 'string] [return syn]]
-      [[compileJS get syn0]
-        [return [[compileJS get syn0] call null syn syn1]]]
-      [[syn1 == 'set]
-        [return
-          [[exports toJS syn0] + '\[
-            [exports toJS syn2]
-            '\]=
-            [exports toJS [syn get 3]]]]]
-      [[syn1 == '+]
-        [return
-          ['( +
-            [[[new array [exports toJS syn0]] concat
-                [[syn slice 2] map [exports get 'toJS]]]
-              join '+]
-            ')]]]
-      [[syn1 == '-]
-        [return
-          ['( +
-            [[[new array [exports toJS syn0]] concat
-                [[syn slice 2] map [exports get 'toJS]]]
-              join '-]
-            ')]]]
-      [[syn1 == 'and]
-        [return
-          ['( +
-            [[[new array [exports toJS syn0]] concat
-                [[syn slice 2] map [exports get 'toJS]]]
-              join '&&]
-            ')]]]
-      [[syn1 == 'or]
-        [return
-          ['( +
-            [[[new array [exports toJS syn0]] concat
-                [[syn slice 2] map [exports get 'toJS]]]
-              join '||]
-            ')]]]
-      [[syn1 == '==]
-        [return ['( + [exports toJS syn0] '=== [exports toJS syn2] ')]]]
-      [[syn1 == '<]
-        [return ['( + [exports toJS syn0] '< [exports toJS syn2] ')]]]
-      [[syn1 == '<=]
-        [return ['( + [exports toJS syn0] '<= [exports toJS syn2] ')]]]
-      [[syn1 == 'fails] [return ['!( + [exports toJS syn0] ')]]]
-      [[syn1 == 'jsType] [return ['typeof\  + [exports toJS syn0]]]]
-      [[syn1 == 'get]
-        [return [[exports toJS syn0] + '\[ [exports toJS syn2] '\]]]]
-      [[[syn0 jsType] == 'string]
-        [return
-          [[exports toJS syn0] + '. syn1 '(
-            [[[syn slice 2] map [exports get 'toJS]] join ',]
-            ')]]]]
+    [if [[syn jsType] == 'string] [return syn]]
+    [if [compileJS get syn0]
+      [return [[compileJS get syn0] call null syn syn1]]]
+    [if [syn1 == 'set]
+      [return
+        [[exports toJS syn0] + '\[
+          [exports toJS syn2]
+          '\]=
+          [exports toJS [syn get 3]]]]]
+    [if [syn1 == '+]
+      [return
+        ['( +
+          [[[new array [exports toJS syn0]] concat
+              [[syn slice 2] map [exports get 'toJS]]]
+            join '+]
+          ')]]]
+    [if [syn1 == '-]
+      [return
+        ['( +
+          [[[new array [exports toJS syn0]] concat
+              [[syn slice 2] map [exports get 'toJS]]]
+            join '-]
+          ')]]]
+    [if [syn1 == 'and]
+      [return
+        ['( +
+          [[[new array [exports toJS syn0]] concat
+              [[syn slice 2] map [exports get 'toJS]]]
+            join '&&]
+          ')]]]
+    [if [syn1 == 'or]
+      [return
+        ['( +
+          [[[new array [exports toJS syn0]] concat
+              [[syn slice 2] map [exports get 'toJS]]]
+            join '||]
+          ')]]]
+    [if [syn1 == '==]
+      [return ['( + [exports toJS syn0] '=== [exports toJS syn2] ')]]]
+    [if [syn1 == '<]
+      [return ['( + [exports toJS syn0] '< [exports toJS syn2] ')]]]
+    [if [syn1 == '<=]
+      [return ['( + [exports toJS syn0] '<= [exports toJS syn2] ')]]]
+    [if [syn1 == 'fails] [return ['!( + [exports toJS syn0] ')]]]
+    [if [syn1 == 'jsType] [return ['typeof\  + [exports toJS syn0]]]]
+    [if [syn1 == 'get]
+      [return [[exports toJS syn0] + '\[ [exports toJS syn2] '\]]]]
+    [if [[syn0 jsType] == 'string]
+      [return
+        [[exports toJS syn0] + '. syn1 '(
+          [[[syn slice 2] map [exports get 'toJS]] join ',]
+          ')]]]
     [[exports toJS syn0] + '. syn1 '(
       [[[syn slice 2] map [exports get 'toJS]] join ',]
       ')]]]

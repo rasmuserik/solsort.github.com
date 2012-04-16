@@ -19,14 +19,6 @@ var compileJS = {
         }
         return undefined;
     },
-    object: function(syn, syn1) {
-        return "{" + syn.slice(1).map(function(pair) {
-            return exports.toJS(pair[0]) + ":" + exports.toJS(pair[1]);
-        }).join(",") + "}";
-    },
-    array: function(syn, syn1) {
-        return "[" + syn.slice(1).map(exports["toJS"]).join(",") + "]";
-    },
     fn: function(syn, syn1) {
         return "function(" + syn1.join(",") + "){" + syn.slice(2, -1).map(exports["toJS"]).join(";") + ";return " + exports.toJS(syn[syn["length"] - 1]) + "}";
     },
@@ -58,31 +50,44 @@ exports["toJS"] = function(syn) {
     var syn2 = syn[2];
     if (typeof syn === "string") {
         return syn;
-    } else if (compileJS[syn0]) {
+    }
+    if (compileJS[syn0]) {
         return compileJS[syn0].call(null, syn, syn1);
-    } else if (syn1 === "set") {
+    }
+    if (syn1 === "set") {
         return exports.toJS(syn0) + "[" + exports.toJS(syn2) + "]=" + exports.toJS(syn[3]);
-    } else if (syn1 === "+") {
+    }
+    if (syn1 === "+") {
         return "(" + [ exports.toJS(syn0) ].concat(syn.slice(2).map(exports["toJS"])).join("+") + ")";
-    } else if (syn1 === "-") {
+    }
+    if (syn1 === "-") {
         return "(" + [ exports.toJS(syn0) ].concat(syn.slice(2).map(exports["toJS"])).join("-") + ")";
-    } else if (syn1 === "and") {
+    }
+    if (syn1 === "and") {
         return "(" + [ exports.toJS(syn0) ].concat(syn.slice(2).map(exports["toJS"])).join("&&") + ")";
-    } else if (syn1 === "or") {
+    }
+    if (syn1 === "or") {
         return "(" + [ exports.toJS(syn0) ].concat(syn.slice(2).map(exports["toJS"])).join("||") + ")";
-    } else if (syn1 === "==") {
+    }
+    if (syn1 === "==") {
         return "(" + exports.toJS(syn0) + "===" + exports.toJS(syn2) + ")";
-    } else if (syn1 === "<") {
+    }
+    if (syn1 === "<") {
         return "(" + exports.toJS(syn0) + "<" + exports.toJS(syn2) + ")";
-    } else if (syn1 === "<=") {
+    }
+    if (syn1 === "<=") {
         return "(" + exports.toJS(syn0) + "<=" + exports.toJS(syn2) + ")";
-    } else if (syn1 === "fails") {
+    }
+    if (syn1 === "fails") {
         return "!(" + exports.toJS(syn0) + ")";
-    } else if (syn1 === "jsType") {
+    }
+    if (syn1 === "jsType") {
         return "typeof " + exports.toJS(syn0);
-    } else if (syn1 === "get") {
+    }
+    if (syn1 === "get") {
         return exports.toJS(syn0) + "[" + exports.toJS(syn2) + "]";
-    } else if (typeof syn0 === "string") {
+    }
+    if (typeof syn0 === "string") {
         return exports.toJS(syn0) + "." + syn1 + "(" + syn.slice(2).map(exports["toJS"]).join(",") + ")";
     }
     return exports.toJS(syn0) + "." + syn1 + "(" + syn.slice(2).map(exports["toJS"]).join(",") + ")";
