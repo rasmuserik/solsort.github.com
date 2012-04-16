@@ -36,9 +36,10 @@ and no programming language have these features yet
 
 ### Features not implemented yet
 - next
-    - better string syntax
-    - build system
+    - newline in prettyprinted file
     - split up in module
+    - build system
+    - better string syntax
 - Type system
     - type analysis
 - JVM backend
