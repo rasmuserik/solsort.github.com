@@ -1,11 +1,11 @@
-[def modules [object]]
+[def modules [new object]]
 
 [def require [fn [name] [modules get name]]]
 
 [window set 'define
   [fn [name dep f]
-    [def module [object]]
-    [def exports [object]]
+    [def module [new object]]
+    [def exports [new object]]
     [module set 'exports exports]
     [f call null require exports module]
     [modules set name [module get 'exports]]]]

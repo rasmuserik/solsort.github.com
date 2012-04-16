@@ -1,6 +1,6 @@
 [# make sure that the environment is sane]
 
-[if [[console jsType] fails] [set console [object]]]
+[if [[console jsType] fails] [set console [new object]]]
 
 [if [[console get 'log] fails] [console set 'log [fn [] true]]]
 

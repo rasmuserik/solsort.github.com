@@ -5,7 +5,7 @@
     [if [[xml jsType] == 'string] [return xml]]
     [set xml [xml slice 0]]
     [def tagname [xml shift]]
-    [def attr [array]]
+    [def attr [new array]]
     [def attrData [xml get 0]]
     [if [attrData and [Array isArray [attrData get 0]]]
       [do [set attr attrData] [xml shift]]]

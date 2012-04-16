@@ -24,10 +24,12 @@
       [def url [request get 'url]]
       [console log [request get 'url]]
       [if [[[url slice -3] == '.js] fails]
-        [do [result writeHead 200 [object ['Content-Type 'text/html]]]
+        [do [result writeHead 200 [new object ['Content-Type 'text/html]]]
           [result end [head + body]]]]
       [if [[url slice -3] == '.js]
-        [do [result writeHead 200 [object ['Content-Type 'text/javascript]]]
+        [do
+          [result writeHead 200
+            [new object ['Content-Type 'text/javascript]]]
           [def name ['. + [url slice 0 -3]]]
           [fs readFile
             [name + '.yl]

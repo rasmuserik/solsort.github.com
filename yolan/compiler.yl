@@ -19,7 +19,7 @@
       [def jsp [uglify get 'parser]]
       [def pro [uglify get 'uglify]]
       [def ast [jsp parse js]]
-      [set js [pro gen_code ast [object ['beautify true]]]]
+      [set js [pro gen_code ast [new object ['beautify true]]]]
       [fs writeFile
         [[process get 'argv] get 4]
         js
