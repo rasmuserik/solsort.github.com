@@ -62,7 +62,7 @@ Code is written as an explicit AST a la lisp, though using square brackets inste
         [fn []
             [console log 'hello 'world]]]
 
-    [\'foo bar\n '[\\baz \[\'hello\] 'qu\ uz]]
+    [\'foo bar\n '[\\baz \[\'quux\] 'hello\ world]]
 
 maps to the following JSON ASTs:
 
@@ -70,7 +70,7 @@ maps to the following JSON ASTs:
         ["fn", [], 
             ["console", "log", ["quote", "hello"], ["quote", "world"]]]]
 
-    ["'foo", "bar\n", ["quote", ["\\baz", "['hello]", ["quote", "qu\ uz"]]]]
+    ["'foo", "bar\n", ["quote", ["\\baz", "['quux]", ["quote", "hello world"]]]]
 
 
 ### Semantics
