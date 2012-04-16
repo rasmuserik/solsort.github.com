@@ -6,7 +6,7 @@
 
 [def action [[process get 'argv] get 2]]
 
-[if [eq? action 'compile]
+[if [action == 'compile]
   [fs readFile
     [[process get 'argv] get 3]
     'utf8
@@ -25,7 +25,7 @@
         js
         [fn [err data] [if err [return err]] true]]]]]
 
-[if [eq? action 'prettyprint]
+[if [action == 'prettyprint]
   [fs readFile
     [[process get 'argv] get 3]
     'utf8
@@ -40,7 +40,7 @@
         src
         [fn [err data] [cond [err [return err]]] true]]]]]
 
-[if [eq? action 'transform]
+[if [action == 'transform]
   [fs readFile
     [[process get 'argv] get 3]
     'utf8
@@ -56,5 +56,5 @@
         src
         [fn [err data] [cond [err [return err]]] true]]]]]
 
-[if [eq? action 'test] [console log 'hello\ world]]
+[if [action == 'test] [console log 'hello\ world]]
 

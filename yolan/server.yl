@@ -23,10 +23,10 @@
     [fn [request result]
       [def url [request get 'url]]
       [console log [request get 'url]]
-      [if [not [eq? [url slice -3] '.js]]
+      [if [not [[url slice -3] == '.js]]
         [result writeHead 200 [object ['Content-Type 'text/html]]]
         [result end [head + body]]]
-      [if [eq? [url slice -3] '.js]
+      [if [[url slice -3] == '.js]
         [result writeHead 200 [object ['Content-Type 'text/javascript]]]
         [def name ['. + [url slice 0 -3]]]
         [fs readFile

@@ -69,53 +69,53 @@
     [def syn0 [syn get 0]]
     [def syn1 [syn get 1]]
     [def syn2 [syn get 2]]
-    [cond [[eq? [JsTypeOf syn] 'string] [return syn]]
+    [cond [[[JsTypeOf syn] == 'string] [return syn]]
       [[compileJS get syn0]
         [return [[compileJS get syn0] call null syn syn1]]]
-      [[eq? syn1 'set]
+      [[syn1 == 'set]
         [return
           [[exports toJS syn0] + '\[
             [exports toJS syn2]
             '\]=
             [exports toJS [syn get 3]]]]]
-      [[eq? syn1 '+]
+      [[syn1 == '+]
         [return
           ['( +
             [[[array [exports toJS syn0]] concat
                 [[syn slice 2] map [exports get 'toJS]]]
               join '+]
             ')]]]
-      [[eq? syn1 '-]
+      [[syn1 == '-]
         [return
           ['( +
             [[[array [exports toJS syn0]] concat
                 [[syn slice 2] map [exports get 'toJS]]]
               join '-]
             ')]]]
-      [[eq? syn1 'and]
+      [[syn1 == 'and]
         [return
           ['( +
             [[[array [exports toJS syn0]] concat
                 [[syn slice 2] map [exports get 'toJS]]]
               join '&&]
             ')]]]
-      [[eq? syn1 'or]
+      [[syn1 == 'or]
         [return
           ['( +
             [[[array [exports toJS syn0]] concat
                 [[syn slice 2] map [exports get 'toJS]]]
               join '||]
             ')]]]
-      [[eq? syn1 '==]
+      [[syn1 == '==]
         [return ['( + [exports toJS syn0] '=== [exports toJS syn2] ')]]]
-      [[eq? syn1 '<]
+      [[syn1 == '<]
         [return ['( + [exports toJS syn0] '< [exports toJS syn2] ')]]]
-      [[eq? syn1 '<=]
+      [[syn1 == '<=]
         [return ['( + [exports toJS syn0] '<= [exports toJS syn2] ')]]]
-      [[eq? syn1 'isFalse] [return ['!( + [exports toJS syn0]] ')]]
-      [[eq? syn1 'get]
+      [[syn1 == 'isFalse] [return ['!( + [exports toJS syn0]] ')]]
+      [[syn1 == 'get]
         [return [[exports toJS syn0] + '\[ [exports toJS syn2] '\]]]]
-      [[eq? [JsTypeOf syn0] 'string]
+      [[[JsTypeOf syn0] == 'string]
         [return
           [[exports toJS syn0] + '. syn1 '(
             [[[syn slice 2] map [exports get 'toJS]] join ',]
