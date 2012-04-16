@@ -34,7 +34,7 @@
   [fn [list]
     [def i 0]
     [def result [array]]
-    [while [< i [list get 'length]]
+    [while [i < [list get 'length]]
       [def elem [list get i]]
       [if [elem == quote]
         [set i [i + 1]]
@@ -61,7 +61,7 @@
 [exports set 'nspace
   [fn [n]
     [def result [array]]
-    [while [< 0 n] [set n [n - 1]] [result push '\ ]]
+    [while [0 < n] [set n [n - 1]] [result push '\ ]]
     [result join ""]]]
 
 [def indent 0]
@@ -87,7 +87,7 @@
     [set indent [indent + indentStep]]
     [def pos indent]
     [set strs [ast map [exports get 'prettyprint]]]
-    [if [< [pos + [[strs join] get 'length] 1] screenWidth]
+    [if [[pos + [[strs join] get 'length] 1] < screenWidth]
       [set indent [indent - indentStep]]
       [return ['\[ + [strs join '\ ] '\]]]]
     [def space ['\n + [exports nspace indent]]]
@@ -98,7 +98,7 @@
     [def i 1]
     [def forceNewLine false]
     [def currentIsString true]
-    [while [< i [ast get 'length]]
+    [while [i < [ast get 'length]]
       [def prevIsString currentIsString]
       [set currentIsString
         [[[JsTypeOf [ast get i]] == 'string] or
@@ -106,11 +106,11 @@
       [set forceNewLine false]
       [if [[not prevIsString] or [not currentIsString]]
         [set forceNewLine true]]
-      [if [< i 2] [set forceNewLine false]]
+      [if [i < 2] [set forceNewLine false]]
       [def prevIsString currentIsString]
       [result push '\ ]
       [if
-        [forceNewLine or [< screenWidth [pos + [[strs get i] get 'length]]]]
+        [forceNewLine or [screenWidth < [pos + [[strs get i] get 'length]]]]
         [result pop]
         [result push space]
         [set pos indent]]
