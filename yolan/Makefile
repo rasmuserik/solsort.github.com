@@ -1,7 +1,9 @@
 CODE=$(shell ls *.yl)
 all: $(CODE:.yl=.js)
+test-clean:
+	rm -f *.js test/*.js test/expected/*.js
 clean:
-	rm *.js
+	rm -f *.js 
 
 compiler-test: all
 	# cd test; for x in *.yl; do node ../compiler.js compile $$x `echo $$x | sed -e s/yl$$/js/`; done
@@ -9,7 +11,7 @@ compiler-test: all
 	cp *.yl test
 	cp *.js test/expected
 	cd test; for x in *.yl; do node ../compiler.js compile $$x `echo $$x | sed -e s/yl$$/js/`; done
-	cd test; for x in *.js; do diff $$x expected/$$x || exit 1; done
+	cd test/expected; for x in *.js; do diff $$x ../$$x || exit 1; done
 
 test: compiler-test
 
