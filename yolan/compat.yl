@@ -2,10 +2,10 @@
 
 [if [not [JsTypeOf console]] [set console [object]]]
 
-[if [not [console get 'log']] [console set log [fn [] true]]]
+[if [not [console get "log"]] [console set log [fn [] true]]]
 
-[if [not [console get 'error']] [console set error [console get 'log']]]
+[if [not [console get "error"]] [console set error [console get "log"]]]
 
-[if [not [console get 'info']] [console set info [console get 'log']]]
+[if [not [console get "info"]] [console set info [console get "log"]]]
 
-[if [not [console get 'warn']] [console set warn [console get 'log']]]
+[if [not [console get "warn"]] [console set warn [console get "log"]]]

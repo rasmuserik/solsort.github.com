@@ -1,12 +1,12 @@
-[def http [module require 'http']]
+[def http [module require "http"]]
 
-[def xml [module require './xml']]
+[def xml [module require "./xml"]]
 
 [[http createServer
     [fn [request result]
-      [console log [request get 'url']]
-      [result writeHead 200 [object ['Content-Type' 'text/html']]]
+      [console log [request get "url"]]
+      [result writeHead 200 [object [Content-Type "text/html"]]]
       [result end
         [xml fromYolan
           [quote [html [head [title Hello world]] [body [h1 hello world]]]]]]]]
-  listen 1234 '127.0.0.1']
+  listen 1234 "127.0.0.1"]

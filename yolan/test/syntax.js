@@ -1,14 +1,66 @@
-var tokenRegEx = RegExp.call(RegExp, "\\s*(\\[|\\]|(\\\\.|[^\\s\\[\\]])+)", "g");
-
-var unescapeRegEx = RegExp.call(RegExp, "\\\\(.)", "g");
-
-var escapeRegEx = RegExp.call(RegExp, "[\\\\\\[\\] \\n\\r]", "g");
-
 exports.tokenize = function(str) {
     var result = [];
-    str.replace(tokenRegEx, function(_, token) {
-        return result.push(token);
-    });
+    var i = 0;
+    var tokeniser = {};
+    var c = str[0];
+    var nextc = function() {
+        i = i + 1;
+        c = str[i];
+        return c;
+    };
+    var isWs = function() {
+        return c === " " || c === "\n" || c === "\r" || c === "	";
+    };
+    var isBracket = function() {
+        return c === "[" || c === "]";
+    };
+    while (c) {
+        while (isWs.call()) {
+            nextc.call();
+        }
+        if (isBracket.call()) {
+            result.push(c);
+            nextc.call();
+        } else if (c === "'") {
+            result.push(quote);
+            nextc.call();
+        } else if (true) {
+            var symb = "";
+            while (c && !isWs.call() && !isBracket.call()) {
+                if (c === "\\") {
+                    nextc.call();
+                    if (!(isWs.call() || isBracket.call() || c === "'")) {
+                        symb = symb + "\\";
+                    }
+                }
+                if (c === '"') {
+                    symb = symb + "\\";
+                }
+                symb = symb + c;
+                nextc.call();
+            }
+            result.push(symb);
+        }
+    }
+    return result;
+};
+
+var quote = {
+    quote: true
+};
+
+var addQuotes = function(list) {
+    var i = 0;
+    var result = [];
+    while (i < list["length"]) {
+        var elem = list[i];
+        if (elem === quote) {
+            i = i + 1;
+            elem = [ "quote", list[i] ];
+        }
+        result.push(elem);
+        i = i + 1;
+    }
     return result;
 };
 
@@ -24,11 +76,11 @@ exports.parse = function(tokens) {
         } else if (token === "]") {
             var t = current;
             current = stack.pop();
-            current.push(t);
+            current.push(addQuotes.call(null, t));
+        } else if (token === quote) {
+            current.push(quote);
         } else if (true) {
-            current.push(token.replace(unescapeRegEx, function(_, a) {
-                return a;
-            }));
+            current.push(JSON.parse('"' + token + '"'));
         }
     }
     return current;

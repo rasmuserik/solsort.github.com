@@ -2,7 +2,7 @@
 
 [exports set fromYolan
   [fn [xml]
-    [if [eq? [JsTypeOf xml] 'string'] [return xml]]
+    [if [eq? [JsTypeOf xml] "string"] [return xml]]
     [set xml [xml slice 0]]
     [def tagname [xml shift]]
     [def attr [array]]
@@ -10,12 +10,12 @@
     [if [and attrData [Array isArray [attrData get 0]]]
       [set attr attrData]
       [xml shift]]
-    [def content [[xml map [exports get 'fromYolan']] join '\ ']]
+    [def content [[xml map [exports get "fromYolan"]] join "\ "]]
     [def attrStr
       [[attr map
           [fn [attr]
-            [+ '\ ' [attr get 0] '="' [[attr slice 1] join '\ '] '"']]]
+            [+ "\ " [attr get 0] "=\\"" [[attr slice 1] join "\ "] "\\""]]]
         join ""]]
     [if content
-      [return [+ '<' tagname attrStr '>' content '</' tagname '>']]]
-    [+ '<' tagname attrStr '/>']]]
+      [return [+ "<" tagname attrStr ">" content "</" tagname ">"]]]
+    [+ "<" tagname attrStr "/>"]]]
