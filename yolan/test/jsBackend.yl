@@ -79,6 +79,8 @@
             [exports toJS [syn get 2]]
             '\]=
             [exports toJS [syn get 3]]]]]
+      [[eq? syn1 '+]
+        [return [+ '( [[[exports toJS syn0] concat [[syn slice 2] map [exports get 'toJS]]] join '+] ')]]]
       [[eq? syn1 'get]
         [return [+ [exports toJS syn0] '\[ [exports toJS [syn get 2]] '\]]]]
       [[eq? [JsTypeOf syn0] 'string]

@@ -44,6 +44,23 @@ if (action === "prettyprint") {
     });
 }
 
+if (action === "transform") {
+    fs.readFile(process["argv"][3], "utf8", function(err, data) {
+        if (err) {
+            return err;
+        }
+        var ast = syntax.parse(syntax.tokenize(data));
+        ast = module.require("./transform").transform(ast);
+        var src = ast.slice(1).map(syntax["prettyprint"]).join("\n\n");
+        return fs.writeFile(process["argv"][4], src, function(err, data) {
+            if (err) {
+                return err;
+            }
+            return true;
+        });
+    });
+}
+
 if (action === "test") {
     console.log("hello world");
 }

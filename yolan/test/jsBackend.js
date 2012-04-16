@@ -80,6 +80,8 @@ exports["toJS"] = function(syn) {
         return compileJS[syn0].call(null, syn, syn1);
     } else if (syn1 === "set") {
         return exports.toJS(syn0) + "[" + exports.toJS(syn[2]) + "]=" + exports.toJS(syn[3]);
+    } else if (syn1 === "+") {
+        return "(" + exports.toJS(syn0).concat(syn.slice(2).map(exports["toJS"])).join("+") + ")";
     } else if (syn1 === "get") {
         return exports.toJS(syn0) + "[" + exports.toJS(syn[2]) + "]";
     } else if (typeof syn0 === "string") {
