@@ -14,6 +14,9 @@ var compileJS = {
                 return exports.toJS(pair[0]) + ":" + exports.toJS(pair[1]);
             }).join(",") + "}";
         }
+        if (syn1 === "array") {
+            return "[" + syn.slice(2).map(exports["toJS"]).join(",") + "]";
+        }
         return undefined;
     },
     object: function(syn, syn1) {

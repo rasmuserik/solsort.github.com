@@ -12,10 +12,10 @@
                     [[exports toJS [pair get 0]] + ':
                       [exports toJS [pair get 1]]]]]
                 join ',]
-              '}]]
+              '}]]]
           [if [syn1 == 'array]
             [return
-              ['\[ + [[[syn slice 2] map [exports get 'toJS]] join ',] '\]]]]]
+              ['\[ + [[[syn slice 2] map [exports get 'toJS]] join ',] '\]]]]
         undefined]]
     ['object
       [fn [syn syn1]
