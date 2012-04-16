@@ -46,7 +46,13 @@
           join 'else\ ]]]
     ['if
       [fn [syn syn1]
-        ['if( + [exports toJS syn1] '){ [exports toJS [syn get 2]] '}else{ [exports toJS [syn get 3]] '}]]]
+        ['if( +
+          [exports toJS syn1]
+          '){
+          [exports toJS [syn get 2]]
+          '}else{
+          [exports toJS [syn get 3]]
+          '}]]]
     ['# [fn [] ""]]
     ['return [fn [syn syn1] ['return\  + [exports toJS syn1]]]]
     ['quote [fn [syn syn1] [JSON stringify syn1]]]]]
