@@ -1,22 +1,22 @@
 [def compileJS
-  [object [JsTypeOf [fn [syn syn1] [+ 'typeof\  [exports toJS syn1]]]]
-    [do [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join ';]]]
-    [def [fn [syn syn1] [+ 'var\  syn1 '= [exports toJS [syn get 2]]]]]
-    [set [fn [syn syn1] [+ syn1 '= [exports toJS [syn get 2]]]]]
-    [object
+  [object ['JsTypeOf [fn [syn syn1] [+ 'typeof\  [exports toJS syn1]]]]
+    ['do [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join ';]]]
+    ['def [fn [syn syn1] [+ 'var\  syn1 '= [exports toJS [syn get 2]]]]]
+    ['set [fn [syn syn1] [+ syn1 '= [exports toJS [syn get 2]]]]]
+    ['object
       [fn [syn syn1]
         [+ '{
           [[[syn slice 1] map
               [fn [pair]
-                [+ [JSON stringify [[pair get 0] toString]]
+                [+ '" [[pair get 0] get 1] '"
                   ':
                   [exports toJS [pair get 1]]]]]
             join ',]
           '}]]]
-    [array
+    ['array
       [fn [syn syn1]
         [+ '\[ [[[syn slice 1] map [exports get 'toJS]] join ',] '\]]]]
-    [fn
+    ['fn
       [fn [syn syn1]
         [+ 'function(
           [syn1 join ',]
@@ -25,14 +25,14 @@
           ';return\ 
           [exports toJS [syn get [- [syn get 'length] 1]]]
           '}]]]
-    [while
+    ['while
       [fn [syn syn1]
         [+ 'while(
           [exports toJS syn1]
           '){
           [[[syn slice 2] map [exports get 'toJS]] join ';]
           '}]]]
-    [cond
+    ['cond
       [fn [syn]
         [[[syn slice 1] map
             [fn [pair]
@@ -42,27 +42,27 @@
                 [[[pair slice 1] map [exports get 'toJS]] join ';]
                 '}]]]
           join 'else\ ]]]
-    [if
+    ['if
       [fn [syn syn1]
         [+ 'if(
           [exports toJS syn1]
           '){
           [[[syn slice 2] map [exports get 'toJS]] join ';]
           '}]]]
-    [# [fn [] ""]]
-    [return [fn [syn syn1] [+ 'return\  [exports toJS syn1]]]]
-    [throw [fn [syn syn1] [+ 'throw\  [exports toJS syn1]]]]
-    [quote [fn [syn syn1] [JSON stringify syn1]]]
-    [+ [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '+]]]
-    [- [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '-]]]
-    [and [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '&&]]]
-    [or [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '||]]]
-    [not [fn [syn syn1] [+ '!( [exports toJS syn1] ')]]]
-    [< [fn [syn syn1] [+ [exports toJS syn1] '< [exports toJS [syn get 2]]]]]
-    [<=
+    ['# [fn [] ""]]
+    ['return [fn [syn syn1] [+ 'return\  [exports toJS syn1]]]]
+    ['throw [fn [syn syn1] [+ 'throw\  [exports toJS syn1]]]]
+    ['quote [fn [syn syn1] [JSON stringify syn1]]]
+    ['+ [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '+]]]
+    ['- [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '-]]]
+    ['and [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '&&]]]
+    ['or [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join '||]]]
+    ['not [fn [syn syn1] [+ '!( [exports toJS syn1] ')]]]
+    ['< [fn [syn syn1] [+ [exports toJS syn1] '< [exports toJS [syn get 2]]]]]
+    ['<=
       [fn [syn syn1]
         [+ [exports toJS syn1] '<= [exports toJS [syn get 2]]]]]
-    [eq?
+    ['eq?
       [fn [syn syn1]
         [+ [exports toJS syn1] '=== [exports toJS [syn get 2]]]]]]]
 

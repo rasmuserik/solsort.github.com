@@ -13,7 +13,7 @@ var compileJS = {
     },
     object: function(syn, syn1) {
         return "{" + syn.slice(1).map(function(pair) {
-            return JSON.stringify(pair[0].toString()) + ":" + exports.toJS(pair[1]);
+            return '"' + pair[0][1] + '"' + ":" + exports.toJS(pair[1]);
         }).join(",") + "}";
     },
     array: function(syn, syn1) {

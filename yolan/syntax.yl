@@ -26,9 +26,9 @@
           [result push symb]]]]
     result]]
 
-[def quote [object [quote true]]]
-[def lbracket [object [lbracket true]]]
-[def rbracket [object [rbracket true]]]
+[def quote [object ['quote true]]]
+[def lbracket [object ['lbracket true]]]
+[def rbracket [object ['rbracket true]]]
 
 [def addQuotes
   [fn [list]
