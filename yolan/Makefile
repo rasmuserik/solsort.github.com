@@ -8,6 +8,7 @@ clean:
 compiler-test: all
 	# cd test; for x in *.yl; do node ../compiler.js compile $$x `echo $$x | sed -e s/yl$$/js/`; done
 	# cd test; for x in *.js; do diff $$x expected/$$x || exit 1; done
+	install -d test/expected
 	cp *.yl test
 	cp *.js test/expected
 	cd test; for x in *.yl; do node ../compiler.js compile $$x `echo $$x | sed -e s/yl$$/js/`; done
