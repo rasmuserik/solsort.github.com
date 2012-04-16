@@ -58,7 +58,7 @@ var compileJS = {
         return syn.slice(1).map(exports["toJS"]).join("||");
     },
     not: function(syn, syn1) {
-        return "!" + exports.toJS(syn1);
+        return "!(" + exports.toJS(syn1) + ")";
     },
     "<": function(syn, syn1) {
         return exports.toJS(syn1) + "<" + exports.toJS(syn[2]);

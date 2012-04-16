@@ -19,5 +19,3 @@ exports.fromYolan = function(xml) {
     }
     return "<" + tagname + attrStr + "/>";
 };
-
-console.log(exports.fromYolan([ "html", [ "head", [ "title", "Hello", "world" ] ], [ "body", [ "h1", "hello" ], [ "p", [ [ "style", "text-align:", "center" ] ], "Yay" ], [ "hr" ] ] ]));

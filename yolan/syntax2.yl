@@ -17,17 +17,20 @@
     [def isWs [fn [] [or [eq? c "\ "] [eq? c "\\n"] [eq? c "\\r"] [eq? c "\\t"]]]]
     [def isBracket [fn [] [or [eq? c "\["] [eq? c "\]"]]]]
     [while c
-        [# skip whitespace]
         [while [isWs call] [nextc call]]
         [cond
             [[isBracket call] [result push c] [nextc call]]
-            [[eq? c "\'"] [result push c] [nextc call]]
+            [[eq? c "\'"] [result push quote] [nextc call]]
             [true 
                 [def symb ""]
                 [while [and c [not [isWs call]] [not [isBracket call]]]
                     [if [eq? c "\\\\"] 
-                    [set symb [+ symb c]]
-                        [nextc call] ]
+                        [nextc call] 
+                        [if [not [or [isWs call] [isBracket call] [eq? c "\'"]]]
+                            [set symb [+ symb "\\\\"]]]
+                    ]
+                    [if [eq? c '"']
+                        [set symb [+ symb '\\\\']]]
                     [set symb [+ symb c]]
                     [nextc call] ]
                 [result push symb]
@@ -35,6 +38,20 @@
     ]
     [console log [JSON stringify result]]
     result]]
+
+[def quote [object [quote true]]]
+[def addQuotes [fn [list] 
+    [def i 0]
+    [def result [array]]
+    [while [< i [list get 'length']]
+        [def elem [list get i]]
+        [if [eq? elem quote]
+            [set i [+ i 1]]
+            [set elem [array 'quote' [list get i]]]]
+        [result push elem]
+        [set i [+ i 1]]]
+    result
+    ]]
 
 [exports set parse
   [fn [tokens]
@@ -46,8 +63,9 @@
       [cond [[eq? token '\['] [stack push current] [set current [array]]]
         [[eq? token '\]'] [def t current]
           [set current [stack pop]]
-          [current push t]]
-        [true [current push [token replace unescapeRegEx [fn [_ a] a]]]]]]
+          [current push [addQuotes call null t]]]
+        [[eq? token quote] [current push quote]]
+        [true [current push [JSON parse [+ '"' token '"']]]]]]
     current]]
 
 [exports set nspace

@@ -57,7 +57,7 @@
     [- [fn [syn] [[[syn slice 1] map [exports get 'toJS']] join '-']]]
     [and [fn [syn] [[[syn slice 1] map [exports get 'toJS']] join '&&']]]
     [or [fn [syn] [[[syn slice 1] map [exports get 'toJS']] join '||']]]
-    [not [fn [syn syn1] [+ '!' [exports toJS syn1]]]]
+    [not [fn [syn syn1] [+ '!(' [exports toJS syn1] ')']]]
     [< [fn [syn syn1] [+ [exports toJS syn1] '<' [exports toJS [syn get 2]]]]]
     [<=
       [fn [syn syn1]

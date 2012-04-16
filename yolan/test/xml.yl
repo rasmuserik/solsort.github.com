@@ -19,9 +19,3 @@
     [if content
       [return [+ '<' tagname attrStr '>' content '</' tagname '>']]]
     [+ '<' tagname attrStr '/>']]]
-
-[console log
-  [exports fromYolan
-    [quote
-      [html [head [title Hello world]]
-        [body [h1 hello] [p [[style text-align: center]] Yay] [hr]]]]]]
