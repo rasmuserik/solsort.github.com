@@ -1,0 +1,8 @@
+[def http [module require 'http']]
+
+[[http createServer
+    [fn [request result]
+        [console log [request get 'url']]
+      [result writeHead 200 [object ['Content-Type' 'text/plain']]]
+      [result end 'Hello\ world']]]
+  listen 1234 '127.0.0.1']
