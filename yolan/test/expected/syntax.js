@@ -18,8 +18,11 @@ exports.tokenize = function(str) {
         while (isWs.call()) {
             nextc.call();
         }
-        if (isBracket.call()) {
-            result.push(c);
+        if (c === "[") {
+            result.push(lbracket);
+            nextc.call();
+        } else if (c === "]") {
+            result.push(rbracket);
             nextc.call();
         } else if (c === "'") {
             result.push(quote);
@@ -49,6 +52,14 @@ var quote = {
     quote: true
 };
 
+var lbracket = {
+    lbracket: true
+};
+
+var rbracket = {
+    rbracket: true
+};
+
 var addQuotes = function(list) {
     var i = 0;
     var result = [];
@@ -70,10 +81,10 @@ exports.parse = function(tokens) {
     var current = [ "do" ];
     while (tokens["length"]) {
         var token = tokens.pop();
-        if (token === "[") {
+        if (token === lbracket) {
             stack.push(current);
             current = [];
-        } else if (token === "]") {
+        } else if (token === rbracket) {
             var t = current;
             current = stack.pop();
             current.push(addQuotes.call(null, t));
