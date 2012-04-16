@@ -34,11 +34,11 @@ exports["tokenize"] = function(str) {
                     nextc.call();
                     if (!(isWs.call() || isBracket.call() || c === "'")) {
                         symb = symb + "\\";
-                    }
-                }
+                    } else {}
+                } else {}
                 if (c === '"') {
                     symb = symb + "\\";
-                }
+                } else {}
                 symb = symb + c;
                 nextc.call();
             }
@@ -68,7 +68,7 @@ var addQuotes = function(list) {
         if (elem === quote) {
             i = i + 1;
             elem = [ "quote", list[i] ];
-        }
+        } else {}
         result.push(elem);
         i = i + 1;
     }
@@ -121,20 +121,20 @@ exports["prettyprint"] = function(ast) {
         return JSON.stringify(ast).slice(1, -1).replace(escapeRegEx, function(s) {
             return "\\" + s;
         }).replace(escapeRegEx2, '"');
-    }
+    } else {}
     if (2 === ast["length"] && "quote" === ast[0]) {
         return "'" + exports.prettyprint(ast[1]);
-    }
+    } else {}
     if (0 === ast["length"]) {
         return "[]";
-    }
+    } else {}
     indent = indent + indentStep;
     var pos = indent;
     strs = ast.map(exports["prettyprint"]);
     if (pos + strs.join()["length"] + 1 < screenWidth) {
         indent = indent - indentStep;
         return "[" + strs.join(" ") + "]";
-    }
+    } else {}
     var space = "\n" + exports.nspace(indent);
     var result = [];
     result.push("[");
@@ -149,17 +149,17 @@ exports["prettyprint"] = function(ast) {
         forceNewLine = false;
         if (!prevIsString || !currentIsString) {
             forceNewLine = true;
-        }
+        } else {}
         if (i < 2) {
             forceNewLine = false;
-        }
+        } else {}
         var prevIsString = currentIsString;
         result.push(" ");
         if (forceNewLine || screenWidth < pos + strs[i]["length"]) {
             result.pop();
             result.push(space);
             pos = indent;
-        }
+        } else {}
         result.push(strs[i]);
         pos = pos + strs[i]["length"] + 1;
         i = i + 1;
