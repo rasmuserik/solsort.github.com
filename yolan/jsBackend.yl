@@ -1,5 +1,5 @@
 [def compileJS
-  [object ['JsTypeOf [fn [syn syn1] ['typeof\  + [exports toJS syn1]]]]
+  [object 
     ['do [fn [syn] [[[syn slice 1] map [exports get 'toJS]] join ';]]]
     ['def [fn [syn syn1] ['var\  + syn1 '= [exports toJS [syn get 2]]]]]
     ['set [fn [syn syn1] [syn1 + '= [exports toJS [syn get 2]]]]]
