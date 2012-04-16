@@ -1,9 +1,3 @@
-[def tokenRegEx
-  [RegExp call RegExp
-    '\\\\s*(\\\\\[|\\\\\]|(\\\\\\\\.|\[^\\\\s\\\\\[\\\\\]\])+)' 'g']]
-
-[def unescapeRegEx [RegExp call RegExp '\\\\\\\\(.)' 'g']]
-
 [def escapeRegEx
   [RegExp call RegExp '\[\\\\\\\\\\\\\[\\\\\]\ \\\\n\\\\r\]' 'g']]
 
@@ -14,44 +8,40 @@
     [def tokeniser [object]]
     [def c [str get 0]]
     [def nextc [fn [] [set i [+ i 1]] [set c [str get i]] c]]
-    [def isWs [fn [] [or [eq? c "\ "] [eq? c "\\n"] [eq? c "\\r"] [eq? c "\\t"]]]]
+    [def isWs
+      [fn [] [or [eq? c "\ "] [eq? c "\\n"] [eq? c "\\r"] [eq? c "\\t"]]]]
     [def isBracket [fn [] [or [eq? c "\["] [eq? c "\]"]]]]
     [while c
-        [while [isWs call] [nextc call]]
-        [cond
-            [[isBracket call] [result push c] [nextc call]]
-            [[eq? c "\'"] [result push quote] [nextc call]]
-            [true 
-                [def symb ""]
-                [while [and c [not [isWs call]] [not [isBracket call]]]
-                    [if [eq? c "\\\\"] 
-                        [nextc call] 
-                        [if [not [or [isWs call] [isBracket call] [eq? c "\'"]]]
-                            [set symb [+ symb "\\\\"]]]
-                    ]
-                    [if [eq? c '"']
-                        [set symb [+ symb '\\\\']]]
-                    [set symb [+ symb c]]
-                    [nextc call] ]
-                [result push symb]
-                ]]
-    ]
+      [while [isWs call] [nextc call]]
+      [cond [[isBracket call] [result push c] [nextc call]]
+        [[eq? c "'"] [result push quote] [nextc call]]
+        [true [def symb ""]
+          [while [and c [not [isWs call]] [not [isBracket call]]]
+            [if [eq? c "\\\\"]
+              [nextc call]
+              [if [not [or [isWs call] [isBracket call] [eq? c "'"]]]
+                [set symb [+ symb "\\\\"]]]]
+            [if [eq? c '"'] [set symb [+ symb '\\\\']]]
+            [set symb [+ symb c]]
+            [nextc call]]
+          [result push symb]]]]
     [console log [JSON stringify result]]
     result]]
 
 [def quote [object [quote true]]]
-[def addQuotes [fn [list] 
+
+[def addQuotes
+  [fn [list]
     [def i 0]
     [def result [array]]
     [while [< i [list get 'length']]
-        [def elem [list get i]]
-        [if [eq? elem quote]
-            [set i [+ i 1]]
-            [set elem [array 'quote' [list get i]]]]
-        [result push elem]
-        [set i [+ i 1]]]
-    result
-    ]]
+      [def elem [list get i]]
+      [if [eq? elem quote]
+        [set i [+ i 1]]
+        [set elem [array 'quote' [list get i]]]]
+      [result push elem]
+      [set i [+ i 1]]]
+    result]]
 
 [exports set parse
   [fn [tokens]
@@ -119,7 +109,9 @@
       [set i [+ i 1]]]
     [result push '\]']
     [set indent [- indent indentStep]]
-    [result join '']]][def fs [module require 'fs']]
+    [result join '']]]
+
+[def fs [module require 'fs']]
 
 [def syntax [module require './syntax']]
 
@@ -127,9 +119,8 @@
 
 [def action [[process get 'argv'] get 2]]
 
-[[module require 'fs'] readFile
-    'test.syn'
-    'utf8'
-    [fn [err data]
-      [if err [return err]]
-      [console log [JSON stringify [[exports parse [exports tokenize data]] get 1]]]]]
+[[module require 'fs'] readFile 'test.syn' 'utf8'
+  [fn [err data]
+    [if err [return err]]
+    [console log
+      [JSON stringify [[exports parse [exports tokenize data]] get 1]]]]]
