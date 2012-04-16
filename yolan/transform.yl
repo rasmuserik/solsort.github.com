@@ -1,6 +1,6 @@
 [exports set 'transform
   [fn [x]
-    [if [[JsTypeOf x] == 'string] [return x]]
+    [if [[x jsType] == 'string] [return x]]
     [set x [x map [exports get 'transform]]]
     [if [[x get 0] == 'JsTypeOf] [do [x set 0 [x get 1]] [x set 1 'jsType]]]
     x]]

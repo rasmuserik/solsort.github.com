@@ -75,7 +75,7 @@
 
 [exports set 'prettyprint
   [fn [ast]
-    [if [[JsTypeOf ast] == 'string]
+    [if [[ast jsType] == 'string]
       [return
         [[[[JSON stringify ast] slice 1 -1] replace escapeRegEx
             [fn [s] ['\\ + s]]]
@@ -100,7 +100,7 @@
     [while [i < [ast get 'length]]
       [def prevIsString currentIsString]
       [set currentIsString
-        [[[JsTypeOf [ast get i]] == 'string] or
+        [[[[ast get i] jsType] == 'string] or
           ['quote == [[ast get i] get 0]]]]
       [set forceNewLine false]
       [if [[prevIsString fails] or [currentIsString fails]]

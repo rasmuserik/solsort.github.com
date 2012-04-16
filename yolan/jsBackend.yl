@@ -43,11 +43,7 @@
           join 'else\ ]]]
     ['if
       [fn [syn syn1]
-        ['if( +
-          [exports toJS syn1]
-          '){
-          [exports toJS [syn get 2]]
-          '}]]]
+        ['if( + [exports toJS syn1] '){ [exports toJS [syn get 2]] '}]]]
     ['# [fn [] ""]]
     ['return [fn [syn syn1] ['return\  + [exports toJS syn1]]]]
     ['quote [fn [syn syn1] [JSON stringify syn1]]]]]
@@ -57,7 +53,7 @@
     [def syn0 [syn get 0]]
     [def syn1 [syn get 1]]
     [def syn2 [syn get 2]]
-    [cond [[[JsTypeOf syn] == 'string] [return syn]]
+    [cond [[[syn jsType] == 'string] [return syn]]
       [[compileJS get syn0]
         [return [[compileJS get syn0] call null syn syn1]]]
       [[syn1 == 'set]
@@ -104,7 +100,7 @@
       [[syn1 == 'jsType] [return ['typeof\  + [exports toJS syn0]]]]
       [[syn1 == 'get]
         [return [[exports toJS syn0] + '\[ [exports toJS syn2] '\]]]]
-      [[[JsTypeOf syn0] == 'string]
+      [[[syn0 jsType] == 'string]
         [return
           [[exports toJS syn0] + '. syn1 '(
             [[[syn slice 2] map [exports get 'toJS]] join ',]

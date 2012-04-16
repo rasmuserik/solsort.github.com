@@ -2,7 +2,7 @@
 
 [exports set 'fromYolan
   [fn [xml]
-    [if [[JsTypeOf xml] == 'string] [return xml]]
+    [if [[xml jsType] == 'string] [return xml]]
     [set xml [xml slice 0]]
     [def tagname [xml shift]]
     [def attr [array]]
