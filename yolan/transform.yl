@@ -5,4 +5,3 @@
     [if [[x get 0] == 'object] [return [[new array 'new] concat x]]]
     [if [[x get 0] == 'array] [return [[new array 'new] concat x]]]
     x]]
-

@@ -73,4 +73,3 @@
         [fn [err data] [if err [return err]] true]]]]]
 
 [if [action == 'test] [console log 'hello\ world]]
-

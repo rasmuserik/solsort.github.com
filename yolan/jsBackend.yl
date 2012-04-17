@@ -106,4 +106,3 @@
     [[exports toJS syn0] + '. syn1 '(
       [[[syn slice 2] map [exports get 'toJS]] join ',]
       ')]]]
-

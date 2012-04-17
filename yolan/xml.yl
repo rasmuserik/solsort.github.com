@@ -16,4 +16,3 @@
         join ""]]
     [if content [return ['< + tagname attrStr '> content '</ tagname '>]]]
     ['< + tagname attrStr '/>]]]
-

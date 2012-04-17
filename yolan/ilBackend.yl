@@ -14,27 +14,51 @@
             [if [Array isArray expr]
               [do [def first [expr get 0]]
                 [if [first == '#]
-                  [if withArg [return '[[undefined]]] [return '[]]]]
-                [if [first == 'fn][do
-                                    [code push [compileFunction call null ['_ + fnid] [expr get 1] ['[do] concat [expr slice 2]]]]
-                                                        [return code]
-
-                   ]]
+                  [return [compileExpression call null 'undefined withArg]]]
+                [if [first == 'set]
+                  [do
+                    [set code
+                      [code concat
+                        [compileExpression call null [expr get 2] true]]]
+                    [code push [new array 'setLocal [expr get 1]]]
+                    [if [withArg fails] [code push '[pop]]]
+                    [return code]]]
+                [if [first == 'def]
+                  [do [locals push [expr get 1]]
+                    [set code
+                      [code concat
+                        [compileExpression call null [expr get 2] true]]]
+                    [code push [new array 'setLocal [expr get 1]]]
+                    [if [withArg fails] [code push '[pop]]]
+                    [return code]]]
+                [if [first == 'if]
+                  [do [def result '[if]]
+                    [result push
+                      [compileExpression call null [expr get 1] true]]
+                    [result push
+                      [compileExpression call null [expr get 2] withArg]]
+                    [result push
+                      [compileExpression call null [expr get 3] withArg]]
+                    [code push result]
+                    [return code]]]
+                [if [first == 'fn]
+                  [do [def id ['_ + fnid]]
+                    [set fnid [fnid + 1]]
+                    [functions push
+                      [compileFunction call null id
+                        [expr get 1]
+                        ['[do] concat [expr slice 2]]]]
+                    [return [new array [new array 'fn id]]]]]
                 [if [first == 'do]
                   [do [def i 1]
                     [def length [expr get 'length]]
                     [while [i < length]
-                      [console log
-                        [compileExpression call null
-                          [expr get i]
-                          [[i == [length - 1]] or withArg]]]
-                      [console log i]
-                      [set code [code concat
-                        [compileExpression call null
-                          [expr get i]
-                          [[i == [length - 1]] or withArg]]]]
+                      [set code
+                        [code concat
+                          [compileExpression call null
+                            [expr get i]
+                            [[i == [length - 1]] and withArg]]]]
                       [set i [i + 1]]]
-                    [console log 'do code]
                     [return code]]]
                 [if true
                   [do [def method [expr get 1]]
@@ -49,14 +73,13 @@
                     [invokeExpr push method]
                     [set invokeExpr [invokeExpr concat types]]
                     [code push invokeExpr]
-                    [console log 'invoke code]
+                    [if [withArg fails] [code push '[pop]]]
                     [return code]]]]]
             [if [withArg fails] [return '[]]]
             [# look up var]
             [set op 'getVar]
             [set id expr]
             [set code [new array [new array op id]]]
-            [console log 'var code]
             code]]
         [def code [compileExpression call null [ast slice 0] true]]
         [code push '[return]]
@@ -69,4 +92,3 @@
         currentFunction]]
     [functions push [compileFunction call null 'entry '[] ast]]
     functions]]
-

@@ -58,4 +58,3 @@
     [getGlobal console]
     [invoke log var var]
     [return]]]
-

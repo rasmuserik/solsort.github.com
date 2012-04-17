@@ -9,4 +9,3 @@
 [if [[console get 'info] fails] [console set 'info [console get 'log]]]
 
 [if [[console get 'warn] fails] [console set 'warn [console get 'log]]]
-

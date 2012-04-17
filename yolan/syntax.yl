@@ -25,6 +25,8 @@
                 [set symb [symb + c]]
                 [nextc call]]
               [result push symb]]]]]]
+    [if [[[result get [[result get 'length] - 1]] get 'length] == 0]
+      [result pop]]
     result]]
 
 [def quote [new object ['quote true]]]
@@ -123,4 +125,3 @@
     [result push '\]]
     [set indent [indent - indentStep]]
     [result join ""]]]
-

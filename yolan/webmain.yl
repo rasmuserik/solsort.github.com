@@ -4,4 +4,3 @@
 [exports set 'run
   [fn []
     [[document get 'body] set 'innerHTML ['[<h1>RUNNING!</h1>] join '\ ]]]]
-
