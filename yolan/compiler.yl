@@ -3,6 +3,7 @@
 [def syntax [module require './syntax]]
 
 [def jsBackend [module require './jsBackend]]
+
 [def ilBackend [module require './ilBackend]]
 
 [def action [[process get 'argv] get 2]]
@@ -38,6 +39,21 @@
       [fs writeFile
         [[process get 'argv] get 4]
         [txt + '\n]
+        [fn [err data] [if err [return err]] true]]]]]
+
+[if [action == 'prettyprint]
+  [fs readFile
+    [[process get 'argv] get 3]
+    'utf8
+    [fn [err data]
+      [if err [return err]]
+      [def ast [syntax parse [syntax tokenize data]]]
+      [def src
+        [[[[ast slice 1] map [syntax get 'prettyprint]] join '\n\n] +]
+        '\n]
+      [fs writeFile
+        [[process get 'argv] get 4]
+        src
         [fn [err data] [if err [return err]] true]]]]]
 
 [if [action == 'transform]

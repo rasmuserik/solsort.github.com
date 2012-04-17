@@ -1,9 +1,9 @@
 CODE=$(shell ls *.yl)
 all: $(CODE:.yl=.js)
 test-clean:
-	rm -rf *.js out test/*.js test/expected/*.js
+	rm -rf *.il *.js out test/*.js test/expected/*.js
 clean:
-	rm -rf *.js out
+	rm -rf *.il *.js out
 
 compiler-test: all
 	# cd test; for x in *.yl; do node ../compiler.js compile $$x `echo $$x | sed -e s/yl$$/js/`; done

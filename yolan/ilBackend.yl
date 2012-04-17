@@ -1,21 +1,26 @@
-[exports set 'toIL [fn [ast]
+[exports set 'toIL
+  [fn [ast]
     [def functions '[]]
     [def fnid 0]
-    [def compileFunction [fn [name args ast]
+    [def compileFunction
+      [fn [name args ast]
         [def locals '[]]
         [def globals '[]]
         [def consts '[]]
         [def currentFunction '[]]
-        [def compileExpression [fn [expr withArg]
-            [if [Array isArray expr] [do
-            [def code '[]]
-            [def subexpr [expr slice 0]]
-            [subexpr set 1 [subexpr get 0]]
-            [console log subexpr]
-            [set subexpr [subexpr slice 1]]
-            [while [0 < [subexpr get 'length]]
-                [set code [code concat [compileExpression call null [subexpr pop] true]]]]
-            [return code]] ]
+        [def compileExpression
+          [fn [expr withArg]
+            [if [Array isArray expr]
+              [do [def code '[]]
+                [def subexpr [expr slice 0]]
+                [subexpr set 1 [subexpr get 0]]
+                [console log subexpr]
+                [set subexpr [subexpr slice 1]]
+                [while [0 < [subexpr get 'length]]
+                  [set code
+                    [code concat
+                      [compileExpression call null [subexpr pop] true]]]]
+                [return code]]]
             [if [withArg fails] [return '[]]]
             [# look up var]
             [set op 'getVar]
@@ -29,8 +34,8 @@
         [currentFunction push [new array 'globals globals]]
         [currentFunction push [new array 'consts consts]]
         [currentFunction push [new array 'code code]]
-        currentFunction
-    ]]
+        currentFunction]]
     [functions push [compileFunction call null 'entry '[] ast]]
     [console log functions]
     functions]]
+
