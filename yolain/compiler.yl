@@ -34,7 +34,8 @@
     [fn [err data]
       [if err [return err]]
       [def il [ilBackend toIL [syntax parse [syntax tokenize data]]]]
-      [def txt [syntax prettyprint il]]
+      [console log [syntax prettyprint il]]
+      [def txt [ilBackend binaryEncode il]]
       [console log txt]
       [fs writeFile
         [[process get 'argv] get 4]

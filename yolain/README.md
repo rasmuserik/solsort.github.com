@@ -1,4 +1,25 @@
+# TODO
+
+- general
+    - restructure into src(yolan w/hierachy), build(java, javascript, stable), test(test-data + testtmp)
+    - build system in yolan
+    - js-compat-lib across platforms
+    - single runner, for both web and local
+    - move to separate repository
+- app
+    - webapp, replace solsort.com
+    - benchmarks from the shootout
+- language
+    - macros
+    - type/class system 
+- java backend
+    - get bootstrapped via rhino (remove dependency when done)
+    - code-gen via ow2-asm
+
+
+
 # Yolain - YOcto LAnguage INfrastructure
+
 
 Why a new language?  I want the following when developing:
 

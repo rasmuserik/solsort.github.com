@@ -1,12 +1,28 @@
+[exports set 'binaryEncode
+  [fn [tree acc]
+    [def joinResult [acc fails]]
+    [set acc [acc or '[]]]
+    [acc push [String fromCharCode [tree get 'length]]]
+    [if [Array isArray tree]
+      [do [acc push '{]
+        [tree map [fn [elem] [exports binaryEncode elem acc]]]]
+      [do [acc push '"] [acc push tree]]]
+    [joinResult and [acc join ""]]]]
+
+[def hasValue [fn [val] [[this.indexOf(val) == -1] fails]]]
+
 [exports set 'toIL
   [fn [ast]
     [def functions '[]]
     [def fnid 0]
     [def compileFunction
       [fn [name args ast]
+        [def nextid 0]
+        [args set 'hasValue hasValue]
         [def locals '[]]
+        [locals set 'hasValue hasValue]
         [def globals '[]]
-        [def consts '[]]
+        [globals set 'hasValue hasValue]
         [def currentFunction '[]]
         [def compileExpression
           [fn [expr withArg]
@@ -20,7 +36,14 @@
                     [set code
                       [code concat
                         [compileExpression call null [expr get 2] true]]]
-                    [code push [new array 'setLocal [expr get 1]]]
+                    [def name [expr get 1]]
+                    [if [args hasValue name]
+                      [code push [new array 'setArg [expr get 1]]]
+                      [if [locals hasValue name]
+                        [code push [new array 'setLocal [expr get 1]]]
+                        [do [code push [new array 'setGlobal [expr get 1]]]
+                          [if [[globals hasValue name] fails]
+                            [globals push name]]]]]
                     [if [withArg fails] [code push '[pop]]]
                     [return code]]]
                 [if [first == 'def]
@@ -32,22 +55,38 @@
                     [if [withArg fails] [code push '[pop]]]
                     [return code]]]
                 [if [first == 'if]
-                  [do [def result '[if]]
-                    [result push
-                      [compileExpression call null [expr get 1] true]]
-                    [result push
-                      [compileExpression call null [expr get 2] withArg]]
-                    [result push
-                      [compileExpression call null [expr get 3] withArg]]
-                    [code push result]
+                  [do [def label1 [nextid toString]]
+                    [set nextid [nextid + 1]]
+                    [def label2 [nextid toString]]
+                    [set nextid [nextid + 1]]
+                    [set code
+                      [code concat
+                        [compileExpression call null [expr get 1] true]]]
+                    [code push [new array 'jumpIfFalsy label1]]
+                    [set code
+                      [code concat
+                        [compileExpression call null [expr get 2] withArg]]]
+                    [code push [new array 'jump label2]]
+                    [code push [new array 'label label1]]
+                    [set code
+                      [code concat
+                        [compileExpression call null [expr get 3] withArg]]]
+                    [code push [new array 'label label2]]
                     [return code]]]
                 [if [first == 'fn]
                   [do [def id ['_ + fnid]]
                     [set fnid [fnid + 1]]
-                    [functions push
+                    [def createdFunction
                       [compileFunction call null id
                         [expr get 1]
                         ['[do] concat [expr slice 2]]]]
+                    [functions push createdFunction]
+                    [def i 0]
+                    [def fnGlobals [createdFunction get 4]]
+                    [while [i < [fnGlobals get 'length]]
+                        [def globName [fnGlobals get i]]
+                        [if [[globals hasValue globName] fails] [globals push globName]]
+                        [set i [i + 1]]]
                     [return [new array [new array 'fn id]]]]]
                 [if [first == 'do]
                   [do [def i 1]
@@ -77,18 +116,23 @@
                     [return code]]]]]
             [if [withArg fails] [return '[]]]
             [# look up var]
-            [set op 'getVar]
-            [set id expr]
-            [set code [new array [new array op id]]]
+            [if [[[parseFloat call null expr] toString] == expr] [return [new array [new array 'num expr]]]]
+            [def name expr]
+            [if
+              [args hasValue name]
+              [code push [new array 'getArg name]]
+              [if [locals hasValue name]
+                [code push [new array 'getLocal name]]
+                [do [code push [new array 'getGlobal name]]
+                  [if [[globals hasValue name] fails] [globals push name]]]]]
             code]]
         [def code [compileExpression call null [ast slice 0] true]]
         [code push '[return]]
-        [currentFunction push [new array 'id name]]
-        [currentFunction push [new array 'args args]]
-        [currentFunction push [new array 'locals locals]]
-        [currentFunction push [new array 'globals globals]]
-        [currentFunction push [new array 'consts consts]]
-        [currentFunction push [new array 'code code]]
+        [currentFunction push name]
+        [currentFunction push args]
+        [currentFunction push locals]
+        [currentFunction push globals]
+        [currentFunction push code]
         currentFunction]]
     [functions push [compileFunction call null 'entry '[] ast]]
     functions]]

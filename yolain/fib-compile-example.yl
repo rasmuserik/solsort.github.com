@@ -1,3 +1,5 @@
+[console log 123]
+
 [def fib
   [fn [n]
     [def result 1]
