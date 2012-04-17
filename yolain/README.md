@@ -2,9 +2,10 @@
 
 - general
     - restructure into src(yolan w/hierachy), build(java, javascript, stable), test(test-data + testtmp)
-    - build system in yolan
-    - js-compat-lib across platforms
-    - single runner, for both web and local
+    - main.yl
+        - build system in yolan
+        - single runner, for both web and local
+        - js-compat-lib across platforms
     - move to separate repository
 - app
     - webapp, replace solsort.com
