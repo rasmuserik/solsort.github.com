@@ -8,7 +8,7 @@
 
 [def xml [module require './xml]]
 
-[def scriptList '[webloader webmain]]
+[def scriptList '[yolain webmain]]
 
 [def head
   ['<!DOCTYPE\ html><html> + [xml fromYolain '[head [title Hello world]]]]]
@@ -32,7 +32,7 @@
             [new object ['Content-Type 'text/javascript]]]
           [def name ['. + [url slice 0 -3]]]
           [fs readFile
-            [name + '.yl]
+            ['./src/ + name '.yl]
             'utf8
             [fn [err data]
               [if err [result end ""]]

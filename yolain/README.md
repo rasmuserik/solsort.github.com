@@ -1,4 +1,6 @@
-# TODO
+# Yolain - YOcto LAnguage INfrastructure
+
+# Next TODO
 
 - general
     - restructure into src(yolan w/hierachy), build(java, javascript, stable), test(test-data + testtmp)
@@ -19,10 +21,10 @@
 
 
 
-# Yolain - YOcto LAnguage INfrastructure
 
 
-Why a new language?  I want the following when developing:
+# Why a new language?  
+I want the following when developing:
 
 - Suitable for doing development directly on mobile phones. Normal programming language syntax does not scale to this kind of screen size and input methods.
 - Expressive language - support for functional programming, metaprogramming, ...
