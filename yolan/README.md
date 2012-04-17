@@ -1,4 +1,4 @@
-# Yolan - YOcto LANguage
+# Yolain - YOcto LAnguage INfrastructure
 
 Why a new language?  I want the following when developing:
 

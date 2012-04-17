@@ -11,7 +11,7 @@ compiler-test: all
 	install -d test/expected
 	cp *.yl test
 	cp *.js test/expected
-	cd test; for x in *.yl; do node ../compiler.js compile $$x `echo $$x | sed -e s/yl$$/js/`; done
+	cd test; for x in *.yl; do node ../compiler.js toJavaScript $$x `echo $$x | sed -e s/yl$$/js/`; done
 	cd test/expected; for x in *.js; do diff $$x ../$$x || exit 1; done
 
 test: compiler-test
@@ -29,7 +29,7 @@ transform: all $(CODE:.yl=.yl-transformed)
 compiler: compiler-test
 	cd compiler; make
 
-.SUFFIXES: .js .yl .yl-pretty .yl-transformed
+.SUFFIXES: .js .yl .yil .yl-pretty .yl-transformed .il
 
 .yl.yl-pretty:
 	node compiler.js prettyprint $*.yl $*.yl-pretty
@@ -38,4 +38,7 @@ compiler: compiler-test
 	node compiler.js transform $*.yl $*.yl-transformed
 
 .yl.js:
-	node compiler/compiler.js compile $*.yl $*.js
+	node compiler/compiler.js toJavaScript $*.yl $*.js
+
+.yl.il:
+	node compiler/compiler.js toIntermediateLanguage $*.yl $*.il

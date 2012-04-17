@@ -6,7 +6,7 @@ var jsBackend = module.require("./jsBackend");
 
 var action = process["argv"][2];
 
-if (action === "compile") {
+if (action === "toJavaScript") {
     fs.readFile(process["argv"][3], "utf8", function(err, data) {
         if (err) {
             return err;

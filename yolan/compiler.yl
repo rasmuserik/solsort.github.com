@@ -3,10 +3,11 @@
 [def syntax [module require './syntax]]
 
 [def jsBackend [module require './jsBackend]]
+[def ilBackend [module require './ilBackend]]
 
 [def action [[process get 'argv] get 2]]
 
-[if [action == 'compile]
+[if [action == 'toJavaScript]
   [fs readFile
     [[process get 'argv] get 3]
     'utf8
@@ -25,19 +26,18 @@
         js
         [fn [err data] [if err [return err]] true]]]]]
 
-[if [action == 'prettyprint]
+[if [action == 'toIntermediateLanguage]
   [fs readFile
     [[process get 'argv] get 3]
     'utf8
     [fn [err data]
       [if err [return err]]
-      [def ast [syntax parse [syntax tokenize data]]]
-      [def src
-        [[[[ast slice 1] map [syntax get 'prettyprint]] join '\n\n] +]
-        '\n]
+      [def il [ilBackend toIL [syntax parse [syntax tokenize data]]]]
+      [def txt [syntax prettyprint il]]
+      [console log txt]
       [fs writeFile
         [[process get 'argv] get 4]
-        src
+        [txt + '\n]
         [fn [err data] [if err [return err]] true]]]]]
 
 [if [action == 'transform]
