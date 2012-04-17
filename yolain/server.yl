@@ -11,7 +11,7 @@
 [def scriptList '[webloader webmain]]
 
 [def head
-  ['<!DOCTYPE\ html><html> + [xml fromYolan '[head [title Hello world]]]]]
+  ['<!DOCTYPE\ html><html> + [xml fromYolain '[head [title Hello world]]]]]
 
 [def body
   ['<body><script>function\ define(_,_,f){f()};</script> +

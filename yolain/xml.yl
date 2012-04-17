@@ -1,6 +1,6 @@
 [# yolan-xml data structure to an xml-string]
 
-[exports set 'fromYolan
+[exports set 'fromYolain
   [fn [xml]
     [if [[xml jsType] == 'string] [return xml]]
     [set xml [xml slice 0]]
@@ -9,7 +9,7 @@
     [def attrData [xml get 0]]
     [if [attrData and [Array isArray [attrData get 0]]]
       [do [set attr attrData] [xml shift]]]
-    [def content [[xml map [exports get 'fromYolan]] join '\ ]]
+    [def content [[xml map [exports get 'fromYolain]] join '\ ]]
     [def attrStr
       [[attr map
           [fn [attr] ['\  + [attr get 0] '=" [[attr slice 1] join '\ ] '"]]]
