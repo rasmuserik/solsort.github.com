@@ -58,7 +58,10 @@ var menuXml = ["ul",
             ["li",["a",{"href":"#brown"},"Tweetsize brownian noise animation"]],
             ["li",["a",{"href":"#rain"},"Rain\xaddrops on water simulation"]],
             ["li",["a",{"href":"#julia4d"},"Projection of 4d-julia\xadbrot fractal"]],
-            ]]
+            ]],
+        ["li","Presentations",["ul",
+            ["li",["a",{"href":"http://solsort.dk/osd2012"},"Serious JavaScript - presentation at Opensource days"]]
+        ]]
     ]]];
 
 

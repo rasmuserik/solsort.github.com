@@ -1,41 +1,42 @@
 [set yolain [new object]]
+
 [yolain set 'engine '[]]
+
 [# Node]
-[if [[[process jsType] == 'undefined] fails] [do
-    [[yolain get 'engine] push 'node]
-]]
+
+[if [[[process jsType] == 'undefined] fails]
+  [do [[yolain get 'engine] push 'node]]]
+
 [# Rhino]
-[if [[[java jsType] == 'undefined] fails] [do
-    [[yolain get 'engine] push 'rhino]
-]]
+
+[if [[[java jsType] == 'undefined] fails]
+  [do [[yolain get 'engine] push 'rhino]]]
 
 [# Browser]
-[if [[[navigator jsType] == 'undefined] fails] [do
-    [[yolain get 'engine] push 'browser]
-[def modules [new object]]
 
-[def require [fn [name] [modules get name]]]
+[if [[[navigator jsType] == 'undefined] fails]
+  [do [[yolain get 'engine] push 'browser]
+    [def modules [new object]]
+    [def require [fn [name] [modules get name]]]
+    [window set 'define
+      [fn [name dep f]
+        [def module [new object]]
+        [def exports [new object]]
+        [module set 'exports exports]
+        [f call null require exports module]
+        [modules set name [module get 'exports]]]]
+    [window set 'require require]]]
 
-[window set 'define
-  [fn [name dep f]
-    [def module [new object]]
-    [def exports [new object]]
-    [module set 'exports exports]
-    [f call null require exports module]
-    [modules set name [module get 'exports]]]]
+[# Shims ]
 
-[window set 'require require]
-]]
-
-[if [[console jsType] == 'undefined]  [do
-    [set console [new object]]
+[if [[console jsType] == 'undefined]
+  [do [set console [new object]]
     [console set 'log [fn [] undefined]]
-    [if [[[print jsType] == 'undefined] fails] 
-        [console set 'log print]]
-]]
+    [if [[[print jsType] == 'undefined] fails] [console set 'log print]]]]
+
 [console log 'hello\ world]
+
 [console log [yolain get 'engine]]
 
 [if [[[[yolain get 'engine] get 'length] == 1] fails]
-    [console log 'Error\ detecting\ engine: [yolain get 'engine]]]
-
+  [console log 'Error\ detecting\ engine: [yolain get 'engine]]]
