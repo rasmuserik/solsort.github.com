@@ -23,10 +23,10 @@
     [fn [request result]
       [def url [request get 'url]]
       [console log [request get 'url]]
-      [if [[[url slice -3] == '.js] fails]
+      [if-else [[[url slice -3] == '.js] fails]
         [do [result writeHead 200 [new object ['Content-Type 'text/html]]]
           [result end [head + body]]]]
-      [if [[url slice -3] == '.js]
+      [if-else [[url slice -3] == '.js]
         [do
           [result writeHead 200
             [new object ['Content-Type 'text/javascript]]]
@@ -35,7 +35,7 @@
             ['./src/ + name '.yl]
             'utf8
             [fn [err data]
-              [if err [result end ""]]
+              [if-else err [result end ""]]
               [result end
                 ['define(" + name
                   '",\["require","exports","module"\],function(require,exports,module){

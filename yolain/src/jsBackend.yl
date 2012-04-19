@@ -5,7 +5,7 @@
     ['set [fn [syn syn1] [syn1 + '= [exports toJS [syn get 2]]]]]
     ['new
       [fn [syn syn1]
-        [if [syn1 == 'object]
+        [if-else [syn1 == 'object]
           [return
             ['{ +
               [[[syn slice 2] map
@@ -14,7 +14,7 @@
                       [exports toJS [pair get 1]]]]]
                 join ',]
               '}]]]
-        [if [syn1 == 'array]
+        [if-else [syn1 == 'array]
           [return
             ['\[ + [[[syn slice 2] map [exports get 'toJS]] join ',] '\]]]]
         undefined]]
@@ -34,7 +34,7 @@
           '){
           [[[syn slice 2] map [exports get 'toJS]] join ';]
           '}]]]
-    ['if
+    ['if-else
       [fn [syn syn1]
         ['if( +
           [exports toJS syn1]
@@ -49,56 +49,56 @@
 
 [exports set 'toJS
   [fn [syn]
-    [if [syn fails] [return ""]]
+    [if-else [syn fails] [return ""]]
     [def syn0 [syn get 0]]
     [def syn1 [syn get 1]]
     [def syn2 [syn get 2]]
-    [if [[syn jsType] == 'string] [return syn]]
-    [if [compileJS get syn0]
+    [if-else [[syn jsType] == 'string] [return syn]]
+    [if-else [compileJS get syn0]
       [return [[compileJS get syn0] call null syn syn1]]]
-    [if [syn1 == 'set]
+    [if-else [syn1 == 'set]
       [return
         [[exports toJS syn0] + '\[
           [exports toJS syn2]
           '\]=
           [exports toJS [syn get 3]]]]]
-    [if [syn1 == '+]
+    [if-else [syn1 == '+]
       [return
         ['( +
           [[[new array [exports toJS syn0]] concat
               [[syn slice 2] map [exports get 'toJS]]]
             join '+]
           ')]]]
-    [if [syn1 == '-]
+    [if-else [syn1 == '-]
       [return
         ['( +
           [[[new array [exports toJS syn0]] concat
               [[syn slice 2] map [exports get 'toJS]]]
             join '-]
           ')]]]
-    [if [syn1 == 'and]
+    [if-else [syn1 == 'and]
       [return
         ['( +
           [[[new array [exports toJS syn0]] concat
               [[syn slice 2] map [exports get 'toJS]]]
             join '&&]
           ')]]]
-    [if [syn1 == 'or]
+    [if-else [syn1 == 'or]
       [return
         ['( +
           [[[new array [exports toJS syn0]] concat
               [[syn slice 2] map [exports get 'toJS]]]
             join '||]
           ')]]]
-    [if [syn1 == '==]
+    [if-else [syn1 == '==]
       [return ['( + [exports toJS syn0] '=== [exports toJS syn2] ')]]]
-    [if [syn1 == '<]
+    [if-else [syn1 == '<]
       [return ['( + [exports toJS syn0] '< [exports toJS syn2] ')]]]
-    [if [syn1 == 'fails] [return ['!( + [exports toJS syn0] ')]]]
-    [if [syn1 == 'jsType] [return ['typeof\  + [exports toJS syn0]]]]
-    [if [syn1 == 'get]
+    [if-else [syn1 == 'fails] [return ['!( + [exports toJS syn0] ')]]]
+    [if-else [syn1 == 'jsType] [return ['typeof\  + [exports toJS syn0]]]]
+    [if-else [syn1 == 'get]
       [return [[exports toJS syn0] + '\[ [exports toJS syn2] '\]]]]
-    [if [[syn0 jsType] == 'string]
+    [if-else [[syn0 jsType] == 'string]
       [return
         [[exports toJS syn0] + '. syn1 '(
           [[[syn slice 2] map [exports get 'toJS]] join ',]

@@ -4,6 +4,8 @@ var syntax = module.require("./syntax");
 
 var jsBackend = module.require("./jsBackend");
 
+var ilBackend = module.require("./ilBackend");
+
 var action = process["argv"][2];
 
 if (action === "toJavaScript") {
@@ -20,6 +22,24 @@ if (action === "toJavaScript") {
             beautify: true
         });
         return fs.writeFile(process["argv"][4], js, function(err, data) {
+            if (err) {
+                return err;
+            } else {}
+            return true;
+        });
+    });
+} else {}
+
+if (action === "toIntermediateLanguage") {
+    fs.readFile(process["argv"][3], "utf8", function(err, data) {
+        if (err) {
+            return err;
+        } else {}
+        var il = ilBackend.toIL(syntax.parse(syntax.tokenize(data)));
+        console.log(syntax.prettyprint(il));
+        var txt = ilBackend.binaryEncode(il);
+        console.log(txt);
+        return fs.writeFile(process["argv"][4], txt + "\n", function(err, data) {
             if (err) {
                 return err;
             } else {}

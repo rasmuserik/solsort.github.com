@@ -8,12 +8,12 @@
 
 [def action [[process get 'argv] get 2]]
 
-[if [action == 'toJavaScript]
+[if-else [action == 'toJavaScript]
   [fs readFile
     [[process get 'argv] get 3]
     'utf8
     [fn [err data]
-      [if err [return err]]
+      [if-else err [return err]]
       [# compile exports to js]
       [def js [jsBackend toJS [syntax parse [syntax tokenize data]]]]
       [# reformat js]
@@ -25,14 +25,14 @@
       [fs writeFile
         [[process get 'argv] get 4]
         js
-        [fn [err data] [if err [return err]] true]]]]]
+        [fn [err data] [if-else err [return err]] true]]]]]
 
-[if [action == 'toIntermediateLanguage]
+[if-else [action == 'toIntermediateLanguage]
   [fs readFile
     [[process get 'argv] get 3]
     'utf8
     [fn [err data]
-      [if err [return err]]
+      [if-else err [return err]]
       [def il [ilBackend toIL [syntax parse [syntax tokenize data]]]]
       [console log [syntax prettyprint il]]
       [def txt [ilBackend binaryEncode il]]
@@ -40,14 +40,14 @@
       [fs writeFile
         [[process get 'argv] get 4]
         [txt + '\n]
-        [fn [err data] [if err [return err]] true]]]]]
+        [fn [err data] [if-else err [return err]] true]]]]]
 
-[if [action == 'prettyprint]
+[if-else [action == 'prettyprint]
   [fs readFile
     [[process get 'argv] get 3]
     'utf8
     [fn [err data]
-      [if err [return err]]
+      [if-else err [return err]]
       [def ast [syntax parse [syntax tokenize data]]]
       [def src
         [[[[ast slice 1] map [syntax get 'prettyprint]] join '\n\n] +]
@@ -55,14 +55,14 @@
       [fs writeFile
         [[process get 'argv] get 4]
         src
-        [fn [err data] [if err [return err]] true]]]]]
+        [fn [err data] [if-else err [return err]] true]]]]]
 
-[if [action == 'transform]
+[if-else [action == 'transform]
   [fs readFile
     [[process get 'argv] get 3]
     'utf8
     [fn [err data]
-      [if err [return err]]
+      [if-else err [return err]]
       [def ast [syntax parse [syntax tokenize data]]]
       [set ast [[module require './transform] transform ast]]
       [def src
@@ -71,6 +71,6 @@
       [fs writeFile
         [[process get 'argv] get 4]
         src
-        [fn [err data] [if err [return err]] true]]]]]
+        [fn [err data] [if-else err [return err]] true]]]]]
 
-[if [action == 'test] [console log 'hello\ world]]
+[if-else [action == 'test] [console log 'hello\ world]]

@@ -25,7 +25,7 @@ var compileJS = {
     "while": function(syn, syn1) {
         return "while(" + exports.toJS(syn1) + "){" + syn.slice(2).map(exports["toJS"]).join(";") + "}";
     },
-    "if": function(syn, syn1) {
+    "if-else": function(syn, syn1) {
         return "if(" + exports.toJS(syn1) + "){" + exports.toJS(syn[2]) + "}else{" + exports.toJS(syn[3]) + "}";
     },
     "#": function() {

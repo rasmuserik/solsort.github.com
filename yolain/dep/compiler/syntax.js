@@ -49,6 +49,9 @@ exports["tokenize"] = function(str) {
             }
         }
     }
+    if (result[result["length"] - 1]["length"] === 0) {
+        result.pop();
+    } else {}
     return result;
 };
 

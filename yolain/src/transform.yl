@@ -1,7 +1,6 @@
 [exports set 'transform
   [fn [x]
-    [if [[x jsType] == 'string] [return x]]
+    [if-else [[x jsType] == 'string] [return x]]
     [set x [x map [exports get 'transform]]]
-    [if [[x get 0] == 'object] [return [[new array 'new] concat x]]]
-    [if [[x get 0] == 'array] [return [[new array 'new] concat x]]]
+    [if-else [[x get 0] == 'if] [x set 0 'if-else]]
     x]]

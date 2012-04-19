@@ -3,11 +3,8 @@ exports["transform"] = function(x) {
         return x;
     } else {}
     x = x.map(exports["transform"]);
-    if (x[0] === "object") {
-        return [ "new" ].concat(x);
-    } else {}
-    if (x[0] === "array") {
-        return [ "new" ].concat(x);
+    if (x[0] === "if") {
+        x[0] = "if-else";
     } else {}
     return x;
 };

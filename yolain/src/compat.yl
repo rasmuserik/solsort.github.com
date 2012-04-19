@@ -1,11 +1,12 @@
 [# make sure that the environment is sane]
 
-[if [[console jsType] fails] [set console [new object]]]
+[if-else [[console jsType] fails] [set console [new object]]]
 
-[if [[console get 'log] fails] [console set 'log [fn [] true]]]
+[if-else [[console get 'log] fails] [console set 'log [fn [] true]]]
 
-[if [[console get 'error] fails] [console set 'error [console get 'log]]]
+[if-else [[console get 'error] fails]
+  [console set 'error [console get 'log]]]
 
-[if [[console get 'info] fails] [console set 'info [console get 'log]]]
+[if-else [[console get 'info] fails] [console set 'info [console get 'log]]]
 
-[if [[console get 'warn] fails] [console set 'warn [console get 'log]]]
+[if-else [[console get 'warn] fails] [console set 'warn [console get 'log]]]

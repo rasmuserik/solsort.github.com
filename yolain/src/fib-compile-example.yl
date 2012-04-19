@@ -3,7 +3,7 @@
 [def fib
   [fn [n]
     [def result 1]
-    [if [1 < n]
+    [if-else [1 < n]
       [set result [[fib call null [n - 1]] + [fib call null [n - 2]]]]]
     [console log result]
     result]]
@@ -20,7 +20,7 @@
       [do [const 0]
         [setLocal result]
         [pop]
-        [if [[const 0] [getArg n] [invoke < var var]]
+        [if-else [[const 0] [getArg n] [invoke < var var]]
           [[const 1] [getArg n]
             [invoke - var var]
             [getGlobal null]
