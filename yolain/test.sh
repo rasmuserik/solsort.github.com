@@ -1,12 +1,11 @@
 # test compiler
-install -d test-tmp
-./compile.sh
-cd src
-for x in `find . -name "*.yl"`
+rm -rf test-tmp && install -d test-tmp
+node build/yolain.js compile
+mv build/* test-tmp
+node dep/yolain.js compile
+cd test-tmp
+for x in *
 do
-    y=`echo $x|sed -e s/yl$/js/`
-    echo Compiling $x with new compiler
-    node ../build/compiler.js toJavaScript $x ../test-tmp/$y || exit 1
     echo Diffing code from $x old compiler with code from new compiler
-    diff ../build/$y ../test-tmp/$y || exit 1
+    diff $x ../build/$x || exit 1
 done

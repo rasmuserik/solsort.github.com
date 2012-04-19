@@ -22,6 +22,9 @@ var compileJS = {
     fn: function(syn, syn1) {
         return "function(" + syn1.join(",") + "){" + syn.slice(2, -1).map(exports["toJS"]).join(";") + ";return " + exports.toJS(syn[syn["length"] - 1]) + "}";
     },
+    "try-catch": function(syn, syn1) {
+        return "try{" + exports.toJS(syn[2]) + "}catch(" + syn[1] + "){" + exports.toJS(syn[3]) + "}";
+    },
     "while": function(syn, syn1) {
         return "while(" + exports.toJS(syn1) + "){" + syn.slice(2).map(exports["toJS"]).join(";") + "}";
     },

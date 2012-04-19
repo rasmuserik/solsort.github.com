@@ -1,0 +1,4 @@
+[exports set 'run [fn [args]
+    [console log 'hello 'world]
+    [console log 'args: args]
+]]
