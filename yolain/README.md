@@ -3,7 +3,6 @@
 # Next TODO
 
 - general
-    - restructure into src(yolan w/hierachy), build(java, javascript, stable), test(test-data + testtmp)
     - main.yl
         - build system in yolan
         - single runner, for both web and local

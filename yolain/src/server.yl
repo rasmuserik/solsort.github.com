@@ -19,6 +19,7 @@
       join ""]
     '<script>require("./webmain").run();</script> '</body></html>]]
 
+[exports set 'run [fn [] 
 [[http createServer
     [fn [request result]
       [def url [request get 'url]]
@@ -43,3 +44,5 @@
                   '});]]]]]]
       true]]
   listen 1234 '127.0.0.1]
+  [console log '[starting server on localhost port 1234]]
+  ]]
