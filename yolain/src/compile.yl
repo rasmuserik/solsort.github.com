@@ -9,40 +9,45 @@
 [def action [[process get 'argv] get 2]]
 
 [exports set 'sourceFiles
-    [[fs readdirSync 'src] filter [fn [name] [[name slice -3] == '.yl]]]]
+  [[fs readdirSync 'src] filter [fn [name] [[name slice -3] == '.yl]]]]
 
-[def mtime [fn [fname] [try-catch e [return [[[fs statSync fname] get 'mtime] getTime]] [return 0]] 0]]
+[def mtime
+  [fn [fname]
+    [try-catch e
+      [return [[[fs statSync fname] get 'mtime] getTime]]
+      [return 0]]
+    0]]
 
-[exports set 'run [fn [] 
-    [[exports get 'sourceFiles] forEach [fn [f]
+[exports set 'run
+  [fn []
+    [[exports get 'sourceFiles] forEach
+      [fn [f]
         [def src ['src/ + f]]
         [def dest ['build/ + [f slice 0 -3]]]
-        [if-else [ [mtime call null dest] < [mtime call null src]] [do
-            [compile call null src dest]]]
-        undefined
-    ]]
-]]
+        [if-else [[mtime call null dest] < [mtime call null src]]
+          [do [compile call null src dest]]]
+        undefined]]]]
 
-[def compile [fn [src dest]
-  [fs readFile
-    src
-    'utf8
-    [fn [err data]
-      [if-else err [return err]]
-      [# compile exports to js]
-      [def ast [syntax parse [syntax tokenize data]]]
-      [def js [jsBackend toJS ast]]
-      [def sourceCode [[[[ast slice 1] map [syntax get 'prettyprint]] join '\n\n] + '\n]]
-      [fs writeFile
-        [dest + '.yl]
-        sourceCode]
-      [# reformat js]
-      [def uglify [require call null 'uglify-js]]
-      [def jsp [uglify get 'parser]]
-      [def pro [uglify get 'uglify]]
-      [def ast [jsp parse js]]
-      [set js [pro gen_code ast [new object ['beautify true]]]]
-      [fs writeFile
-        [dest + '.js]
-        js
-        [fn [err data] [if-else err [return err] [console log src '-> dest]] true]]]]]]
+[def compile
+  [fn [src dest]
+    [fs readFile src 'utf8
+      [fn [err data]
+        [if-else err [return err]]
+        [# compile exports to js]
+        [def ast [syntax parse [syntax tokenize data]]]
+        [def js [jsBackend toJS ast]]
+        [def sourceCode
+          [[[[ast slice 1] map [syntax get 'prettyprint]] join '\n\n] + '\n]]
+        [fs writeFile [dest + '.yl] sourceCode]
+        [# reformat js]
+        [def uglify [require call null 'uglify-js]]
+        [def jsp [uglify get 'parser]]
+        [def pro [uglify get 'uglify]]
+        [def ast [jsp parse js]]
+        [set js [pro gen_code ast [new object ['beautify true]]]]
+        [fs writeFile
+          [dest + '.js]
+          js
+          [fn [err data]
+            [if-else err [return err] [console log src '-> dest]]
+            true]]]]]]

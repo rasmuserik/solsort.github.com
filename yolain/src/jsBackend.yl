@@ -27,9 +27,15 @@
           ';return\ 
           [exports toJS [syn get [[syn get 'length] - 1]]]
           '}]]]
-    ['try-catch [fn [syn syn1]
-        ['try{ + [exports toJS [syn get 2]] '}catch( [syn get 1] '){ [exports toJS [syn get 3]] '}]
-        ]]
+    ['try-catch
+      [fn [syn syn1]
+        ['try{ +
+          [exports toJS [syn get 2]]
+          '}catch(
+          [syn get 1]
+          '){
+          [exports toJS [syn get 3]]
+          '}]]]
     ['while
       [fn [syn syn1]
         ['while( +

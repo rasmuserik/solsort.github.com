@@ -4,13 +4,11 @@
 
 [# Node]
 
-[if-else [[[process jsType] == 'undefined] fails]
-  [do [set engine 'node]]]
+[if-else [[[process jsType] == 'undefined] fails] [do [set engine 'node]]]
 
 [# Rhino]
 
-[if-else [[[java jsType] == 'undefined] fails]
-  [do [set engine 'rhino]]]
+[if-else [[[java jsType] == 'undefined] fails] [do [set engine 'rhino]]]
 
 [# Browser]
 
@@ -44,14 +42,15 @@
 
 [# Start execution]
 
-[def run [fn [args] 
+[def run
+  [fn [args]
     [def moduleName [[args get 0] or [engine + '-run]]]
-    [[[module require ['./ + moduleName]] get 'run] apply null [args slice 1]]]]
+    [[[module require ['./ + moduleName]] get 'run] apply null
+      [args slice 1]]]]
+
 [yolain set 'run run]
 
 [if-else [[[module jsType] == 'undefined] fails]
   [do [module set 'exports yolain]]]
 
-[if-else [engine == 'node] [do
-    [yolain run [[process get 'argv] slice 2]]
-]]
+[if-else [engine == 'node] [do [yolain run [[process get 'argv] slice 2]]]]
