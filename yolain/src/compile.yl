@@ -16,7 +16,7 @@
 [exports set 'run [fn [] 
     [[exports get 'sourceFiles] forEach [fn [f]
         [def src ['src/ + f]]
-        [def dest ['build/ + [f slice 0 -2] 'js]]
+        [def dest ['build/ + [f slice 0 -3]]]
         [if-else [ [mtime call null dest] < [mtime call null src]] [do
             [compile call null src dest]]]
         undefined
@@ -30,7 +30,12 @@
     [fn [err data]
       [if-else err [return err]]
       [# compile exports to js]
-      [def js [jsBackend toJS [syntax parse [syntax tokenize data]]]]
+      [def ast [syntax parse [syntax tokenize data]]]
+      [def js [jsBackend toJS ast]]
+      [def sourceCode [[[[ast slice 1] map [syntax get 'prettyprint]] join '\n\n] + '\n]]
+      [fs writeFile
+        [dest + '.yl]
+        sourceCode]
       [# reformat js]
       [def uglify [require call null 'uglify-js]]
       [def jsp [uglify get 'parser]]
@@ -38,6 +43,6 @@
       [def ast [jsp parse js]]
       [set js [pro gen_code ast [new object ['beautify true]]]]
       [fs writeFile
-        dest
+        [dest + '.js]
         js
         [fn [err data] [if-else err [return err] [console log src '-> dest]] true]]]]]]

@@ -24,7 +24,7 @@ var mtime = function(fname) {
 exports["run"] = function() {
     return exports["sourceFiles"].forEach(function(f) {
         var src = "src/" + f;
-        var dest = "build/" + f.slice(0, -2) + "js";
+        var dest = "build/" + f.slice(0, -3);
         if (mtime.call(null, dest) < mtime.call(null, src)) {
             compile.call(null, src, dest);
         } else {}
@@ -37,7 +37,10 @@ var compile = function(src, dest) {
         if (err) {
             return err;
         } else {}
-        var js = jsBackend.toJS(syntax.parse(syntax.tokenize(data)));
+        var ast = syntax.parse(syntax.tokenize(data));
+        var js = jsBackend.toJS(ast);
+        var sourceCode = ast.slice(1).map(syntax["prettyprint"]).join("\n\n") + "\n";
+        fs.writeFile(dest + ".yl", sourceCode);
         var uglify = require.call(null, "uglify-js");
         var jsp = uglify["parser"];
         var pro = uglify["uglify"];
@@ -45,7 +48,7 @@ var compile = function(src, dest) {
         js = pro.gen_code(ast, {
             beautify: true
         });
-        return fs.writeFile(dest, js, function(err, data) {
+        return fs.writeFile(dest + ".js", js, function(err, data) {
             if (err) {
                 return err;
             } else {
