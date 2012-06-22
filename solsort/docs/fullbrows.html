@@ -154,15 +154,17 @@
         <span class="nx">addButton</span><span class="p">({</span><span class="nx">imagePath</span><span class="o">:</span> <span class="s1">&#39;img/home.png&#39;</span><span class="p">,</span> <span class="nx">pos</span><span class="o">:</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
             <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
         <span class="p">}});</span>
-        <span class="k">if</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;#source&#39;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">addButton</span><span class="p">({</span><span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;sourcebutton&#39;</span><span class="p">,</span> <span class="nx">pos</span><span class="o">:</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s1">&#39;#&#39;</span> <span class="o">+</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
-            <span class="p">}});</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="nx">addButton</span><span class="p">({</span><span class="nx">text</span><span class="o">:</span> <span class="s1">&#39;code&#39;</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;sourcebutton&#39;</span><span class="p">,</span> <span class="nx">pos</span><span class="o">:</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="nx">callback</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s2">&quot;#source/&quot;</span> <span class="o">+</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-            <span class="p">}});</span>
-        <span class="p">}</span>
+        <span class="cm">/*</span>
+<span class="cm">        if(window.location.hash.slice(0,7) === &#39;#source&#39;) {</span>
+<span class="cm">            addButton({text: &#39;run&#39;, id: &#39;sourcebutton&#39;, pos: &#39;right&#39;, callback: function() {</span>
+<span class="cm">                window.location.hash = &#39;#&#39; + window.location.hash.slice(8);</span>
+<span class="cm">            }});</span>
+<span class="cm">        } else {</span>
+<span class="cm">            addButton({text: &#39;code&#39;, id: &#39;sourcebutton&#39;, pos: &#39;right&#39;, callback: function() {</span>
+<span class="cm">                window.location.hash = &quot;#source/&quot; + window.location.hash.slice(1);</span>
+<span class="cm">            }});</span>
+<span class="cm">        }</span>
+<span class="cm">        */</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="nx">relayoutStyle</span><span class="p">();</span>
     <span class="p">}</span>

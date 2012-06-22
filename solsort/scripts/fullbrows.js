@@ -162,6 +162,7 @@ exports.start = function(opt) {
         addButton({imagePath: 'img/home.png', pos: 'right', callback: function() {
             window.location.hash = '';
         }});
+        /*
         if(window.location.hash.slice(0,7) === '#source') {
             addButton({text: 'run', id: 'sourcebutton', pos: 'right', callback: function() {
                 window.location.hash = '#' + window.location.hash.slice(8);
@@ -171,6 +172,7 @@ exports.start = function(opt) {
                 window.location.hash = "#source/" + window.location.hash.slice(1);
             }});
         }
+        */
     } else {
         relayoutStyle();
     }
